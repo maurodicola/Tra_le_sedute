@@ -48,6 +48,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
 .tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
 .tabs .wrap::-webkit-scrollbar{display:none}
+@media (max-width:699px){.tabs .wrap{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent 100%)}}
+@media (min-width:700px){.tabs .wrap{flex-wrap:wrap;overflow-x:visible;row-gap:6px}}
 .tab{border:0;background:none;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500;font-size:.95rem}
 .tab:hover{color:var(--ink);background:var(--accent-soft)}
 .tab[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}
