@@ -221,6 +221,32 @@ textarea{min-height:76px;resize:vertical}
 footer .wrap{padding-block:24px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;display:flex;flex-direction:column;gap:4px}
 footer em{font-family:var(--f-display);font-size:1rem}
 
+/* «Informazioni e note legali»: finestra sopra la pagina, apribile dal link in alto o con l'indirizzo #informazioni. */
+.masthead-side{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
+@media (max-width:560px){.masthead-side{align-items:flex-start;text-align:left}}
+.info-link{font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.info-link:hover{color:var(--ochre)}
+.info{width:min(760px,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.info::backdrop{background:rgba(16,22,21,.6)}
+.info-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 24px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
+.info-head h2{font-weight:400;font-size:1.7rem}
+.info-kicker{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
+.info-close{font:inherit;font-size:1.1rem;line-height:1;width:40px;height:40px;border:0;border-radius:50%;background:var(--accent-soft);color:var(--accent);cursor:pointer;flex-shrink:0}
+.info-body{padding:6px 24px 24px;font-size:.95rem;line-height:1.6}
+.info-body h3{font-family:var(--f-body);font-size:1rem;color:var(--accent);margin:20px 0 6px}
+.info-body p{margin:0 0 8px}
+.info-body ul,.info-body ol{margin:0 0 8px;padding-left:22px}
+.info-body li{margin:3px 0}
+.info-body h4{font-family:var(--f-display);font-size:1.15rem;margin:18px 0 4px}
+.info-body h5{font-family:var(--f-body);font-size:.9rem;color:var(--muted);margin:12px 0 4px}
+.info-body hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+.info-body .legal{margin-top:12px;padding-top:4px;border-top:1px solid var(--line)}
+.info-body .legal-title{font-family:var(--f-display);font-weight:400;font-size:1.4rem;color:var(--ink);margin-top:18px}
+.info-body code{font-size:.85em;background:var(--bg);padding:1px 5px;border-radius:4px}
+.info-license{white-space:pre-wrap;font-size:.75rem;line-height:1.5;background:var(--bg);border-radius:8px;padding:12px 14px;overflow-x:auto}
+.info-version{color:var(--muted);font-size:.8rem;margin-top:18px}
+@media (max-width:560px){.info-head{padding:16px 16px 12px}.info-head h2{font-size:1.4rem}.info-body{padding:4px 16px 20px}}
+
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -230,7 +256,10 @@ footer em{font-family:var(--f-display);font-size:1rem}
       <h1 class="brand">Tra le <em>sedute</em></h1>
       <p class="tagline">Un quaderno per i giorni tra un incontro e l'altro</p>
     </div>
-    <p class="today-date" id="todayLabel"></p>
+    <div class="masthead-side">
+      <a class="info-link" id="info-link" href="#informazioni">Informazioni e note legali</a>
+      <p class="today-date" id="todayLabel"></p>
+    </div>
   </div>
 </header>
 
@@ -440,10 +469,114 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <footer>
   <div class="wrap">
     <em>Un dono di gratitudine per chi ogni giorno ascolta.</em>
-    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea</span>
+    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea · Versione 1.1 · 16/10/2026</span>
   </div>
 </footer>
 
+
+<dialog class="info" id="info" aria-labelledby="info-title"><div class="info-head"><div><p class="info-kicker">Tra le sedute</p><h2 id="info-title">Informazioni e note legali</h2></div><button class="info-close" id="info-close" type="button" aria-label="Chiudi">✕</button></div>
+<div class="info-body">
+<section><h3>Che cos'è</h3><p>Tra le sedute è un quaderno personale per i giorni tra un incontro e l'altro con la propria psicoterapeuta o il proprio psicoterapeuta: diario delle emozioni, ruota delle emozioni, termometro dell'umore, registro dei pensieri, appunti per la prossima seduta e haiku sul tema della cura.</p><p>È nato come dono di gratitudine verso chi ascolta. È gratuito, senza pubblicità e senza fini commerciali. Tutto ciò che si scrive resta nel browser del dispositivo in uso e non viene inviato a nessuno.</p></section>
+<section class="legal"><!-- Testo di LEGAL.md riportato tale e quale. -->
+<h3 class="legal-title">Informazioni legali e avvertenze</h5>
+<p>Questo documento descrive i limiti d'uso di «Tra le sedute». Non sostituisce la consulenza legale o medica professionale.</p>
+<h4>🩺 Natura dello strumento</h4>
+<p>«Tra le sedute» è un quaderno digitale per annotazioni personali.</p>
+<h5>Non è un dispositivo medico</h5>
+<ul>
+<li>Non ha finalità diagnostiche, di monitoraggio clinico o terapeutiche</li>
+<li>Non elabora i dati per trarne valutazioni sulla salute</li>
+<li>Non suggerisce trattamenti, farmaci o decisioni cliniche</li>
+<li>I grafici mostrano solo ciò che l'utente ha scritto, senza interpretarlo</li>
+</ul>
+<h5>Non sostituisce la psicoterapia</h5>
+<ul>
+<li>Gli strumenti presenti (diario, ruota delle emozioni, registro dei pensieri) sono di uso comune in molti percorsi, ma la loro utilità dipende dalla persona e dall'approccio del professionista</li>
+<li>Il registro situazione-pensiero-conseguenza è tipico di alcuni orientamenti: va usato solo se il professionista lo ritiene adatto</li>
+<li>Ogni decisione sul percorso di cura spetta alla persona e al suo professionista</li>
+</ul>
+<h4>🆘 Non è un servizio di emergenza</h4>
+<p>L'app non invia messaggi, non avvisa nessuno e non viene letta da altri.</p>
+<p>Se senti di essere in pericolo o hai bisogno di aiuto subito:
+- <strong>112</strong>, numero unico di emergenza
+- <strong>Telefono Amico Italia</strong>, 02 2327 2327, per parlare con qualcuno</p>
+<p>In caso di crisi, rivolgiti anche al tuo medico, al tuo professionista di riferimento o al pronto soccorso più vicino.</p>
+<h4>🔒 Dati e privacy</h4>
+<h5>Dove restano i dati</h5>
+<ul>
+<li>Tutte le voci restano nel browser del dispositivo in uso (<code>localStorage</code>)</li>
+<li>Non esiste un server, un account o una copia remota</li>
+<li>L'autore non riceve, non vede e non conserva alcun dato degli utenti</li>
+<li>Il professionista non riceve nulla in automatico: è l'utente a decidere se e cosa mostrare in seduta</li>
+</ul>
+<h5>Cosa comporta</h5>
+<ul>
+<li>I dati possono andare persi se si cancellano i dati del browser, si usa una finestra privata o si cambia dispositivo</li>
+<li>Chi ha accesso al dispositivo sbloccato può leggere le voci: proteggi il dispositivo con un blocco schermo</li>
+<li>La funzione «Copia tutte le voci» produce un testo: una volta incollato altrove, la sua riservatezza dipende da dove viene salvato</li>
+</ul>
+<h5>Risorse esterne</h5>
+<ul>
+<li>La pagina carica i caratteri tipografici da Google Fonts. Questo comporta una connessione ai server di Google, che ricevono l'indirizzo IP del dispositivo come per qualunque risorsa web. Nessun contenuto scritto dall'utente viene trasmesso.</li>
+<li>Se la pagina è ospitata su un servizio esterno (per esempio GitHub Pages o una pagina condivisa), valgono anche le condizioni di quel servizio.</li>
+</ul>
+<h4>⚖️ Responsabilità</h4>
+<h5>Limitazioni di responsabilità</h5>
+<p>L'autore di questo strumento:</p>
+<ul>
+<li>NON garantisce che l'app sia adatta a uno scopo specifico</li>
+<li>NON è responsabile della perdita di dati salvati nel browser</li>
+<li>NON è responsabile dell'uso che viene fatto delle annotazioni</li>
+<li>NON fornisce consulenza psicologica, medica o legale</li>
+<li>NON è responsabile di decisioni prese sulla base di quanto annotato</li>
+</ul>
+<h5>Assunzione di responsabilità dell'utente</h5>
+<p>Utilizzando questo strumento, l'utente:</p>
+<ul>
+<li><strong>riconosce</strong> che si tratta di un quaderno personale e non di un servizio sanitario</li>
+<li><strong>si impegna</strong> a rivolgersi ai servizi di emergenza in caso di pericolo</li>
+<li><strong>sceglie</strong> liberamente cosa scrivere, conservare e condividere</li>
+</ul>
+<h5>Per i professionisti</h5>
+<p>Se un professionista decide di proporre l'app ai propri pazienti:</p>
+<ul>
+<li>la scelta di quali sezioni consigliare resta una valutazione clinica del professionista</li>
+<li>è opportuno ricordare che i dati restano sul dispositivo del paziente e non arrivano al professionista</li>
+<li>l'app non va presentata come canale di contatto tra una seduta e l'altra</li>
+</ul>
+<h4>✍️ Haiku</h4>
+<p>Gli haiku presenti nell'app sono testi originali di AI Haiku Gaea, che accompagnano il progetto. Il codice è sotto licenza MIT; per riutilizzare gli haiku fuori dal progetto, cita la fonte.</p>
+<h4>📜 Cronologia delle modifiche</h4>
+<ul>
+<li><strong>16/10/2026</strong> — Versione 1.0, redatto documento iniziale</li>
+</ul>
+<hr />
+<p><strong>Ultimo aggiornamento:</strong> 16 Ottobre 2026</p>
+<p><strong>Nota:</strong> Questa pagina non sostituisce la consulenza legale o medica professionale.</p>
+</section>
+<section class="legal"><h3 class="legal-title">Licenza</h3><p>Il codice è distribuito con licenza MIT. Gli haiku sono testi originali di AI Haiku Gaea: se li riusi fuori dal progetto, cita la fonte. Testo ufficiale della licenza:</p><pre class="info-license">MIT License
+
+Copyright (c) 2026 Mauro Di Cola
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</pre></section>
+<p class="info-version">Tra le sedute · <span id="info-version">Versione 1.1 · 16/10/2026</span> · Mauro Di Cola</p>
+</div></dialog>
 
 <script>
 (function(){
@@ -876,6 +1009,14 @@ function draw(){
 }
 $("hk-draw-btn").onclick=draw;
 
+/* ---------- Informazioni e note legali ---------- */
+var infoDlg=$("info");
+function openInfo(){ if(!infoDlg.open){ if(infoDlg.showModal) infoDlg.showModal(); else infoDlg.setAttribute("open",""); } }
+$("info-link").addEventListener("click",function(e){ e.preventDefault(); try{ history.replaceState(null,"","#informazioni"); }catch(_){} openInfo(); });
+$("info-close").addEventListener("click",function(){ infoDlg.close ? infoDlg.close() : infoDlg.removeAttribute("open"); });
+infoDlg.addEventListener("click",function(e){ if(e.target===infoDlg) infoDlg.close(); });
+infoDlg.addEventListener("close",function(){ if(location.hash==="#informazioni"){ try{ history.replaceState(null,"",location.pathname+location.search); }catch(_){} } });
+
 /* ---------- Avvio ---------- */
 var VALUE_DESC=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value");
 var WD=["L","M","M","G","V","S","D"];
@@ -976,8 +1117,10 @@ $("a-when").value=ymd(new Date());
 renderAll(); draw();
 var h=(location.hash||"").slice(1);
 show(h && document.querySelector('[data-page="'+h+'"]') ? h : (S.tab||"oggi"));
+if(h==="informazioni") openInfo();
 setInterval(function(){ renderNext(); }, 60000);
 })();
 </script>
+
 
 </body></html>
