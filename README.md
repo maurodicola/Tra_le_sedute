@@ -55,7 +55,7 @@ L'obiettivo è semplice:
 
 - **Oggi**: segno rapido dell'umore, riepilogo della settimana, scorciatoie
 - **Diario delle emozioni**: quando, emozione, intensità 0–10, situazione, pensiero, azione, bisogno; vista settimanale a colori
-- **Ruota delle emozioni**: sette famiglie (gioia, tristezza, paura, rabbia, sorpresa, disgusto, vergogna) con le loro sfumature; la parola scelta passa al diario
+- **Ruota** delle emozioni: sette famiglie (gioia, tristezza, paura, rabbia, sorpresa, disgusto, vergogna) con le loro sfumature; la parola scelta passa al diario
 - **Umore**: umore, energia e sonno giorno per giorno, con grafico degli ultimi 30 giorni
 - **Pensieri**: registro a 7 colonne (situazione, pensiero automatico, emozione e comportamento, prove a favore, prove contro, pensiero alternativo, quanto ci si crede prima e dopo), con 11 trappole del pensiero da segnare e il grafico di quelle più frequenti
 - **Attività**: attività fatte o da fare, per giorno e momento, con voti di piacere e padronanza da 0 a 10; riepilogo degli ultimi 7 giorni e attività che hanno fatto stare meglio
