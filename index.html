@@ -1,0 +1,983 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tra le Sedute</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: un quaderno a colonna singola, schede in alto, un haiku apre ogni pagina come un'epigrafe */
+:root{
+  --bg:#ECEFEA; --surface:#F8F9F5; --ink:#1C2625; --muted:#5A6865; --line:#D2D8CF;
+  --accent:#2F5F69; --accent-soft:#DCE7E6; --on-accent:#FFFFFF; --ochre:#B07A1E; --danger:#A23E33;
+  --e-gioia:#C9960F; --e-tristezza:#4A6CA3; --e-paura:#6C5899; --e-rabbia:#B0463A;
+  --e-sorpresa:#2B8686; --e-disgusto:#61813A; --e-vergogna:#9E557A; --on-e:#FFFFFF;
+  --f-display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101615; --surface:#172120; --ink:#E3E9E4; --muted:#98A6A2; --line:#283432;
+  --accent:#86BAC2; --accent-soft:#1F3236; --on-accent:#0B1414; --ochre:#E2B35A; --danger:#E58A7E;
+  --e-gioia:#E8C25A; --e-tristezza:#8EAEE0; --e-paura:#B3A2DE; --e-rabbia:#EC8F82;
+  --e-sorpresa:#6FCCCB; --e-disgusto:#A8C77B; --e-vergogna:#E1A0C2; --on-e:#101615; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101615; --surface:#172120; --ink:#E3E9E4; --muted:#98A6A2; --line:#283432;
+  --accent:#86BAC2; --accent-soft:#1F3236; --on-accent:#0B1414; --ochre:#E2B35A; --danger:#E58A7E;
+  --e-gioia:#E8C25A; --e-tristezza:#8EAEE0; --e-paura:#B3A2DE; --e-rabbia:#EC8F82;
+  --e-sorpresa:#6FCCCB; --e-disgusto:#A8C77B; --e-vergogna:#E1A0C2; --on-e:#101615; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0;line-height:1.2}
+h2{font-size:1.75rem}
+h3{font-size:1.15rem}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Testata */
+.masthead .wrap{padding-block:28px 6px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-size:2.2rem;font-weight:400;letter-spacing:-.01em}
+.brand em{font-style:italic;color:var(--accent)}
+.tagline{color:var(--muted);font-size:.95rem}
+.today-date{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
+
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+.tabs .wrap::-webkit-scrollbar{display:none}
+.tab{border:0;background:none;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500;font-size:.95rem}
+.tab:hover{color:var(--ink);background:var(--accent-soft)}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}
+
+main .wrap{padding-block:24px 48px}
+.page{display:flex;flex-direction:column;gap:24px}
+
+/* Haiku */
+.hk{margin:0;padding:22px 0 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.hk blockquote{margin:0;font-family:var(--f-display);font-style:italic;font-size:1.35rem;line-height:1.5;transition:opacity .35s}
+.hk blockquote span{display:block}
+.hk blockquote span:nth-child(2){padding-left:1.4em}
+.hk blockquote span:nth-child(3){padding-left:.7em}
+.hk figcaption{display:flex;gap:12px;align-items:center;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}
+.hk.big blockquote{font-size:1.7rem}
+.link-btn{border:0;background:none;color:var(--accent);cursor:pointer;padding:4px 0;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.link-btn:hover{text-decoration:underline}
+
+.intro{color:var(--muted);max-width:62ch}
+
+/* Superfici */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:16px}
+.demo-banner{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;background:var(--accent-soft);border-radius:var(--r);padding:12px 16px;font-size:.92rem}
+.demo-banner strong{font-weight:600}
+
+/* Form */
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.lbl{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.hint{font-size:.85rem;color:var(--muted)}
+input[type=text],input[type=date],input[type=datetime-local],select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+textarea{min-height:76px;resize:vertical}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.range-row{display:flex;align-items:center;gap:12px}
+.range-row input{flex:1;accent-color:var(--accent)}
+.range-row output{font-variant-numeric:tabular-nums;font-weight:600;min-width:3.2em;text-align:right}
+.scale-labels{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);border-radius:999px;padding:10px 18px;cursor:pointer;font-weight:600}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:6px 12px;font-size:.85rem}
+.btn.danger{border-color:var(--danger);background:transparent;color:var(--danger)}
+.btn.danger.armed{background:var(--danger);color:var(--surface)}
+.toast{font-size:.9rem;color:var(--accent);font-weight:500;min-height:1.4em}
+
+/* Voci */
+.entries{display:flex;flex-direction:column;gap:12px}
+.entry{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.entry.demo{border-style:dashed}
+.entry-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.when{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.85rem;font-weight:600;background:var(--chip,var(--accent));color:var(--on-e)}
+.badge{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--muted)}
+.meter{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.meter i{display:block;width:60px;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.meter i b{display:block;height:100%;background:var(--chip,var(--accent))}
+.entry dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.entry dt{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.entry dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.entry-foot{display:flex;justify-content:flex-end}
+.empty{color:var(--muted);font-style:italic}
+
+/* Grafici */
+.chart-wrap{overflow-x:auto}
+.chart-wrap svg{display:block;width:100%;min-width:320px;height:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend i{width:14px;height:3px;border-radius:2px;background:var(--accent)}
+.legend i.dot{width:8px;height:8px;border-radius:50%;background:var(--ochre)}
+
+/* Scelta emozione */
+.emo-pick{position:relative}
+.emo-pick input{padding-right:52px}
+.emo-toggle{position:absolute;right:4px;top:4px;height:calc(100% - 8px);min-height:36px;width:44px;border:0;border-radius:6px;background:var(--accent-soft);color:var(--accent);cursor:pointer;font-size:1.1rem}
+.emo-pick .emo-panel{margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.emo-group{display:flex;flex-direction:column;gap:6px}
+.emo-group .lbl{display:flex;align-items:center;gap:6px}
+.emo-group .lbl i{width:10px;height:10px;border-radius:50%;background:var(--chip)}
+.emo-group .nuances{gap:6px}
+.emo-group .nuance{padding:5px 11px;font-size:.9rem}
+
+.opt-pick{position:relative}
+.opt-display{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 4px 4px 12px;cursor:pointer;text-align:left;min-height:46px}
+.opt-display .opt-arrow{display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:36px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:1.1rem}
+.opt-pick .emo-panel{margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px}
+
+/* Calendario */
+.dt-pick{position:relative}
+.dt-panel{margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:12px;max-width:360px}
+.dt-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dt-head strong{font-family:var(--f-display);font-size:1.1rem;font-weight:600;text-transform:capitalize}
+.dt-nav,.step button{width:44px;height:38px;border:0;border-radius:6px;background:var(--accent-soft);color:var(--accent);cursor:pointer;font-size:1.1rem;font-weight:600}
+.dt-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+.dt-grid .wd{font-size:.72rem;color:var(--muted);font-weight:600;padding:4px 0}
+.dt-day{aspect-ratio:1;width:100%;max-width:44px;margin:0 auto;border:0;border-radius:50%;background:none;cursor:pointer;font-variant-numeric:tabular-nums;font-size:.95rem}
+.dt-day:hover{background:var(--accent-soft)}
+.dt-day.today{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.dt-day[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:600}
+.dt-time{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;border-top:1px solid var(--line);padding-top:12px}
+.step{display:flex;flex-direction:column;gap:6px}
+.step > div{display:flex;align-items:center;gap:6px}
+.step output{min-width:2.2em;text-align:center;font-weight:600;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.dt-actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* Ruota */
+.wheel-layout{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:640px){.wheel-layout{grid-template-columns:minmax(0,1fr)}}
+.wheel svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+.wheel path{cursor:pointer;transition:transform .25s ease,opacity .25s}
+.wheel g.sector:hover path{opacity:.88}
+.wheel text{pointer-events:none;font-family:var(--f-body);font-weight:600;font-size:12.5px}
+.nuances{display:flex;flex-wrap:wrap;gap:8px}
+.nuance{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.92rem}
+.nuance:hover{border-color:var(--chip)}
+.nuance[aria-pressed="true"]{background:var(--chip);color:var(--on-e);border-color:var(--chip)}
+.fam-title{display:flex;align-items:center;gap:10px}
+.fam-title i{width:14px;height:14px;border-radius:50%;background:var(--chip)}
+
+/* Settimana del diario */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;align-items:end}
+.day{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.day .bars{height:110px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:3px;border-bottom:1px solid var(--line)}
+.day .bars b{display:block;width:min(12px,30%);border-radius:3px 3px 0 0;background:var(--chip,var(--accent))}
+.day small{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.day.today small{color:var(--accent);font-weight:700}
+
+/* ABC */
+.abc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.abc{grid-template-columns:minmax(0,1fr)}}
+.abc > div{background:var(--bg);border-radius:8px;padding:10px 12px;min-width:0;overflow-wrap:anywhere}
+.abc .k{font-family:var(--f-display);font-size:1.4rem;color:var(--accent);line-height:1}
+.alt{border-left:3px solid var(--ochre);padding-left:12px}
+
+/* Seduta */
+.countdown{font-family:var(--f-display);font-size:1.5rem}
+.note{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.note.demo{border-style:dashed}
+.note input[type=checkbox]{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:none}
+.note .txt{flex:1;min-width:0;overflow-wrap:anywhere}
+.note.done .txt{color:var(--muted);text-decoration:line-through}
+.star{color:var(--ochre);font-weight:700}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:none;border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--muted);font-size:.9rem}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);font-weight:600}
+.icon-btn{border:0;background:none;color:var(--muted);cursor:pointer;padding:2px 6px;font-size:.85rem}
+.icon-btn:hover{color:var(--danger)}
+
+/* Oggi */
+.shortcuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.shortcut{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.shortcut:hover{border-color:var(--accent)}
+.shortcut strong{font-family:var(--f-display);font-size:1.15rem;font-weight:600}
+.shortcut span{color:var(--muted);font-size:.9rem}
+.stats{display:flex;gap:28px;flex-wrap:wrap}
+.stat b{display:block;font-family:var(--f-display);font-size:1.9rem;font-weight:400;font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+/* Haiku page */
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.hk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.hk-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px}
+.hk-card blockquote{margin:0;font-family:var(--f-display);font-style:italic;font-size:1.12rem;line-height:1.5}
+.hk-card blockquote span{display:block}
+.hk-card small{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em}
+
+/* Info */
+.prose{display:flex;flex-direction:column;gap:12px;max-width:64ch}
+.prose ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.phone{font-variant-numeric:tabular-nums;font-weight:600;user-select:all}
+.copy-fallback{width:100%;min-height:160px;font-size:.85rem}
+
+footer .wrap{padding-block:24px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;display:flex;flex-direction:column;gap:4px}
+footer em{font-family:var(--f-display);font-size:1rem}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <div>
+      <h1 class="brand">Tra le <em>sedute</em></h1>
+      <p class="tagline">Un quaderno per i giorni tra un incontro e l'altro</p>
+    </div>
+    <p class="today-date" id="todayLabel"></p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sezioni">
+  <div class="wrap" role="tablist" id="tablist">
+    <button class="tab" role="tab" data-tab="oggi">Oggi</button>
+    <button class="tab" role="tab" data-tab="diario">Diario</button>
+    <button class="tab" role="tab" data-tab="ruota">Ruota delle emozioni</button>
+    <button class="tab" role="tab" data-tab="umore">Umore</button>
+    <button class="tab" role="tab" data-tab="pensieri">Pensieri</button>
+    <button class="tab" role="tab" data-tab="seduta">Per la seduta</button>
+    <button class="tab" role="tab" data-tab="haiku">Haiku</button>
+    <button class="tab" role="tab" data-tab="info">Come funziona</button>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- OGGI -->
+<section class="page" data-page="oggi">
+  <div class="hk-slot" data-themes="oggi,stagioni"></div>
+  <div class="panel">
+    <h3>Come stai, adesso?</h3>
+    <div class="field">
+      <div class="range-row">
+        <input type="range" id="q-mood" min="1" max="10" value="6" aria-label="Umore di oggi da 1 a 10">
+        <output id="q-mood-out">6/10</output>
+      </div>
+      <div class="scale-labels"><span>1 · molto giù</span><span>10 · molto bene</span></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="q-save">Segna l'umore di oggi</button>
+      <span class="toast" id="q-toast" role="status"></span>
+    </div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="shortcuts">
+    <button class="shortcut" data-go="diario"><strong>Scrivi cosa provi</strong><span>Una voce nel diario delle emozioni</span></button>
+    <button class="shortcut" data-go="ruota"><strong>Trova la parola giusta</strong><span>Dai un nome preciso a ciò che senti</span></button>
+    <button class="shortcut" data-go="seduta"><strong>Un appunto per la seduta</strong><span>Così non lo dimentichi</span></button>
+  </div>
+</section>
+
+<!-- DIARIO -->
+<section class="page" data-page="diario" hidden>
+  <div class="hk-slot" data-themes="diario,emozioni"></div>
+  <h2>Diario delle emozioni</h2>
+  <p class="intro">Annota un momento della giornata: cosa è successo, cosa hai provato, quanto era forte. Non serve scrivere bene. Serve scrivere.</p>
+  <form class="panel" id="d-form" autocomplete="off">
+    <div class="grid2">
+      <div class="field"><span class="lbl" id="d-when-lbl">Quando</span><div class="dt-pick" data-mode="datetime"><input type="hidden" id="d-when"></div></div>
+      <div class="field"><label for="d-emo">Emozione</label><div class="emo-pick"><input type="text" id="d-emo" placeholder="es. ansia, sollievo, delusione" required><button type="button" class="emo-toggle" aria-expanded="false" aria-label="Mostra l'elenco delle emozioni">▾</button><div class="emo-panel" hidden></div></div><span class="hint">Non trovi la parola? <button type="button" class="link-btn" data-go="ruota">Apri la ruota</button></span></div>
+    </div>
+    <div class="field">
+      <label for="d-int">Intensità</label>
+      <div class="range-row"><input type="range" id="d-int" min="0" max="10" value="5"><output id="d-int-out">5/10</output></div>
+      <div class="scale-labels"><span>0 · appena percepita</span><span>10 · la più forte possibile</span></div>
+    </div>
+    <div class="field"><label for="d-sit">Cosa stava succedendo</label><textarea id="d-sit" placeholder="Dove eri, con chi, cosa è accaduto"></textarea></div>
+    <div class="grid2">
+      <div class="field"><label for="d-thought">Cosa ho pensato</label><textarea id="d-thought" placeholder="Il pensiero che è passato per la testa"></textarea></div>
+      <div class="field"><label for="d-did">Cosa ho fatto</label><textarea id="d-did" placeholder="Come ho reagito, cosa ho fatto dopo"></textarea></div>
+    </div>
+    <div class="field"><label for="d-need">Di cosa avrei avuto bisogno</label><textarea id="d-need" placeholder="Facoltativo"></textarea></div>
+    <div class="actions"><button class="btn" type="submit">Salva nel diario</button><span class="toast" id="d-toast" role="status"></span></div>
+  </form>
+  <div class="panel">
+    <h3>La tua settimana</h3>
+    <p class="hint">Ogni barra è una voce del diario: l'altezza è l'intensità, il colore la famiglia dell'emozione.</p>
+    <div class="week" id="d-week"></div>
+  </div>
+  <div id="d-demo"></div>
+  <div class="entries" id="d-list"></div>
+</section>
+
+<!-- RUOTA -->
+<section class="page" data-page="ruota" hidden>
+  <div class="hk-slot" data-themes="emozioni"></div>
+  <h2>Ruota delle emozioni</h2>
+  <p class="intro">"Sto male" può voler dire molte cose. Tocca una famiglia di emozioni, poi scegli la sfumatura più vicina a ciò che provi.</p>
+  <div class="wheel-layout">
+    <div class="wheel" id="wheel"></div>
+    <div class="panel" id="fam-panel"></div>
+  </div>
+</section>
+
+<!-- UMORE -->
+<section class="page" data-page="umore" hidden>
+  <div class="hk-slot" data-themes="umore,stagioni"></div>
+  <h2>Termometro dell'umore</h2>
+  <p class="intro">Un segno al giorno. Col tempo il grafico mostra l'andamento, che dice più di una giornata sola.</p>
+  <form class="panel" id="m-form" autocomplete="off">
+    <div class="grid2">
+      <div class="field"><span class="lbl" id="m-date-lbl">Giorno</span><div class="dt-pick" data-mode="date"><input type="hidden" id="m-date"></div></div>
+      <div class="field"><span class="lbl" id="m-sleep-lbl">Come ho dormito</span>
+        <div class="opt-pick"><input type="hidden" id="m-sleep" value=""><button type="button" class="opt-display" aria-labelledby="m-sleep-lbl" aria-expanded="false"><span class="opt-val">Non indicato</span><span class="opt-arrow" aria-hidden="true">▾</span></button>
+        <div class="emo-panel" hidden><div class="nuances"><button type="button" class="nuance" style="--chip:var(--accent)" data-v="">Non indicato</button><button type="button" class="nuance" style="--chip:var(--accent)" data-v="Bene">Bene</button><button type="button" class="nuance" style="--chip:var(--accent)" data-v="Così così">Così così</button><button type="button" class="nuance" style="--chip:var(--accent)" data-v="Male">Male</button></div></div></div></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label for="m-mood">Umore</label><div class="range-row"><input type="range" id="m-mood" min="1" max="10" value="6"><output id="m-mood-out">6/10</output></div></div>
+      <div class="field"><label for="m-energy">Energia</label><div class="range-row"><input type="range" id="m-energy" min="1" max="10" value="5"><output id="m-energy-out">5/10</output></div></div>
+    </div>
+    <div class="field"><label for="m-note">Una parola sulla giornata</label><input type="text" id="m-note" placeholder="Facoltativo"></div>
+    <div class="actions"><button class="btn" type="submit">Salva il giorno</button><span class="toast" id="m-toast" role="status"></span></div>
+  </form>
+  <div id="m-demo"></div>
+  <div class="panel">
+    <h3>Ultimi 30 giorni</h3>
+    <div class="legend"><span><i></i>Umore</span><span><i class="dot"></i>Energia</span></div>
+    <div class="chart-wrap" id="m-chart"></div>
+  </div>
+  <div class="entries" id="m-list"></div>
+</section>
+
+<!-- PENSIERI -->
+<section class="page" data-page="pensieri" hidden>
+  <div class="hk-slot" data-themes="pensieri"></div>
+  <h2>Pensieri: situazione, pensiero, conseguenza</h2>
+  <p class="intro">Uno stesso fatto può far nascere pensieri diversi, e i pensieri cambiano ciò che proviamo. Questo registro aiuta a separare le tre cose. È uno strumento tipico di alcuni approcci: chiedi alla tua terapeuta se fa al caso tuo.</p>
+  <form class="panel" id="a-form" autocomplete="off">
+    <div class="field" style="max-width:360px"><span class="lbl" id="a-when-lbl">Giorno</span><div class="dt-pick" data-mode="date"><input type="hidden" id="a-when"></div></div>
+    <div class="field"><label for="a-sit">A · La situazione</label><textarea id="a-sit" placeholder="I fatti, come li descriverebbe una telecamera" required></textarea></div>
+    <div class="field"><label for="a-thought">B · Il pensiero automatico</label><textarea id="a-thought" placeholder="Cosa mi sono detto in quel momento" required></textarea></div>
+    <div class="field"><label for="a-belief">Quanto ci credevo</label><div class="range-row"><input type="range" id="a-belief" min="0" max="100" step="10" value="70"><output id="a-belief-out">70%</output></div></div>
+    <div class="grid2">
+      <div class="field"><label for="a-emo">C · Emozione</label><div class="emo-pick"><input type="text" id="a-emo" placeholder="es. vergogna"><button type="button" class="emo-toggle" aria-expanded="false" aria-label="Mostra l'elenco delle emozioni">▾</button><div class="emo-panel" hidden></div></div></div>
+      <div class="field"><label for="a-int">Intensità</label><div class="range-row"><input type="range" id="a-int" min="0" max="10" value="6"><output id="a-int-out">6/10</output></div></div>
+    </div>
+    <div class="field"><label for="a-beh">C · Cosa ho fatto</label><textarea id="a-beh" placeholder="Il comportamento che ne è seguito"></textarea></div>
+    <div class="field"><label for="a-alt">Un altro modo di vederla</label><textarea id="a-alt" placeholder="Facoltativo. Cosa direi a un amico nella stessa situazione?"></textarea></div>
+    <div class="field"><label for="a-belief2">Quanto credo ora al pensiero di partenza</label><div class="range-row"><input type="range" id="a-belief2" min="0" max="100" step="10" value="50"><output id="a-belief2-out">50%</output></div></div>
+    <div class="actions"><button class="btn" type="submit">Salva il registro</button><span class="toast" id="a-toast" role="status"></span></div>
+  </form>
+  <div id="a-demo"></div>
+  <div class="entries" id="a-list"></div>
+</section>
+
+<!-- SEDUTA -->
+<section class="page" data-page="seduta" hidden>
+  <div class="hk-slot" data-themes="seduta,cura"></div>
+  <h2>Per la prossima seduta</h2>
+  <p class="intro">Le cose importanti arrivano spesso a metà settimana, e in seduta sfuggono. Annotale qui man mano.</p>
+  <div class="panel">
+    <div class="grid2">
+      <div class="field"><span class="lbl" id="s-next-lbl">Prossimo incontro</span><div class="dt-pick" data-mode="datetime" data-clear="1"><input type="hidden" id="s-next"></div></div>
+      <div class="field"><span class="lbl">Manca</span><span class="countdown" id="s-count">Nessuna data</span></div>
+    </div>
+  </div>
+  <form class="panel" id="n-form" autocomplete="off">
+    <div class="field"><label for="n-text">Cosa vorrei portare</label><input type="text" id="n-text" placeholder="es. il sogno di martedì, la discussione al lavoro" required></div>
+    <div class="actions">
+      <label style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="n-imp" style="accent-color:var(--ochre);width:18px;height:18px"> Importante</label>
+      <button class="btn" type="submit">Aggiungi</button>
+    </div>
+  </form>
+  <div class="actions" style="justify-content:space-between">
+    <div class="seg" id="n-filter">
+      <button type="button" data-f="todo" aria-pressed="true">Da portare</button>
+      <button type="button" data-f="done" aria-pressed="false">Già parlati</button>
+    </div>
+    <button class="btn ghost small" id="n-copy">Copia gli appunti</button>
+  </div>
+  <div id="n-demo"></div>
+  <div class="entries" id="n-list"></div>
+  <div id="n-copy-fallback"></div>
+</section>
+
+<!-- HAIKU -->
+<section class="page" data-page="haiku" hidden>
+  <h2>Haiku</h2>
+  <p class="intro">Tre versi per chi chiede aiuto e per chi ascolta. Pescane uno, o sfogliali per tema.</p>
+  <figure class="hk big" id="hk-draw"></figure>
+  <div class="actions"><button class="btn" id="hk-draw-btn">Pesca un haiku</button></div>
+  <div class="filters" id="hk-filters"></div>
+  <div class="hk-grid" id="hk-grid"></div>
+</section>
+
+<!-- INFO -->
+<section class="page" data-page="info" hidden>
+  <div class="hk-slot" data-themes="cura,stagioni"></div>
+  <h2>Come funziona</h2>
+  <div class="prose">
+    <h3>Dove finiscono le tue parole</h3>
+    <p>Tutto ciò che scrivi resta solo in questo browser, su questo dispositivo. Non viene inviato a nessuno, nemmeno alla tua terapeuta. Se cancelli i dati del browser o usi una finestra privata, le voci vanno perse: per conservarle, ogni tanto copiale altrove.</p>
+    <p id="storage-warn" class="hint" hidden>Al momento questo browser non permette di salvare: le voci resteranno solo finché la pagina è aperta.</p>
+    <h3>Come usarlo</h3>
+    <ul>
+      <li>Non serve compilare tutto, ogni giorno. Anche una riga conta.</li>
+      <li>Puoi portare in seduta ciò che hai scritto, leggerlo o mostrarlo. Sei tu a decidere cosa condividere.</li>
+      <li>Questi strumenti accompagnano il percorso e non sostituiscono il lavoro fatto insieme in seduta.</li>
+    </ul>
+    <h3>Se stai male adesso</h3>
+    <p>Se senti di essere in pericolo o hai bisogno di aiuto subito, chiama il <span class="phone">112</span>. Per parlare con qualcuno, Telefono Amico Italia risponde al <span class="phone">02 2327 2327</span>.</p>
+    <h3>Porta tutto con te</h3>
+    <p>Copia tutte le voci in un testo, da incollare in una nota o in una email a te stesso.</p>
+    <div class="actions"><button class="btn ghost" id="x-copy">Copia tutte le voci</button><span class="toast" id="x-toast" role="status"></span></div>
+    <div id="x-fallback"></div>
+    <h3>Ricomincia da capo</h3>
+    <div class="actions"><button class="btn danger" id="x-wipe">Cancella tutte le voci</button><span class="toast" id="w-toast" role="status"></span></div>
+  </div>
+</section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <em>Un dono di gratitudine per chi ogni giorno ascolta.</em>
+    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea</span>
+  </div>
+</footer>
+
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Haiku ---------- */
+var THEMES = {oggi:"Il giorno", diario:"Scrivere", emozioni:"Emozioni", umore:"Umore", pensieri:"Pensieri", seduta:"La seduta", cura:"Chi ascolta", stagioni:"Stagioni interiori"};
+var HAIKU = [
+ ["oggi","Apro le imposte —|nulla mi chiede il giorno|se non entrare."],
+ ["oggi","Caffè che fuma —|chiedo a me stesso, piano:|come stai, oggi?"],
+ ["oggi","Un giorno nuovo:|non devo essere forte,|mi basta esserci."],
+ ["oggi","Luce di ottobre|sulla tazza ancor calda —|comincio da qui."],
+ ["oggi","Il cielo grigio|ha il suo modo di essere|pur sempre cielo."],
+ ["diario","Pagina bianca —|una parola sola|è già una porta."],
+ ["diario","Scrivo la sera|quel che non dissi a voce:|l'inchiostro ascolta."],
+ ["diario","Chiamo per nome|quello che sento, e piano|si fa più mite."],
+ ["diario","Segno la data —|anche il dolore ha un posto|dove posarsi."],
+ ["diario","Righe d'inchiostro —|un sasso bianco ogni giorno|lungo il sentiero."],
+ ["diario","Rileggo il mese:|quel giorno così nero|oggi è più grigio."],
+ ["emozioni","Rabbia d'agosto —|passa anche il temporale|e lava l'aria."],
+ ["emozioni","Tristezza lenta:|non si scaccia, si accoglie|come un'ospite."],
+ ["emozioni","Paura al buio —|accendo una candela,|la guardo in viso."],
+ ["emozioni","Gioia improvvisa —|passero sul balcone,|non chiede il perché."],
+ ["emozioni","Vergogna antica —|la stendo al sole come|un panno umido."],
+ ["emozioni","Due emozioni|nella stessa giornata:|ci stanno entrambe."],
+ ["emozioni","Ogni emozione —|messaggero alla porta.|Apro. Ascolto."],
+ ["emozioni","Odor di casa:|il bucato della nonna|steso nel tempo."],
+ ["umore","Segno un sei, oggi —|né sole né tempesta,|cielo d'ottobre."],
+ ["umore","Onde del mare —|anche l'onda più alta|torna alla riva."],
+ ["umore","Un giorno storto|non fa una vita storta:|è solo un giorno."],
+ ["umore","Riga del mese —|colline e valli, come|un paesaggio."],
+ ["umore","Stanchezza, sera —|anche la luna è mezza,|eppure brilla."],
+ ["umore","Mattino lento —|chiedo all'umore un nome,|risponde: nebbia."],
+ ["pensieri","Pensiero nero|posa sul davanzale —|ma non è il cielo."],
+ ["pensieri","Sempre, mai, tutti —|parole troppo grandi|per un martedì."],
+ ["pensieri","Dice la mente:|«fallirai, come sempre».|E io: «vediamo»."],
+ ["pensieri","Situazione,|pensiero, conseguenza:|tre sassi in fila."],
+ ["pensieri","Un fatto solo,|ma i pensieri sono cento —|scelgo con cura."],
+ ["seduta","Parole lente|cadono nella stanza —|qualcuno ascolta."],
+ ["seduta","Silenzio pieno:|tra una domanda e l'altra|germoglia un seme."],
+ ["seduta","Due sedie, un'ora —|la stanza fa silenzio|se dico il vero."],
+ ["seduta","Di settimana|in settimana un'ora|che è solo mia."],
+ ["seduta","Sul taccuino|tre cose da portare —|e ne dico una."],
+ ["seduta","Torno per strada:|pesano meno i passi|che nell'andata."],
+ ["seduta","Pausa in seduta:|non è vuoto, è un giardino|dove si aspetta."],
+ ["seduta","Dire «non lo so» —|anche questa è una frase|che va lontano."],
+ ["cura","Chi ascolta tanto|la sera posa il peso|come un cappotto."],
+ ["cura","Cento racconti|passano per la stanza —|lei resta, quercia."],
+ ["cura","Mestiere antico:|tenere una lanterna|per chi cammina."],
+ ["cura","Domande giuste —|come chiavi nel mazzo:|una, la porta."],
+ ["cura","Anche chi cura|ha sete di un tè caldo|e di un tramonto."],
+ ["cura","Grazie a chi ascolta|né fretta né giudizio —|come la terra."],
+ ["cura","Luce di studio —|chi cura impara ancora,|a lume basso."],
+ ["cura","Tra due persone|un filo invisibile|regge: fiducia."],
+ ["stagioni","Germoglio in crepa —|anche il cemento cede|alla pazienza."],
+ ["stagioni","Inverno dentro —|sotto la neve il seme|conta i suoi giorni."],
+ ["stagioni","Piano, ogni cosa:|la luna impiega un mese|a farsi piena."],
+ ["stagioni","Foglie d'ottobre —|anche il dolore cambia|colore, piano."],
+ ["stagioni","Rondine tarda —|non è in ritardo, arriva|quando è il suo tempo."],
+ ["stagioni","Il fiume cambia|e resta sempre fiume —|così anch'io, forse."]
+].map(function(h){return {t:h[0], l:h[1].split("|")};});
+
+/* ---------- Emozioni ---------- */
+var FAMILIES = [
+ {k:"gioia", n:"Gioia", d:"Ci dice che qualcosa di importante per noi sta andando bene.", s:["serenità","gratitudine","entusiasmo","orgoglio","sollievo","speranza","tenerezza","allegria","fiducia","affetto"]},
+ {k:"tristezza", n:"Tristezza", d:"Segnala una perdita, o qualcosa che ci manca.", s:["malinconia","solitudine","delusione","nostalgia","scoraggiamento","vuoto","rimpianto","abbattimento","impotenza"]},
+ {k:"paura", n:"Paura", d:"Avvisa di un pericolo, vero o immaginato.", s:["ansia","preoccupazione","insicurezza","vulnerabilità","smarrimento","panico","apprensione","timore del giudizio","agitazione"]},
+ {k:"rabbia", n:"Rabbia", d:"Nasce quando sentiamo superato un limite, o un'ingiustizia.", s:["irritazione","frustrazione","risentimento","invidia","gelosia","indignazione","impazienza","ostilità","fastidio"]},
+ {k:"sorpresa", n:"Sorpresa", d:"Arriva con l'inatteso e apre l'attenzione.", s:["stupore","confusione","curiosità","meraviglia","disorientamento","sconcerto"]},
+ {k:"disgusto", n:"Disgusto", d:"Ci fa allontanare da ciò che sentiamo come dannoso.", s:["avversione","disprezzo","repulsione","rifiuto","nausea"]},
+ {k:"vergogna", n:"Vergogna", d:"Riguarda lo sguardo degli altri, e quello che abbiamo su noi stessi.", s:["colpa","imbarazzo","inadeguatezza","umiliazione","senso di indegnità"]}
+];
+var EMO_FAMILY = {};
+FAMILIES.forEach(function(f){ EMO_FAMILY[f.n.toLowerCase()] = f.k; f.s.forEach(function(s){ EMO_FAMILY[s] = f.k; }); });
+function famOf(emo){ return EMO_FAMILY[(emo||"").trim().toLowerCase()] || null; }
+function famColor(emo){ var f = famOf(emo); return f ? "var(--e-"+f+")" : "var(--accent)"; }
+
+/* ---------- Utilità ---------- */
+function pad(n){ return (n<10?"0":"")+n; }
+function ymd(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function localDT(d){ return ymd(d)+"T"+pad(d.getHours())+":"+pad(d.getMinutes()); }
+function addDays(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function parseYMD(s){ var p=s.split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
+var MESI=["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+var GIORNI=["domenica","lunedì","martedì","mercoledì","giovedì","venerdì","sabato"];
+var GG=["dom","lun","mar","mer","gio","ven","sab"];
+function niceDate(d){ return GIORNI[d.getDay()]+" "+d.getDate()+" "+MESI[d.getMonth()]; }
+function niceDT(s){ var d=new Date(s); if(isNaN(d)) return s; return niceDate(d)+", ore "+pad(d.getHours())+":"+pad(d.getMinutes()); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function $(id){ return document.getElementById(id); }
+function flash(id,msg){ var el=$(id); el.textContent=msg; clearTimeout(el._t); el._t=setTimeout(function(){el.textContent="";},2600); }
+
+/* ---------- Archivio locale ---------- */
+var KEY="tra-le-sedute-v1", storageOk=true;
+var S = {diary:[], mood:[], abc:[], notes:[], next:"", tab:"oggi"};
+try{ var raw=localStorage.getItem(KEY); if(raw){ var p=JSON.parse(raw); for(var k in S){ if(p[k]!==undefined) S[k]=p[k]; } } }catch(e){ storageOk=false; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOk=false; $("storage-warn").hidden=false; } }
+if(!storageOk) $("storage-warn").hidden=false;
+
+/* ---------- Esempi (mostrati finché non c'è una voce vera) ---------- */
+var now=new Date();
+function atDay(off,h,m){ var d=addDays(now,off); d.setHours(h,m,0,0); return localDT(d); }
+var DEMO = {
+ diary:[
+  {id:"x1", when:atDay(-1,19,30), emo:"ansia", int:6, sit:"Domani ho un colloquio di lavoro.", thought:"Non sarò all'altezza.", did:"Ho fatto una passeggiata lunga.", need:"Un po' di rassicurazione."},
+  {id:"x2", when:atDay(-3,13,10), emo:"sollievo", int:5, sit:"Ho chiarito con mia sorella dopo giorni di silenzio.", thought:"Allora si può parlare.", did:"L'ho chiamata di nuovo la sera.", need:""},
+  {id:"x3", when:atDay(-4,22,0), emo:"solitudine", int:7, sit:"Sabato sera a casa da solo.", thought:"Gli altri hanno tutti qualcuno.", did:"Ho guardato un film senza seguirlo.", need:"Sentire una voce amica."},
+  {id:"x4", when:atDay(-6,9,0), emo:"irritazione", int:4, sit:"Il treno è arrivato con quaranta minuti di ritardo.", thought:"Va sempre tutto storto.", did:"Ho scritto al lavoro che arrivavo tardi.", need:""}
+ ],
+ mood:(function(){ var v=[5,6,6,4,5,7,6,5,3,4,5,6,7,7,6,5,6,4,5,6,7,6]; var e=[4,5,6,3,4,6,6,5,3,3,4,5,6,7,5,5,5,4,4,6,6,5]; var out=[]; for(var i=0;i<v.length;i++){ if(i===9||i===15) continue; out.push({date:ymd(addDays(now,-(v.length-i))), mood:v[i], energy:e[i], sleep:i%4===0?"Male":"Bene", note:i===8?"giornata pesante":""}); } return out; })(),
+ abc:[{id:"y1", when:ymd(addDays(now,-2)), sit:"Un collega non ha risposto al mio saluto in corridoio.", thought:"Ce l'ha con me, ho sbagliato qualcosa.", belief:80, emo:"preoccupazione", int:6, beh:"Ho evitato la sala caffè tutta la mattina.", alt:"Forse era distratto o di fretta: non l'ho mai visto arrabbiato con me.", belief2:30}],
+ notes:[
+  {id:"z1", text:"Perché il sabato sera mi pesa così tanto?", imp:true, done:false},
+  {id:"z2", text:"Raccontare il colloquio di lavoro", imp:false, done:false},
+  {id:"z3", text:"Dire che la settimana scorsa è andata meglio", imp:false, done:true}
+ ]
+};
+function data(kind){ return S[kind].length ? {items:S[kind], demo:false} : {items:DEMO[kind], demo:true}; }
+function demoBanner(id, kind, what){
+  var el=$(id);
+  el.innerHTML = data(kind).demo ? '<div class="demo-banner"><strong>Esempi.</strong><span>'+what+' Spariscono appena salvi la tua prima voce.</span></div>' : "";
+}
+
+/* ---------- Haiku nelle pagine ---------- */
+function pick(themes, avoid){
+  var pool=HAIKU.filter(function(h){ return themes.indexOf(h.t)>=0 && h!==avoid; });
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function hkHTML(h, withBtn){
+  return '<blockquote>'+h.l.map(function(x){return "<span>"+esc(x)+"</span>";}).join("")+'</blockquote>'+
+    '<figcaption><span>'+esc(THEMES[h.t])+'</span>'+(withBtn?'<button class="link-btn" type="button">Un altro</button>':'')+'</figcaption>';
+}
+function fillSlot(slot){
+  var themes=slot.getAttribute("data-themes").split(",");
+  var fig=slot.querySelector("figure");
+  if(!fig){ fig=document.createElement("figure"); fig.className="hk"; slot.appendChild(fig); }
+  var h=pick(themes, slot._h); slot._h=h;
+  fig.innerHTML=hkHTML(h,true);
+  fig.querySelector("button").onclick=function(){
+    var q=fig.querySelector("blockquote"); q.style.opacity="0";
+    setTimeout(function(){ fillSlot(slot); }, matchMedia("(prefers-reduced-motion: reduce)").matches?0:300);
+  };
+}
+document.querySelectorAll(".hk-slot").forEach(fillSlot);
+
+/* ---------- Schede ---------- */
+var tabs=document.querySelectorAll(".tab"), pages=document.querySelectorAll(".page");
+function show(name){
+  if(!document.querySelector('[data-page="'+name+'"]')) name="oggi";
+  pages.forEach(function(p){ p.hidden = p.getAttribute("data-page")!==name; });
+  tabs.forEach(function(t){ var on=t.getAttribute("data-tab")===name; t.setAttribute("aria-selected",on?"true":"false"); if(on && t.scrollIntoView) t.scrollIntoView({block:"nearest",inline:"nearest"}); });
+  S.tab=name; save();
+  var slot=document.querySelector('[data-page="'+name+'"] .hk-slot'); if(slot) fillSlot(slot);
+  if(name==="oggi") renderToday();
+  window.scrollTo({top:0});
+}
+tabs.forEach(function(t){ t.onclick=function(){ show(t.getAttribute("data-tab")); }; });
+document.addEventListener("click",function(e){ var g=e.target.closest("[data-go]"); if(g){ e.preventDefault(); show(g.getAttribute("data-go")); } });
+
+/* ---------- Range output ---------- */
+function bindRange(id, suffix){ var r=$(id), o=$(id+"-out"); function u(){ o.textContent=r.value+suffix; } r.addEventListener("input",u); u(); return u; }
+var uQ=bindRange("q-mood","/10"), uDI=bindRange("d-int","/10"), uMM=bindRange("m-mood","/10"), uME=bindRange("m-energy","/10"),
+    uAB=bindRange("a-belief","%"), uAI=bindRange("a-int","/10"), uAB2=bindRange("a-belief2","%");
+
+/* ---------- Elimina con conferma ---------- */
+function armDelete(btn, fn, label){
+  btn.onclick=function(){
+    if(btn.classList.contains("armed")){ fn(); return; }
+    btn.classList.add("armed"); var old=btn.textContent; btn.textContent=label||"Conferma";
+    setTimeout(function(){ btn.classList.remove("armed"); btn.textContent=old; }, 3500);
+  };
+}
+
+/* ---------- Oggi ---------- */
+function renderToday(){
+  $("todayLabel").textContent = niceDate(new Date());
+  var today=ymd(new Date());
+  var m=S.mood.filter(function(x){return x.date===today;})[0];
+  if(m){ $("q-mood").value=m.mood; uQ(); }
+  var weekAgo=addDays(new Date(),-6); weekAgo.setHours(0,0,0,0);
+  var wk=S.diary.filter(function(d){ return new Date(d.when)>=weekAgo; }).length;
+  var todo=S.notes.filter(function(n){return !n.done;}).length;
+  var next = S.next ? countdownText(S.next) : "—";
+  $("stats").innerHTML =
+    '<div class="stat"><b>'+wk+'</b><span>voci questa settimana</span></div>'+
+    '<div class="stat"><b>'+todo+'</b><span>appunti da portare</span></div>'+
+    '<div class="stat"><b>'+esc(next)+'</b><span>alla prossima seduta</span></div>';
+}
+$("q-save").onclick=function(){
+  var today=ymd(new Date()), v=+$("q-mood").value;
+  var m=S.mood.filter(function(x){return x.date===today;})[0];
+  if(m) m.mood=v; else S.mood.push({date:today, mood:v, energy:null, sleep:"", note:""});
+  save(); flash("q-toast","Segnato: "+v+"/10"); renderMood(); renderToday();
+};
+
+/* ---------- Diario ---------- */
+function resetDiaryForm(){ $("d-form").reset(); $("d-when").value=localDT(new Date()); uDI(); }
+$("d-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  S.diary.push({id:uid(), when:$("d-when").value, emo:$("d-emo").value.trim(), int:+$("d-int").value,
+    sit:$("d-sit").value.trim(), thought:$("d-thought").value.trim(), did:$("d-did").value.trim(), need:$("d-need").value.trim()});
+  save(); resetDiaryForm(); flash("d-toast","Salvato nel diario"); renderDiary();
+});
+function renderDiary(){
+  var d=data("diary");
+  demoBanner("d-demo","diary","Queste voci mostrano come apparirà il tuo diario.");
+  var items=d.items.slice().sort(function(a,b){ return a.when<b.when?1:-1; });
+  $("d-list").innerHTML = items.map(function(x){
+    var col=famColor(x.emo);
+    var rows=[["Cosa stava succedendo",x.sit],["Cosa ho pensato",x.thought],["Cosa ho fatto",x.did],["Di cosa avrei avuto bisogno",x.need]]
+      .filter(function(r){return r[1];}).map(function(r){return "<div><dt>"+r[0]+"</dt><dd>"+esc(r[1])+"</dd></div>";}).join("");
+    return '<article class="entry'+(d.demo?' demo':'')+'" style="--chip:'+col+'">'+
+      '<div class="entry-head"><span class="when">'+esc(niceDT(x.when))+'</span><span class="chip">'+esc(x.emo)+'</span>'+
+      '<span class="meter"><i><b style="width:'+(x.int*10)+'%"></b></i>'+x.int+'/10</span>'+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
+      (rows?'<dl>'+rows+'</dl>':'')+
+      (d.demo?'':'<div class="entry-foot"><button class="btn danger small" data-del="'+x.id+'">Elimina</button></div>')+
+      '</article>';
+  }).join("");
+  $("d-list").querySelectorAll("[data-del]").forEach(function(b){
+    armDelete(b,function(){ S.diary=S.diary.filter(function(x){return x.id!==b.getAttribute("data-del");}); save(); renderDiary(); },"Conferma eliminazione");
+  });
+  // settimana
+  var today=new Date(); today.setHours(0,0,0,0); var html="";
+  for(var i=6;i>=0;i--){
+    var day=addDays(today,-i), key=ymd(day);
+    var es=d.items.filter(function(x){ return x.when.slice(0,10)===key; }).sort(function(a,b){return a.when<b.when?-1:1;});
+    var bars=es.slice(0,5).map(function(x){ return '<b title="'+esc(x.emo)+' '+x.int+'/10" style="--chip:'+famColor(x.emo)+';height:'+Math.max(4,x.int*10)+'%"></b>'; }).join("");
+    html+='<div class="day'+(i===0?' today':'')+'"><div class="bars">'+bars+'</div><small>'+(i===0?'oggi':GG[day.getDay()])+'</small></div>';
+  }
+  $("d-week").innerHTML=html;
+}
+
+/* ---------- Ruota ---------- */
+var selFam=null, selNu=null;
+function renderWheel(){
+  var n=FAMILIES.length, r0=48, r1=160, gap=1.2, svg='<svg viewBox="-170 -170 340 340" role="img" aria-label="Ruota delle emozioni">';
+  function pt(r,a){ var t=a*Math.PI/180; return (r*Math.cos(t)).toFixed(2)+" "+(r*Math.sin(t)).toFixed(2); }
+  FAMILIES.forEach(function(f,i){
+    var a0=-90+i*360/n+gap, a1=-90+(i+1)*360/n-gap, mid=(a0+a1)/2, on=selFam===f.k;
+    var off=on?8:0, tx=off*Math.cos(mid*Math.PI/180), ty=off*Math.sin(mid*Math.PI/180);
+    var dPath="M"+pt(r0,a0)+" L"+pt(r1,a0)+" A"+r1+" "+r1+" 0 0 1 "+pt(r1,a1)+" L"+pt(r0,a1)+" A"+r0+" "+r0+" 0 0 0 "+pt(r0,a0)+" Z";
+    var lr=(r0+r1)/2+6, lx=lr*Math.cos(mid*Math.PI/180), ly=lr*Math.sin(mid*Math.PI/180);
+    svg+='<g class="sector" data-fam="'+f.k+'" transform="translate('+tx.toFixed(1)+' '+ty.toFixed(1)+')" tabindex="0" role="button" aria-label="'+f.n+'">'+
+      '<path d="'+dPath+'" fill="var(--e-'+f.k+')" opacity="'+(selFam && !on?0.45:1)+'"></path>'+
+      '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" fill="var(--on-e)">'+f.n+'</text></g>';
+  });
+  svg+='<circle r="'+(r0-6)+'" fill="var(--surface)" stroke="var(--line)"></circle>'+
+       '<text y="-6" text-anchor="middle" fill="var(--muted)" style="font-weight:500;font-size:11px">Come</text>'+
+       '<text y="9" text-anchor="middle" fill="var(--muted)" style="font-weight:500;font-size:11px">mi sento?</text></svg>';
+  $("wheel").innerHTML=svg;
+  $("wheel").querySelectorAll(".sector").forEach(function(g){
+    function go(){ selFam=g.getAttribute("data-fam"); selNu=null; renderWheel(); }
+    g.addEventListener("click",go);
+    g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  var p=$("fam-panel");
+  if(!selFam){ p.innerHTML='<h3>Scegli una famiglia</h3><p class="hint">Ogni spicchio raccoglie emozioni imparentate tra loro. Non esistono emozioni giuste o sbagliate: ognuna porta un\'informazione.</p>'; return; }
+  var f=FAMILIES.filter(function(x){return x.k===selFam;})[0];
+  p.style.setProperty("--chip","var(--e-"+f.k+")");
+  p.innerHTML='<div class="fam-title"><i></i><h3>'+f.n+'</h3></div><p>'+esc(f.d)+'</p>'+
+    '<span class="lbl">Quale sfumatura?</span><div class="nuances">'+
+    [f.n.toLowerCase()].concat(f.s).map(function(s){ return '<button type="button" class="nuance" aria-pressed="'+(selNu===s)+'" data-nu="'+esc(s)+'">'+esc(s)+'</button>'; }).join("")+
+    '</div><div class="actions"><button class="btn" id="nu-go" '+(selNu?'':'disabled style="opacity:.5;cursor:default"')+'>'+(selNu?'Scrivi nel diario: '+esc(selNu):'Scegli una sfumatura')+'</button></div>';
+  p.querySelectorAll(".nuance").forEach(function(b){ b.onclick=function(){ selNu=b.getAttribute("data-nu"); renderWheel(); }; });
+  $("nu-go").onclick=function(){ if(!selNu) return; resetDiaryForm(); $("d-emo").value=selNu; show("diario"); setTimeout(function(){ $("d-int").focus(); },50); };
+}
+
+/* ---------- Umore ---------- */
+$("m-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var date=$("m-date").value, ex=S.mood.filter(function(x){return x.date===date;})[0];
+  var rec={date:date, mood:+$("m-mood").value, energy:+$("m-energy").value, sleep:$("m-sleep").value, note:$("m-note").value.trim()};
+  if(ex) Object.assign(ex,rec); else S.mood.push(rec);
+  save(); flash("m-toast", ex?"Giorno aggiornato":"Giorno salvato"); $("m-note").value=""; renderMood();
+});
+function renderMood(){
+  var d=data("mood");
+  demoBanner("m-demo","mood","Il grafico qui sotto mostra un mese di esempio.");
+  var W=640,H=230,L=34,R=12,T=14,B=30, today=new Date(); today.setHours(0,0,0,0);
+  var days=30, xs=function(i){ return L+(W-L-R)*i/(days-1); }, ys=function(v){ return T+(H-T-B)*(10-v)/9; };
+  var map={}; d.items.forEach(function(x){ map[x.date]=x; });
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Umore ed energia negli ultimi 30 giorni">';
+  [1,4,7,10].forEach(function(v){ s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+ys(v)+'" y2="'+ys(v)+'" stroke="var(--line)" stroke-width="1"></line><text x="'+(L-8)+'" y="'+ys(v)+'" text-anchor="end" dominant-baseline="middle" font-size="11" fill="var(--muted)">'+v+'</text>'; });
+  var pts=[], epts=[];
+  for(var i=0;i<days;i++){
+    var day=addDays(today,-(days-1-i)), k=ymd(day), r=map[k];
+    if(i%7===(days-1)%7) s+='<text x="'+xs(i)+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="var(--muted)">'+day.getDate()+' '+MESI[day.getMonth()].slice(0,3)+'</text>';
+    if(r){ pts.push([xs(i),ys(r.mood)]); if(r.energy) epts.push([xs(i),ys(r.energy)]); }
+  }
+  if(pts.length>1){
+    var line=pts.map(function(p,j){return (j?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1);}).join(" ");
+    s+='<path d="'+line+" L"+pts[pts.length-1][0].toFixed(1)+" "+ys(1)+" L"+pts[0][0].toFixed(1)+" "+ys(1)+' Z" fill="var(--accent)" opacity=".1"></path>';
+    s+='<path d="'+line+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"></path>';
+  }
+  epts.forEach(function(p){ s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3" fill="var(--ochre)"></circle>'; });
+  pts.forEach(function(p,j){ var last=j===pts.length-1; s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(last?5:3)+'" fill="'+(last?'var(--accent)':'var(--surface)')+'" stroke="var(--accent)" stroke-width="2"></circle>'; });
+  if(!pts.length) s+='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" fill="var(--muted)" font-size="13">Nessun giorno segnato in questo periodo</text>';
+  s+='</svg>';
+  $("m-chart").innerHTML=s;
+  var items=d.items.slice().sort(function(a,b){return a.date<b.date?1:-1;}).slice(0,10);
+  $("m-list").innerHTML='<h3>Gli ultimi giorni</h3>'+items.map(function(x){
+    return '<article class="entry'+(d.demo?' demo':'')+'"><div class="entry-head"><span class="when">'+esc(niceDate(parseYMD(x.date)))+'</span>'+
+      '<span class="meter"><i><b style="width:'+(x.mood*10)+'%"></b></i>umore '+x.mood+'/10</span>'+
+      (x.energy?'<span class="meter" style="--chip:var(--ochre)"><i><b style="width:'+(x.energy*10)+'%"></b></i>energia '+x.energy+'/10</span>':'')+
+      (x.sleep?'<span class="badge">sonno: '+esc(x.sleep.toLowerCase())+'</span>':'')+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
+      (x.note?'<p>'+esc(x.note)+'</p>':'')+
+      (d.demo?'':'<div class="entry-foot"><button class="btn danger small" data-mdel="'+x.date+'">Elimina</button></div>')+'</article>';
+  }).join("");
+  $("m-list").querySelectorAll("[data-mdel]").forEach(function(b){
+    armDelete(b,function(){ S.mood=S.mood.filter(function(x){return x.date!==b.getAttribute("data-mdel");}); save(); renderMood(); },"Conferma eliminazione");
+  });
+}
+
+/* ---------- Pensieri ---------- */
+$("a-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  S.abc.push({id:uid(), when:$("a-when").value, sit:$("a-sit").value.trim(), thought:$("a-thought").value.trim(), belief:+$("a-belief").value,
+    emo:$("a-emo").value.trim(), int:+$("a-int").value, beh:$("a-beh").value.trim(), alt:$("a-alt").value.trim(), belief2:+$("a-belief2").value});
+  save(); $("a-form").reset(); $("a-when").value=ymd(new Date()); uAB(); uAI(); uAB2(); flash("a-toast","Registro salvato"); renderABC();
+});
+function renderABC(){
+  var d=data("abc");
+  demoBanner("a-demo","abc","Ecco come appare una voce compilata.");
+  var items=d.items.slice().sort(function(a,b){return a.when<b.when?1:-1;});
+  $("a-list").innerHTML=items.map(function(x){
+    return '<article class="entry'+(d.demo?' demo':'')+'" style="--chip:'+famColor(x.emo)+'"><div class="entry-head"><span class="when">'+esc(niceDate(parseYMD(x.when)))+'</span>'+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
+      '<div class="abc"><div><span class="k">A</span><p>'+esc(x.sit)+'</p></div>'+
+      '<div><span class="k">B</span><p>'+esc(x.thought)+'</p><p class="hint">ci credevo al '+x.belief+'%</p></div>'+
+      '<div><span class="k">C</span>'+(x.emo?'<p><span class="chip">'+esc(x.emo)+' '+x.int+'/10</span></p>':'')+(x.beh?'<p>'+esc(x.beh)+'</p>':'')+'</div></div>'+
+      (x.alt?'<div class="alt"><span class="lbl">Un altro modo di vederla</span><p>'+esc(x.alt)+'</p><p class="hint">ora ci credo al '+x.belief2+'%, prima al '+x.belief+'%</p></div>':'')+
+      (d.demo?'':'<div class="entry-foot"><button class="btn danger small" data-adel="'+x.id+'">Elimina</button></div>')+'</article>';
+  }).join("");
+  $("a-list").querySelectorAll("[data-adel]").forEach(function(b){
+    armDelete(b,function(){ S.abc=S.abc.filter(function(x){return x.id!==b.getAttribute("data-adel");}); save(); renderABC(); },"Conferma eliminazione");
+  });
+}
+
+/* ---------- Seduta ---------- */
+var nFilter="todo";
+function countdownText(v){
+  var t=new Date(v); if(isNaN(t)) return "—";
+  var a=new Date(); a.setHours(0,0,0,0); var b=new Date(t); b.setHours(0,0,0,0);
+  var days=Math.round((b-a)/864e5);
+  if(t<new Date()) return "passato";
+  if(days===0) return "oggi";
+  if(days===1) return "domani";
+  return days+" giorni";
+}
+function renderNext(){
+  $("s-next").value=S.next||"";
+  var c=$("s-count");
+  if(!S.next){ c.textContent="Nessuna data"; return; }
+  var txt=countdownText(S.next), t=new Date(S.next);
+  c.textContent = txt==="passato" ? "Data passata: aggiornala" : (txt==="oggi"||txt==="domani" ? txt.charAt(0).toUpperCase()+txt.slice(1) : txt) + ", ore "+pad(t.getHours())+":"+pad(t.getMinutes());
+}
+$("s-next").addEventListener("change",function(){ S.next=this.value; save(); renderNext(); });
+$("n-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  S.notes.push({id:uid(), text:$("n-text").value.trim(), imp:$("n-imp").checked, done:false});
+  save(); $("n-form").reset(); nFilter="todo"; renderNotes();
+});
+$("n-filter").querySelectorAll("button").forEach(function(b){ b.onclick=function(){ nFilter=b.getAttribute("data-f"); renderNotes(); }; });
+function renderNotes(){
+  $("n-filter").querySelectorAll("button").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-f")===nFilter); });
+  var d=data("notes");
+  demoBanner("n-demo","notes","Ecco come appaiono gli appunti.");
+  var items=d.items.filter(function(n){ return nFilter==="done"?n.done:!n.done; }).sort(function(a,b){ return (b.imp?1:0)-(a.imp?1:0); });
+  $("n-list").innerHTML = items.length ? items.map(function(n){
+    return '<div class="note'+(n.done?' done':'')+(d.demo?' demo':'')+'"><input type="checkbox" '+(n.done?'checked':'')+' '+(d.demo?'disabled':'')+' data-nid="'+n.id+'" aria-label="Parlato in seduta">'+
+      '<div class="txt">'+(n.imp?'<span class="star" title="Importante">★ </span>':'')+esc(n.text)+'</div>'+
+      (d.demo?'<span class="badge">Esempio</span>':'<button class="icon-btn" data-ndel="'+n.id+'" aria-label="Elimina appunto">Elimina</button>')+'</div>';
+  }).join("") : '<p class="empty">'+(nFilter==="done"?"Nessun appunto ancora segnato come parlato.":"Nessun appunto da portare. Aggiungine uno quando ti viene in mente.")+'</p>';
+  $("n-list").querySelectorAll("[data-nid]").forEach(function(c){ c.onchange=function(){ var n=S.notes.filter(function(x){return x.id===c.getAttribute("data-nid");})[0]; if(n){ n.done=c.checked; save(); setTimeout(renderNotes,250); } }; });
+  $("n-list").querySelectorAll("[data-ndel]").forEach(function(b){ armDelete(b,function(){ S.notes=S.notes.filter(function(x){return x.id!==b.getAttribute("data-ndel");}); save(); renderNotes(); },"Conferma"); });
+}
+
+/* ---------- Copia ---------- */
+function copyText(text, toastId, fallbackId){
+  function fallback(){
+    var box=$(fallbackId); box.innerHTML='<p class="hint">Seleziona il testo qui sotto e copialo.</p><textarea class="copy-fallback" readonly></textarea>';
+    var ta=box.querySelector("textarea"); ta.value=text; ta.focus(); ta.select();
+  }
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ if(toastId) flash(toastId,"Copiato"); else alertBtn(); }, fallback);
+    } else fallback();
+  }catch(e){ fallback(); }
+}
+function alertBtn(){ var b=$("n-copy"), o=b.textContent; b.textContent="Copiato"; setTimeout(function(){ b.textContent=o; },2000); }
+$("n-copy").onclick=function(){
+  var todo=S.notes.filter(function(n){return !n.done;});
+  var text="Da portare in seduta"+(S.next?" ("+niceDT(S.next)+")":"")+":\n"+(todo.length?todo.map(function(n){return "- "+(n.imp?"[importante] ":"")+n.text;}).join("\n"):"(nessun appunto)");
+  copyText(text, null, "n-copy-fallback");
+};
+$("x-copy").onclick=function(){
+  var out=["TRA LE SEDUTE · copia del "+niceDate(new Date()),""];
+  out.push("== DIARIO DELLE EMOZIONI ==");
+  S.diary.slice().sort(function(a,b){return a.when<b.when?-1:1;}).forEach(function(x){
+    out.push(niceDT(x.when)+" · "+x.emo+" "+x.int+"/10");
+    if(x.sit) out.push("  Situazione: "+x.sit); if(x.thought) out.push("  Pensiero: "+x.thought);
+    if(x.did) out.push("  Cosa ho fatto: "+x.did); if(x.need) out.push("  Bisogno: "+x.need); out.push("");
+  });
+  out.push("== UMORE ==");
+  S.mood.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date+" · umore "+x.mood+"/10"+(x.energy?" · energia "+x.energy+"/10":"")+(x.sleep?" · sonno "+x.sleep:"")+(x.note?" · "+x.note:"")); });
+  out.push("","== PENSIERI (A-B-C) ==");
+  S.abc.forEach(function(x){ out.push(x.when); out.push("  A: "+x.sit); out.push("  B: "+x.thought+" ("+x.belief+"%)"); out.push("  C: "+(x.emo?x.emo+" "+x.int+"/10. ":"")+(x.beh||"")); if(x.alt) out.push("  Altro modo: "+x.alt+" (ora "+x.belief2+"%)"); out.push(""); });
+  out.push("== APPUNTI PER LA SEDUTA ==");
+  S.notes.forEach(function(n){ out.push("- "+(n.done?"[parlato] ":"")+(n.imp?"[importante] ":"")+n.text); });
+  copyText(out.join("\n"), "x-toast", "x-fallback");
+};
+armDelete($("x-wipe"),function(){
+  S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.next=""; save();
+  renderAll(); flash("w-toast","Tutte le voci sono state cancellate");
+},"Sì, cancella tutto");
+
+/* ---------- Pagina haiku ---------- */
+var hkFilter="tutti", lastDraw=null;
+function renderHaikuPage(){
+  var chips=[["tutti","Tutti"]].concat(Object.keys(THEMES).map(function(k){return [k,THEMES[k]];}));
+  $("hk-filters").innerHTML=chips.map(function(c){ return '<button type="button" class="nuance" style="--chip:var(--accent)" aria-pressed="'+(hkFilter===c[0])+'" data-hf="'+c[0]+'">'+c[1]+'</button>'; }).join("");
+  $("hk-filters").querySelectorAll("[data-hf]").forEach(function(b){ b.onclick=function(){ hkFilter=b.getAttribute("data-hf"); renderHaikuPage(); }; });
+  var list=HAIKU.filter(function(h){ return hkFilter==="tutti"||h.t===hkFilter; });
+  $("hk-grid").innerHTML=list.map(function(h){ return '<div class="hk-card"><blockquote>'+h.l.map(function(x){return "<span>"+esc(x)+"</span>";}).join("")+'</blockquote><small>'+esc(THEMES[h.t])+'</small></div>'; }).join("");
+}
+function draw(){
+  var pool=HAIKU.filter(function(h){ return h!==lastDraw && (hkFilter==="tutti"||h.t===hkFilter); });
+  lastDraw=pool[Math.floor(Math.random()*pool.length)];
+  $("hk-draw").innerHTML=hkHTML(lastDraw,false);
+}
+$("hk-draw-btn").onclick=draw;
+
+/* ---------- Avvio ---------- */
+var VALUE_DESC=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value");
+var WD=["L","M","M","G","V","S","D"];
+document.querySelectorAll(".dt-pick").forEach(function(box){
+  var inp=box.querySelector("input"), mode=box.getAttribute("data-mode"), canClear=box.hasAttribute("data-clear");
+  var lblId=inp.id+"-lbl";
+  var btn=document.createElement("button"); btn.type="button"; btn.className="opt-display"; btn.setAttribute("aria-expanded","false"); btn.setAttribute("aria-labelledby",lblId);
+  btn.innerHTML='<span class="opt-val"></span><span class="opt-arrow" aria-hidden="true">▾</span>';
+  var panel=document.createElement("div"); panel.className="dt-panel"; panel.hidden=true;
+  box.appendChild(btn); box.appendChild(panel);
+  var view=null, draft=null;
+  function raw(){ return VALUE_DESC.get.call(inp); }
+  function parse(v){ if(!v) return null; var d=v.slice(0,10).split("-"), t=(v.slice(11)||"00:00").split(":"); return {y:+d[0],m:+d[1]-1,d:+d[2],h:+t[0]||0,mi:+t[1]||0}; }
+  function fmt(o){ var s=o.y+"-"+pad(o.m+1)+"-"+pad(o.d); return mode==="datetime" ? s+"T"+pad(o.h)+":"+pad(o.mi) : s; }
+  function label(){
+    var o=parse(raw()); var v=btn.querySelector(".opt-val");
+    if(!o){ v.textContent="Nessuna data"; return; }
+    var d=new Date(o.y,o.m,o.d); var s=niceDate(d); s=s.charAt(0).toUpperCase()+s.slice(1);
+    v.textContent = mode==="datetime" ? s+", ore "+pad(o.h)+":"+pad(o.mi) : s;
+  }
+  Object.defineProperty(inp,"value",{configurable:true, get:function(){ return raw(); }, set:function(v){ VALUE_DESC.set.call(inp,v); label(); if(!panel.hidden) render(); }});
+  function commit(o, closeAfter){ VALUE_DESC.set.call(inp, o?fmt(o):""); label(); inp.dispatchEvent(new Event("change",{bubbles:true})); if(closeAfter) close(); else render(); }
+  function render(){
+    var cur=draft, today=new Date();
+    var first=new Date(view.y,view.m,1), off=(first.getDay()+6)%7, n=new Date(view.y,view.m+1,0).getDate();
+    var h='<div class="dt-head"><button type="button" class="dt-nav" data-nav="-1" aria-label="Mese precedente">‹</button><strong>'+MESI[view.m]+' '+view.y+'</strong><button type="button" class="dt-nav" data-nav="1" aria-label="Mese successivo">›</button></div><div class="dt-grid">';
+    WD.forEach(function(w){ h+='<span class="wd">'+w+'</span>'; });
+    for(var i=0;i<off;i++) h+='<span></span>';
+    for(var d=1; d<=n; d++){
+      var isT = today.getFullYear()===view.y && today.getMonth()===view.m && today.getDate()===d;
+      var isS = cur && cur.y===view.y && cur.m===view.m && cur.d===d;
+      h+='<button type="button" class="dt-day'+(isT?' today':'')+'" aria-pressed="'+(!!isS)+'" data-d="'+d+'">'+d+'</button>';
+    }
+    h+='</div>';
+    if(mode==="datetime"){
+      var hh=cur?cur.h:today.getHours(), mm=cur?cur.mi:today.getMinutes();
+      h+='<div class="dt-time"><div class="step"><span class="lbl">Ora</span><div><button type="button" data-st="h" data-by="-1" aria-label="Un\'ora prima">−</button><output>'+pad(hh)+'</output><button type="button" data-st="h" data-by="1" aria-label="Un\'ora dopo">+</button></div></div>'+
+         '<div class="step"><span class="lbl">Minuti</span><div><button type="button" data-st="mi" data-by="-5" aria-label="Cinque minuti prima">−</button><output>'+pad(mm)+'</output><button type="button" data-st="mi" data-by="5" aria-label="Cinque minuti dopo">+</button></div></div></div>';
+    }
+    h+='<div class="dt-actions"><div class="actions"><button type="button" class="btn ghost small" data-now="1">'+(mode==="datetime"?"Adesso":"Oggi")+'</button>'+(canClear?'<button type="button" class="btn ghost small" data-clr="1">Togli la data</button>':'')+'</div>'+(mode==="datetime"?'<button type="button" class="btn small" data-done="1">Fatto</button>':'')+'</div>';
+    panel.innerHTML=h;
+    panel.querySelectorAll("[data-nav]").forEach(function(b){ b.onclick=function(){ var k=+b.getAttribute("data-nav"); var x=new Date(view.y,view.m+k,1); view={y:x.getFullYear(),m:x.getMonth()}; render(); }; });
+    panel.querySelectorAll("[data-d]").forEach(function(b){ b.onclick=function(){
+      var t=new Date(); var base=draft||{h:t.getHours(),mi:t.getMinutes()};
+      draft={y:view.y,m:view.m,d:+b.getAttribute("data-d"),h:base.h,mi:base.mi};
+      commit(draft, mode==="date");
+    }; });
+    panel.querySelectorAll("[data-st]").forEach(function(b){ b.onclick=function(){
+      var t=new Date(); if(!draft) draft={y:t.getFullYear(),m:t.getMonth(),d:t.getDate(),h:t.getHours(),mi:t.getMinutes()};
+      var by=+b.getAttribute("data-by");
+      if(b.getAttribute("data-st")==="h") draft.h=(draft.h+by+24)%24;
+      else { var m=by>0 ? Math.floor(draft.mi/5)*5+5 : Math.ceil(draft.mi/5)*5-5; draft.mi=(m+60)%60; }
+      commit(draft,false);
+    }; });
+    var nb=panel.querySelector("[data-now]"); nb.onclick=function(){ var t=new Date(); draft={y:t.getFullYear(),m:t.getMonth(),d:t.getDate(),h:t.getHours(),mi:t.getMinutes()}; view={y:draft.y,m:draft.m}; commit(draft, mode==="date"); };
+    var cb=panel.querySelector("[data-clr]"); if(cb) cb.onclick=function(){ draft=null; commit(null,true); };
+    var db=panel.querySelector("[data-done]"); if(db) db.onclick=close;
+  }
+  function open(){ draft=parse(raw()); var t=new Date(); view= draft?{y:draft.y,m:draft.m}:{y:t.getFullYear(),m:t.getMonth()}; render(); panel.hidden=false; btn.setAttribute("aria-expanded","true"); btn.querySelector(".opt-arrow").textContent="▴"; }
+  function close(){ panel.hidden=true; btn.setAttribute("aria-expanded","false"); btn.querySelector(".opt-arrow").textContent="▾"; }
+  btn.onclick=function(){ if(panel.hidden) open(); else close(); };
+  document.addEventListener("click",function(e){ if(e.target.isConnected && !box.contains(e.target)) close(); });
+  label();
+});
+document.querySelectorAll(".opt-pick").forEach(function(box){
+  var hid=box.querySelector("input"), btn=box.querySelector(".opt-display"), val=box.querySelector(".opt-val"), arrow=box.querySelector(".opt-arrow"), panel=box.querySelector(".emo-panel");
+  function sync(){ box.querySelectorAll("[data-v]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-v")===hid.value); }); val.textContent = hid.value || "Non indicato"; }
+  function close(){ panel.hidden=true; btn.setAttribute("aria-expanded","false"); arrow.textContent="▾"; }
+  btn.onclick=function(){ if(panel.hidden){ sync(); panel.hidden=false; btn.setAttribute("aria-expanded","true"); arrow.textContent="▴"; } else close(); };
+  box.querySelectorAll("[data-v]").forEach(function(b){ b.onclick=function(){ hid.value=b.getAttribute("data-v"); sync(); close(); }; });
+  document.addEventListener("click",function(e){ if(e.target.isConnected && !box.contains(e.target)) close(); });
+  sync();
+});
+document.querySelectorAll(".emo-pick").forEach(function(box){
+  var inp=box.querySelector("input"), btn=box.querySelector(".emo-toggle"), panel=box.querySelector(".emo-panel");
+  function fill(q){
+    q=(q||"").trim().toLowerCase();
+    var html=FAMILIES.map(function(f){
+      var words=[f.n.toLowerCase()].concat(f.s).filter(function(s){ return !q || s.indexOf(q)>=0 || f.n.toLowerCase().indexOf(q)>=0; });
+      if(!words.length) return "";
+      return '<div class="emo-group" style="--chip:var(--e-'+f.k+')"><span class="lbl"><i></i>'+f.n+'</span><div class="nuances">'+
+        words.map(function(s){ return '<button type="button" class="nuance" data-w="'+esc(s)+'">'+esc(s)+'</button>'; }).join("")+'</div></div>';
+    }).join("");
+    panel.innerHTML = html || '<p class="hint">Nessuna parola nell\'elenco: va benissimo anche la tua.</p>';
+    panel.querySelectorAll("[data-w]").forEach(function(b){ b.onclick=function(){ inp.value=b.getAttribute("data-w"); close(); }; });
+  }
+  function open(q){ fill(q); panel.hidden=false; btn.setAttribute("aria-expanded","true"); btn.textContent="▴"; }
+  function close(){ panel.hidden=true; btn.setAttribute("aria-expanded","false"); btn.textContent="▾"; }
+  btn.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  btn.onclick=function(){ if(panel.hidden){ inp.blur(); open(""); } else close(); };
+  inp.addEventListener("input",function(){ if(inp.value.trim()) open(inp.value); else close(); });
+  document.addEventListener("click",function(e){ if(e.target.isConnected && !box.contains(e.target)) close(); });
+});
+function renderAll(){ renderToday(); renderDiary(); renderWheel(); renderMood(); renderABC(); renderNext(); renderNotes(); renderHaikuPage(); }
+resetDiaryForm();
+$("m-date").value=ymd(new Date());
+$("a-when").value=ymd(new Date());
+renderAll(); draw();
+var h=(location.hash||"").slice(1);
+show(h && document.querySelector('[data-page="'+h+'"]') ? h : (S.tab||"oggi"));
+setInterval(function(){ renderNext(); }, 60000);
+})();
+</script>
+
+</body></html>
