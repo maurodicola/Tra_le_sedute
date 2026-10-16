@@ -209,7 +209,12 @@ textarea{min-height:76px;resize:vertical}
 .d7 b{font-size:.95rem;color:var(--ink);font-variant-numeric:tabular-nums}
 .d7[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .d7[aria-pressed="true"] b{color:var(--on-accent)}
-.d7:disabled{cursor:default}
+.d7:disabled{cursor:default;opacity:.45}
+.d7.is-today{border-color:var(--accent)}
+.d7 .tick{font-size:.8rem;line-height:1;min-height:.8rem;font-weight:700}
+.d7[aria-pressed="true"]:disabled{opacity:.8}
+.week-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.week-nav .dt-nav:disabled{opacity:.35;cursor:default}
 .task-count{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
 
 /* Seduta */
@@ -489,7 +494,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
   <div class="entries" id="n-list"></div>
   <div id="n-copy-fallback"></div>
   <h2 class="sub-h">Compiti tra le sedute</h2>
-  <p class="intro">I compiti concordati in seduta. Tocca un giorno quando li hai fatti, e annota com'è andata: anche le difficoltà sono materiale prezioso per la prossima seduta.</p>
+  <p class="intro">I compiti concordati in seduta. Quando ne fai uno, tocca «Segna fatto oggi»; se te ne sei dimenticato, tocca il giorno giusto nella settimana. Annota anche com'è andata: le difficoltà sono materiale prezioso per la prossima seduta.</p>
   <form class="panel" id="t-form" autocomplete="off">
     <div class="field"><label for="t-text">Nuovo compito</label><input type="text" id="t-text" placeholder="es. compilare il registro dei pensieri una volta al giorno" required></div>
     <div class="actions"><button class="btn" type="submit">Aggiungi il compito</button></div>
@@ -782,8 +787,8 @@ var DEMO = {
   {id:"w5", day:ymd(addDays(now,-2)), slot:"mattina", what:"Riordinare la scrivania", state:"fatta", pl:4, ma:7}
  ],
  tasks:[
-  (function(){ var d={}; [0,-1,-3,-4].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v1", text:"Compilare il registro dei pensieri una volta al giorno", days:d, note:"La sera sono stanco, meglio farlo dopo pranzo.", closed:false}; })(),
-  (function(){ var d={}; [-2,-5].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v2", text:"Programmare due attività piacevoli a settimana", days:d, note:"", closed:false}; })()
+  (function(){ var d={}; [0,-1,-3,-4].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v1", text:"Compilare il registro dei pensieri una volta al giorno", created:ymd(addDays(now,-9)), days:d, note:"La sera sono stanco, meglio farlo dopo pranzo.", closed:false}; })(),
+  (function(){ var d={}; [-2,-5].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v2", text:"Programmare due attività piacevoli a settimana", created:ymd(addDays(now,-9)), days:d, note:"", closed:false}; })()
  ]
 };
 function data(kind){ return S[kind].length ? {items:S[kind], demo:false} : {items:DEMO[kind], demo:true}; }
@@ -1106,27 +1111,38 @@ var tFilter="open";
 bindSeg("t-filter",function(v){ tFilter=v; renderTasks(); });
 $("t-form").addEventListener("submit",function(e){
   e.preventDefault();
-  S.tasks.push({id:uid(), text:$("t-text").value.trim(), days:{}, note:"", closed:false});
+  S.tasks.push({id:uid(), text:$("t-text").value.trim(), created:ymd(new Date()), days:{}, note:"", closed:false});
   save(); $("t-text").value=""; tFilter="open"; setSeg("t-filter","open"); renderTasks();
 });
+var tWeek={};
+function weekStart(off){ var t=new Date(); t.setHours(0,0,0,0); return addDays(t, -((t.getDay()+6)%7) + 7*off); }
+function weekCount(t){ var s=weekStart(0), n=0; for(var i=0;i<7;i++){ if(t.days[ymd(addDays(s,i))]) n++; } return n; }
+function volte(n){ return n===1?"1 volta":n+" volte"; }
 function renderTasks(){
   var d=data("tasks");
   demoBanner("t-demo","tasks","Ecco come appaiono i compiti.");
   var items=d.items.filter(function(t){ return tFilter==="closed"?t.closed:!t.closed; });
-  var today=new Date(); today.setHours(0,0,0,0);
+  var today=new Date(); today.setHours(0,0,0,0); var tk=ymd(today);
   if(!items.length){ $("t-list").innerHTML='<p class="empty">'+(tFilter==="closed"?"Nessun compito concluso.":"Nessun compito in corso. Aggiungi quelli concordati in seduta.")+'</p>'; return; }
   $("t-list").innerHTML=items.map(function(t){
-    var cells="", week=0;
-    for(var i=6;i>=0;i--){ var day=addDays(today,-i), k=ymd(day), on=!!t.days[k]; if(on) week++;
-      cells+='<button type="button" class="d7" aria-pressed="'+on+'" data-tid="'+t.id+'" data-day="'+k+'" '+(d.demo?'disabled':'')+' aria-label="'+esc(niceDate(day))+'">'+(i===0?'oggi':GG[day.getDay()])+'<b>'+day.getDate()+'</b></button>'; }
-    var total=Object.keys(t.days).filter(function(k){return t.days[k];}).length;
-    return '<article class="entry'+(d.demo?' demo':'')+'"><div class="entry-head"><strong>'+esc(t.text)+'</strong>'+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
-      '<div class="days7">'+cells+'</div><span class="task-count">'+week+(week===1?' giorno':' giorni')+' su 7 questa settimana · '+total+' in tutto</span>'+
+    var off=tWeek[t.id]||0, s=weekStart(off), e=addDays(s,6), cells="", wn=0;
+    for(var i=0;i<7;i++){ var day=addDays(s,i), k=ymd(day), on=!!t.days[k], fut=day>today; if(on) wn++;
+      cells+='<button type="button" class="d7'+(k===tk?' is-today':'')+'" aria-pressed="'+on+'" data-tid="'+t.id+'" data-day="'+k+'" '+((d.demo||fut)?'disabled':'')+' aria-label="'+esc(niceDate(day))+(on?', fatto':'')+'">'+(k===tk?'oggi':GG[day.getDay()])+'<b>'+day.getDate()+'</b><span class="tick" aria-hidden="true">'+(on?'✓':'')+'</span></button>'; }
+    var total=Object.keys(t.days).filter(function(k){return t.days[k];}).length, doneToday=!!t.days[tk];
+    var range=off===0?"Questa settimana":(off===-1?"Settimana scorsa":"Dal "+s.getDate()+" "+MESI[s.getMonth()]+" al "+e.getDate()+" "+MESI[e.getMonth()]);
+    return '<article class="entry'+(d.demo?' demo':'')+'"><div class="entry-head"><strong>'+esc(t.text)+'</strong>'+(t.created?'<span class="hint">dal '+esc(niceDate(parseYMD(t.created)))+'</span>':'')+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
+      (t.closed?'':'<div class="actions"><button type="button" class="btn'+(doneToday?' ghost':'')+'" data-ttoday="'+t.id+'" '+(d.demo?'disabled':'')+'>'+(doneToday?'✓ Fatto oggi · tocca per annullare':'Segna fatto oggi')+'</button></div>')+
+      '<div class="week-nav"><button type="button" class="dt-nav" data-twk="'+t.id+'" data-by="-1" aria-label="Settimana precedente">‹</button><span class="lbl">'+range+'</span><button type="button" class="dt-nav" data-twk="'+t.id+'" data-by="1" aria-label="Settimana successiva" '+(off>=0?'disabled':'')+'>›</button></div>'+
+      '<div class="days7">'+cells+'</div><span class="hint">Tocca un giorno per segnarlo come fatto o per toglierlo.</span>'+
+      '<span class="task-count">Fatto '+volte(wn)+' '+(off===0?'questa settimana':'in quella settimana')+' · '+volte(total)+' in tutto</span>'+
       '<div class="field"><label for="tn-'+t.id+'">Com\'è andata, difficoltà</label><textarea id="tn-'+t.id+'" data-tnote="'+t.id+'" '+(d.demo?'readonly':'')+' placeholder="Cosa ha funzionato, cosa no">'+esc(t.note)+'</textarea></div>'+
       (d.demo?'':'<div class="entry-foot actions" style="justify-content:flex-end"><button type="button" class="btn ghost small" data-tclose="'+t.id+'">'+(t.closed?'Riapri':'Concluso')+'</button><button type="button" class="btn danger small" data-tdel="'+t.id+'">Elimina</button></div>')+'</article>';
   }).join("");
   function find(id){ return S.tasks.filter(function(t){return t.id===id;})[0]; }
-  $("t-list").querySelectorAll(".d7[data-tid]").forEach(function(b){ b.onclick=function(){ var t=find(b.getAttribute("data-tid")); if(!t) return; var k=b.getAttribute("data-day"); if(t.days[k]) delete t.days[k]; else t.days[k]=true; save(); renderTasks(); }; });
+  function toggle(t,k){ if(t.days[k]) delete t.days[k]; else t.days[k]=true; save(); renderTasks(); }
+  $("t-list").querySelectorAll(".d7[data-tid]").forEach(function(b){ b.onclick=function(){ var t=find(b.getAttribute("data-tid")); if(t) toggle(t,b.getAttribute("data-day")); }; });
+  $("t-list").querySelectorAll("[data-ttoday]").forEach(function(b){ b.onclick=function(){ var t=find(b.getAttribute("data-ttoday")); if(t) toggle(t,tk); }; });
+  $("t-list").querySelectorAll("[data-twk]").forEach(function(b){ b.onclick=function(){ var id=b.getAttribute("data-twk"); tWeek[id]=Math.min(0,(tWeek[id]||0)+(+b.getAttribute("data-by"))); renderTasks(); }; });
   $("t-list").querySelectorAll("[data-tnote]").forEach(function(a){ a.addEventListener("input",function(){ var t=find(a.getAttribute("data-tnote")); if(t){ t.note=a.value; save(); } }); });
   $("t-list").querySelectorAll("[data-tclose]").forEach(function(b){ b.onclick=function(){ var t=find(b.getAttribute("data-tclose")); if(t){ t.closed=!t.closed; save(); renderTasks(); } }; });
   $("t-list").querySelectorAll("[data-tdel]").forEach(function(b){ armDelete(b,function(){ S.tasks=S.tasks.filter(function(t){return t.id!==b.getAttribute("data-tdel");}); save(); renderTasks(); },"Conferma"); });
@@ -1188,7 +1204,7 @@ $("n-copy").onclick=function(){
   var todo=S.notes.filter(function(n){return !n.done;});
   var text="Da portare in seduta"+(S.next?" ("+niceDT(S.next)+")":"")+":\n"+(todo.length?todo.map(function(n){return "- "+(n.imp?"[importante] ":"")+n.text;}).join("\n"):"(nessun appunto)");
   var open=S.tasks.filter(function(t){return !t.closed;});
-  if(open.length){ var wk=ymd(addDays(new Date(),-6)); text+="\n\nCompiti tra le sedute:\n"+open.map(function(t){ var n=Object.keys(t.days).filter(function(k){return t.days[k] && k>=wk;}).length; return "- "+t.text+" ("+n+" giorni su 7)"+(t.note?"\n  "+t.note:""); }).join("\n"); }
+  if(open.length){ text+="\n\nCompiti tra le sedute:\n"+open.map(function(t){ return "- "+t.text+" (fatto "+volte(weekCount(t))+" questa settimana)"+(t.note?"\n  "+t.note:""); }).join("\n"); }
   copyText(text, null, "n-copy-fallback");
 };
 $("x-copy").onclick=function(){
