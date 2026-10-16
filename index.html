@@ -27,6 +27,7 @@
   --e-sorpresa:#6FCCCB; --e-disgusto:#A8C77B; --e-vergogna:#E1A0C2; --on-e:#101615; color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -180,6 +181,35 @@ textarea{min-height:76px;resize:vertical}
 .abc .k{font-family:var(--f-display);font-size:1.4rem;color:var(--accent);line-height:1}
 .alt{border-left:3px solid var(--ochre);padding-left:12px}
 
+/* Trappole del pensiero */
+.traps .nuance{--chip:var(--accent)}
+.trap-desc{font-size:.9rem;color:var(--muted);min-height:1.4em}
+.trap-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ev{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.ev{grid-template-columns:minmax(0,1fr)}}
+.ev > div{background:var(--bg);border-radius:8px;padding:10px 12px;min-width:0;overflow-wrap:anywhere}
+.ev .lbl{display:block;margin-bottom:4px}
+.bars-list{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr) 2em;gap:10px;align-items:center;font-size:.9rem}
+.bar-row i{display:block;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar-row i b{display:block;height:100%;background:var(--accent)}
+.bar-row span:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+
+/* Attività */
+.day-head{font-family:var(--f-display);font-size:1.1rem;font-weight:600;margin-top:8px;text-transform:capitalize}
+.rate-inline{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:10px}
+.top-acts{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+
+/* Compiti */
+.sub-h{margin-top:16px}
+.days7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.d7{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.75rem;color:var(--muted);min-width:0}
+.d7 b{font-size:.95rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.d7[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.d7[aria-pressed="true"] b{color:var(--on-accent)}
+.d7:disabled{cursor:default}
+.task-count{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
 /* Seduta */
 .countdown{font-family:var(--f-display);font-size:1.5rem}
 .note{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
@@ -270,6 +300,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
     <button class="tab" role="tab" data-tab="ruota">Ruota delle emozioni</button>
     <button class="tab" role="tab" data-tab="umore">Umore</button>
     <button class="tab" role="tab" data-tab="pensieri">Pensieri</button>
+    <button class="tab" role="tab" data-tab="attivita">Attività</button>
     <button class="tab" role="tab" data-tab="seduta">Per la seduta</button>
     <button class="tab" role="tab" data-tab="haiku">Haiku</button>
     <button class="tab" role="tab" data-tab="info">Come funziona</button>
@@ -378,24 +409,53 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <!-- PENSIERI -->
 <section class="page" data-page="pensieri" hidden>
   <div class="hk-slot" data-themes="pensieri"></div>
-  <h2>Pensieri: situazione, pensiero, conseguenza</h2>
-  <p class="intro">Uno stesso fatto può far nascere pensieri diversi, e i pensieri cambiano ciò che proviamo. Questo registro aiuta a separare le tre cose. È uno strumento tipico di alcuni approcci: chiedi alla tua terapeuta se fa al caso tuo.</p>
+  <h2>Registro dei pensieri</h2>
+  <p class="intro">Uno stesso fatto può far nascere pensieri diversi, e i pensieri cambiano ciò che proviamo. Questo registro aiuta a separare situazione, pensiero e conseguenza, e poi a mettere il pensiero alla prova. È lo strumento classico della terapia cognitivo-comportamentale: chiedi alla tua terapeuta se fa al caso tuo.</p>
   <form class="panel" id="a-form" autocomplete="off">
     <div class="field" style="max-width:360px"><span class="lbl" id="a-when-lbl">Giorno</span><div class="dt-pick" data-mode="date"><input type="hidden" id="a-when"></div></div>
     <div class="field"><label for="a-sit">A · La situazione</label><textarea id="a-sit" placeholder="I fatti, come li descriverebbe una telecamera" required></textarea></div>
     <div class="field"><label for="a-thought">B · Il pensiero automatico</label><textarea id="a-thought" placeholder="Cosa mi sono detto in quel momento" required></textarea></div>
     <div class="field"><label for="a-belief">Quanto ci credevo</label><div class="range-row"><input type="range" id="a-belief" min="0" max="100" step="10" value="70"><output id="a-belief-out">70%</output></div></div>
+    <div class="field"><span class="lbl">Trappole del pensiero</span><span class="hint">Facoltativo. Tocca quelle in cui ti sembra di essere caduto; un secondo tocco le toglie.</span><div class="nuances traps" id="a-traps"></div><p class="trap-desc" id="a-trap-desc"></p></div>
     <div class="grid2">
       <div class="field"><label for="a-emo">C · Emozione</label><div class="emo-pick"><input type="text" id="a-emo" placeholder="es. vergogna"><button type="button" class="emo-toggle" aria-expanded="false" aria-label="Mostra l'elenco delle emozioni">▾</button><div class="emo-panel" hidden></div></div></div>
       <div class="field"><label for="a-int">Intensità</label><div class="range-row"><input type="range" id="a-int" min="0" max="10" value="6"><output id="a-int-out">6/10</output></div></div>
     </div>
     <div class="field"><label for="a-beh">C · Cosa ho fatto</label><textarea id="a-beh" placeholder="Il comportamento che ne è seguito"></textarea></div>
-    <div class="field"><label for="a-alt">Un altro modo di vederla</label><textarea id="a-alt" placeholder="Facoltativo. Cosa direi a un amico nella stessa situazione?"></textarea></div>
+    <div class="grid2">
+      <div class="field"><label for="a-pro">Prove a favore del pensiero</label><textarea id="a-pro" placeholder="Fatti, non impressioni, che lo confermano"></textarea></div>
+      <div class="field"><label for="a-con">Prove contro il pensiero</label><textarea id="a-con" placeholder="Fatti che non tornano, eccezioni, cosa direbbe un amico"></textarea></div>
+    </div>
+    <div class="field"><label for="a-alt">Un altro modo di vederla</label><textarea id="a-alt" placeholder="Un pensiero più equilibrato, che tenga conto delle prove a favore e contro"></textarea></div>
     <div class="field"><label for="a-belief2">Quanto credo ora al pensiero di partenza</label><div class="range-row"><input type="range" id="a-belief2" min="0" max="100" step="10" value="50"><output id="a-belief2-out">50%</output></div></div>
     <div class="actions"><button class="btn" type="submit">Salva il registro</button><span class="toast" id="a-toast" role="status"></span></div>
   </form>
+  <div class="panel" id="a-trap-stats" hidden></div>
   <div id="a-demo"></div>
   <div class="entries" id="a-list"></div>
+</section>
+
+<!-- ATTIVITÀ -->
+<section class="page" data-page="attivita" hidden>
+  <div class="hk-slot" data-themes="passi,oggi"></div>
+  <h2>Attività: piacere e padronanza</h2>
+  <p class="intro">Quando l'umore è basso, si tende a fare meno, e facendo meno l'umore scende ancora. Annota cosa fai e dai due voti: quanto ti è piaciuto e quanto ti sei sentito capace. Puoi anche programmare piccole attività per i prossimi giorni. Nella terapia cognitivo-comportamentale si chiama attivazione comportamentale.</p>
+  <form class="panel" id="b-form" autocomplete="off">
+    <div class="grid2">
+      <div class="field"><span class="lbl" id="b-day-lbl">Giorno</span><div class="dt-pick" data-mode="date"><input type="hidden" id="b-day"></div></div>
+      <div class="field"><span class="lbl">Momento</span><div class="seg" id="b-slot"><button type="button" data-v="mattina" aria-pressed="true">Mattina</button><button type="button" data-v="pomeriggio" aria-pressed="false">Pomeriggio</button><button type="button" data-v="sera" aria-pressed="false">Sera</button></div></div>
+    </div>
+    <div class="field"><label for="b-what">Attività</label><input type="text" id="b-what" placeholder="es. passeggiata al parco, chiamare un amico, riordinare la scrivania" required></div>
+    <div class="field"><span class="lbl">Stato</span><div class="seg" id="b-state"><button type="button" data-v="fatta" aria-pressed="true">Fatta</button><button type="button" data-v="programmata" aria-pressed="false">Da fare</button></div></div>
+    <div class="grid2" id="b-rates">
+      <div class="field"><label for="b-pl">Piacere</label><div class="range-row"><input type="range" id="b-pl" min="0" max="10" value="5"><output id="b-pl-out">5/10</output></div><span class="hint">Quanto mi è piaciuto</span></div>
+      <div class="field"><label for="b-ma">Padronanza</label><div class="range-row"><input type="range" id="b-ma" min="0" max="10" value="5"><output id="b-ma-out">5/10</output></div><span class="hint">Quanto mi sono sentito capace</span></div>
+    </div>
+    <div class="actions"><button class="btn" type="submit" id="b-submit">Salva l'attività</button><span class="toast" id="b-toast" role="status"></span></div>
+  </form>
+  <div class="panel" id="b-summary"></div>
+  <div id="b-demo"></div>
+  <div class="entries" id="b-list"></div>
 </section>
 
 <!-- SEDUTA -->
@@ -426,6 +486,15 @@ footer em{font-family:var(--f-display);font-size:1rem}
   <div id="n-demo"></div>
   <div class="entries" id="n-list"></div>
   <div id="n-copy-fallback"></div>
+  <h2 class="sub-h">Compiti tra le sedute</h2>
+  <p class="intro">I compiti concordati in seduta. Tocca un giorno quando li hai fatti, e annota com'è andata: anche le difficoltà sono materiale prezioso per la prossima seduta.</p>
+  <form class="panel" id="t-form" autocomplete="off">
+    <div class="field"><label for="t-text">Nuovo compito</label><input type="text" id="t-text" placeholder="es. compilare il registro dei pensieri una volta al giorno" required></div>
+    <div class="actions"><button class="btn" type="submit">Aggiungi il compito</button></div>
+  </form>
+  <div class="seg" id="t-filter"><button type="button" data-v="open" aria-pressed="true">In corso</button><button type="button" data-v="closed" aria-pressed="false">Conclusi</button></div>
+  <div id="t-demo"></div>
+  <div class="entries" id="t-list"></div>
 </section>
 
 <!-- HAIKU -->
@@ -469,14 +538,14 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <footer>
   <div class="wrap">
     <em>Un dono di gratitudine per chi ogni giorno ascolta.</em>
-    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea · Versione 1.1 · 16/10/2026</span>
+    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea · Versione 1.2 · 16/10/2026</span>
   </div>
 </footer>
 
 
 <dialog class="info" id="info" aria-labelledby="info-title"><div class="info-head"><div><p class="info-kicker">Tra le sedute</p><h2 id="info-title">Informazioni e note legali</h2></div><button class="info-close" id="info-close" type="button" aria-label="Chiudi">✕</button></div>
 <div class="info-body">
-<section><h3>Che cos'è</h3><p>Tra le sedute è un quaderno personale per i giorni tra un incontro e l'altro con la propria psicoterapeuta o il proprio psicoterapeuta: diario delle emozioni, ruota delle emozioni, termometro dell'umore, registro dei pensieri, appunti per la prossima seduta e haiku sul tema della cura.</p><p>È nato come dono di gratitudine verso chi ascolta. È gratuito, senza pubblicità e senza fini commerciali. Tutto ciò che si scrive resta nel browser del dispositivo in uso e non viene inviato a nessuno.</p></section>
+<section><h3>Che cos'è</h3><p>Tra le sedute è un quaderno personale per i giorni tra un incontro e l'altro con la propria psicoterapeuta o il proprio psicoterapeuta: diario delle emozioni, ruota delle emozioni, termometro dell'umore, registro dei pensieri con le trappole del pensiero, attività con piacere e padronanza, appunti e compiti tra le sedute, e haiku sul tema della cura.</p><p>È nato come dono di gratitudine verso chi ascolta. È gratuito, senza pubblicità e senza fini commerciali. Tutto ciò che si scrive resta nel browser del dispositivo in uso e non viene inviato a nessuno.</p></section>
 <section class="legal"><!-- Testo di LEGAL.md riportato tale e quale. -->
 <h3 class="legal-title">Informazioni legali e avvertenze</h5>
 <p>Questo documento descrive i limiti d'uso di «Tra le sedute». Non sostituisce la consulenza legale o medica professionale.</p>
@@ -491,8 +560,9 @@ footer em{font-family:var(--f-display);font-size:1rem}
 </ul>
 <h5>Non sostituisce la psicoterapia</h5>
 <ul>
-<li>Gli strumenti presenti (diario, ruota delle emozioni, registro dei pensieri) sono di uso comune in molti percorsi, ma la loro utilità dipende dalla persona e dall'approccio del professionista</li>
-<li>Il registro situazione-pensiero-conseguenza è tipico di alcuni orientamenti: va usato solo se il professionista lo ritiene adatto</li>
+<li>Gli strumenti presenti (diario, ruota delle emozioni, termometro dell'umore, registro dei pensieri, attività, compiti) sono di uso comune in molti percorsi, ma la loro utilità dipende dalla persona e dall'approccio del professionista</li>
+<li>Il registro dei pensieri con le trappole del pensiero e le prove a favore e contro, il monitoraggio delle attività con piacere e padronanza e i compiti tra le sedute sono tipici della terapia cognitivo-comportamentale: vanno usati solo se il professionista li ritiene adatti e, idealmente, concordati in seduta</li>
+<li>L'app non contiene questionari con punteggio né esercizi di esposizione, che richiedono la guida diretta del professionista</li>
 <li>Ogni decisione sul percorso di cura spetta alla persona e al suo professionista</li>
 </ul>
 <h4>🆘 Non è un servizio di emergenza</h4>
@@ -549,6 +619,8 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <h4>📜 Cronologia delle modifiche</h4>
 <ul>
 <li><strong>16/10/2026</strong> — Versione 1.0, redatto documento iniziale</li>
+<li><strong>16/10/2026</strong> — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»</li>
+<li><strong>16/10/2026</strong> — Versione 1.2, aggiunti strumenti di tipo cognitivo-comportamentale (registro a 7 colonne, attività, compiti)</li>
 </ul>
 <hr />
 <p><strong>Ultimo aggiornamento:</strong> 16 Ottobre 2026</p>
@@ -575,7 +647,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</pre></section>
-<p class="info-version">Tra le sedute · <span id="info-version">Versione 1.1 · 16/10/2026</span> · Mauro Di Cola</p>
+<p class="info-version">Tra le sedute · <span id="info-version">Versione 1.2 · 16/10/2026</span> · Mauro Di Cola</p>
 </div></dialog>
 
 <script>
@@ -583,7 +655,7 @@ SOFTWARE.</pre></section>
 "use strict";
 
 /* ---------- Haiku ---------- */
-var THEMES = {oggi:"Il giorno", diario:"Scrivere", emozioni:"Emozioni", umore:"Umore", pensieri:"Pensieri", seduta:"La seduta", cura:"Chi ascolta", stagioni:"Stagioni interiori"};
+var THEMES = {oggi:"Il giorno", diario:"Scrivere", emozioni:"Emozioni", umore:"Umore", pensieri:"Pensieri", seduta:"La seduta", cura:"Chi ascolta", passi:"Piccoli passi", stagioni:"Stagioni interiori"};
 var HAIKU = [
  ["oggi","Apro le imposte —|nulla mi chiede il giorno|se non entrare."],
  ["oggi","Caffè che fuma —|chiedo a me stesso, piano:|come stai, oggi?"],
@@ -636,7 +708,13 @@ var HAIKU = [
  ["stagioni","Piano, ogni cosa:|la luna impiega un mese|a farsi piena."],
  ["stagioni","Foglie d'ottobre —|anche il dolore cambia|colore, piano."],
  ["stagioni","Rondine tarda —|non è in ritardo, arriva|quando è il suo tempo."],
- ["stagioni","Il fiume cambia|e resta sempre fiume —|così anch'io, forse."]
+ ["stagioni","Il fiume cambia|e resta sempre fiume —|così anch'io, forse."],
+ ["passi","Lavo una tazza:|anche un gesto piccolo|rimette ordine."],
+ ["passi","Esco a camminare —|il corpo va per primo,|l'umore segue."],
+ ["passi","Piccolo compito|segnato sul quaderno:|oggi l'ho fatto."],
+ ["passi","Senza voglia, sì,|ma l'ho fatto lo stesso —|domani è più lieve."],
+ ["passi","Prove a favore,|prove contro: sul tavolo|il pensiero pesa meno."],
+ ["passi","La mente predice,|il giorno poi risponde —|ascolto il giorno."]
 ].map(function(h){return {t:h[0], l:h[1].split("|")};});
 
 /* ---------- Emozioni ---------- */
@@ -672,7 +750,7 @@ function flash(id,msg){ var el=$(id); el.textContent=msg; clearTimeout(el._t); e
 
 /* ---------- Archivio locale ---------- */
 var KEY="tra-le-sedute-v1", storageOk=true;
-var S = {diary:[], mood:[], abc:[], notes:[], next:"", tab:"oggi"};
+var S = {diary:[], mood:[], abc:[], notes:[], acts:[], tasks:[], next:"", tab:"oggi"};
 try{ var raw=localStorage.getItem(KEY); if(raw){ var p=JSON.parse(raw); for(var k in S){ if(p[k]!==undefined) S[k]=p[k]; } } }catch(e){ storageOk=false; }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOk=false; $("storage-warn").hidden=false; } }
 if(!storageOk) $("storage-warn").hidden=false;
@@ -688,11 +766,22 @@ var DEMO = {
   {id:"x4", when:atDay(-6,9,0), emo:"irritazione", int:4, sit:"Il treno è arrivato con quaranta minuti di ritardo.", thought:"Va sempre tutto storto.", did:"Ho scritto al lavoro che arrivavo tardi.", need:""}
  ],
  mood:(function(){ var v=[5,6,6,4,5,7,6,5,3,4,5,6,7,7,6,5,6,4,5,6,7,6]; var e=[4,5,6,3,4,6,6,5,3,3,4,5,6,7,5,5,5,4,4,6,6,5]; var out=[]; for(var i=0;i<v.length;i++){ if(i===9||i===15) continue; out.push({date:ymd(addDays(now,-(v.length-i))), mood:v[i], energy:e[i], sleep:i%4===0?"Male":"Bene", note:i===8?"giornata pesante":""}); } return out; })(),
- abc:[{id:"y1", when:ymd(addDays(now,-2)), sit:"Un collega non ha risposto al mio saluto in corridoio.", thought:"Ce l'ha con me, ho sbagliato qualcosa.", belief:80, emo:"preoccupazione", int:6, beh:"Ho evitato la sala caffè tutta la mattina.", alt:"Forse era distratto o di fretta: non l'ho mai visto arrabbiato con me.", belief2:30}],
+ abc:[{id:"y1", when:ymd(addDays(now,-2)), sit:"Un collega non ha risposto al mio saluto in corridoio.", thought:"Ce l'ha con me, ho sbagliato qualcosa.", belief:80, emo:"preoccupazione", int:6, beh:"Ho evitato la sala caffè tutta la mattina.", traps:["lettura del pensiero","personalizzazione"], pro:"Non mi ha guardato e ha tirato dritto.", con:"Ieri mi ha chiesto un consiglio. Era al telefono e camminava veloce. Non ci sono stati screzi.", alt:"Forse era distratto o di fretta: non l'ho mai visto arrabbiato con me.", belief2:30}],
  notes:[
   {id:"z1", text:"Perché il sabato sera mi pesa così tanto?", imp:true, done:false},
   {id:"z2", text:"Raccontare il colloquio di lavoro", imp:false, done:false},
   {id:"z3", text:"Dire che la settimana scorsa è andata meglio", imp:false, done:true}
+ ],
+ acts:[
+  {id:"w1", day:ymd(addDays(now,1)), slot:"pomeriggio", what:"Andare in libreria", state:"programmata"},
+  {id:"w2", day:ymd(now), slot:"mattina", what:"Passeggiata al parco", state:"fatta", pl:7, ma:5},
+  {id:"w3", day:ymd(addDays(now,-1)), slot:"sera", what:"Telefonare a mia sorella", state:"fatta", pl:8, ma:6},
+  {id:"w4", day:ymd(addDays(now,-1)), slot:"pomeriggio", what:"Pagare le bollette", state:"fatta", pl:2, ma:8},
+  {id:"w5", day:ymd(addDays(now,-2)), slot:"mattina", what:"Riordinare la scrivania", state:"fatta", pl:4, ma:7}
+ ],
+ tasks:[
+  (function(){ var d={}; [0,-1,-3,-4].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v1", text:"Compilare il registro dei pensieri una volta al giorno", days:d, note:"La sera sono stanco, meglio farlo dopo pranzo.", closed:false}; })(),
+  (function(){ var d={}; [-2,-5].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v2", text:"Programmare due attività piacevoli a settimana", days:d, note:"", closed:false}; })()
  ]
 };
 function data(kind){ return S[kind].length ? {items:S[kind], demo:false} : {items:DEMO[kind], demo:true}; }
@@ -892,11 +981,35 @@ function renderMood(){
 }
 
 /* ---------- Pensieri ---------- */
+var TRAPS=[
+ ["tutto-o-nulla","Vedo le cose solo in bianco o nero: o perfetto o fallimento."],
+ ["generalizzazione","Da un solo episodio traggo una regola: «sempre», «mai», «tutti»."],
+ ["filtro mentale","Mi fermo sul dettaglio negativo e non vedo il resto."],
+ ["squalificare il positivo","Ciò che va bene «non conta» o «è stata fortuna»."],
+ ["lettura del pensiero","Do per scontato di sapere cosa pensano gli altri di me."],
+ ["previsione negativa","Prevedo che andrà male, come se lo sapessi già."],
+ ["catastrofizzazione","Immagino lo scenario peggiore e lo tratto come probabile."],
+ ["ragionamento emotivo","Lo sento, quindi deve essere vero."],
+ ["doverizzazioni","«Dovrei», «devo», «non dovrei»: regole rigide per me o per gli altri."],
+ ["etichettamento","Mi do un'etichetta globale: «sono un fallito», «sono un disastro»."],
+ ["personalizzazione","Mi sento responsabile di cose che non dipendono da me."]
+];
+var TRAP_DESC={}; TRAPS.forEach(function(t){ TRAP_DESC[t[0]]=t[1]; });
+var selTraps=[];
+function renderTrapPicker(){
+  $("a-traps").innerHTML=TRAPS.map(function(t){ return '<button type="button" class="nuance" aria-pressed="'+(selTraps.indexOf(t[0])>=0)+'" data-trap="'+esc(t[0])+'">'+esc(t[0])+'</button>'; }).join("");
+  $("a-traps").querySelectorAll("[data-trap]").forEach(function(b){ b.onclick=function(){
+    var k=b.getAttribute("data-trap"), i=selTraps.indexOf(k);
+    if(i>=0){ selTraps.splice(i,1); $("a-trap-desc").textContent=""; } else { selTraps.push(k); $("a-trap-desc").textContent=k.charAt(0).toUpperCase()+k.slice(1)+": "+TRAP_DESC[k]; }
+    renderTrapPicker();
+  }; });
+}
 $("a-form").addEventListener("submit",function(e){
   e.preventDefault();
   S.abc.push({id:uid(), when:$("a-when").value, sit:$("a-sit").value.trim(), thought:$("a-thought").value.trim(), belief:+$("a-belief").value,
-    emo:$("a-emo").value.trim(), int:+$("a-int").value, beh:$("a-beh").value.trim(), alt:$("a-alt").value.trim(), belief2:+$("a-belief2").value});
-  save(); $("a-form").reset(); $("a-when").value=ymd(new Date()); uAB(); uAI(); uAB2(); flash("a-toast","Registro salvato"); renderABC();
+    emo:$("a-emo").value.trim(), int:+$("a-int").value, beh:$("a-beh").value.trim(), traps:selTraps.slice(), pro:$("a-pro").value.trim(), con:$("a-con").value.trim(),
+    alt:$("a-alt").value.trim(), belief2:+$("a-belief2").value});
+  save(); $("a-form").reset(); selTraps=[]; $("a-trap-desc").textContent=""; renderTrapPicker(); $("a-when").value=ymd(new Date()); uAB(); uAI(); uAB2(); flash("a-toast","Registro salvato"); renderABC();
 });
 function renderABC(){
   var d=data("abc");
@@ -907,12 +1020,114 @@ function renderABC(){
       '<div class="abc"><div><span class="k">A</span><p>'+esc(x.sit)+'</p></div>'+
       '<div><span class="k">B</span><p>'+esc(x.thought)+'</p><p class="hint">ci credevo al '+x.belief+'%</p></div>'+
       '<div><span class="k">C</span>'+(x.emo?'<p><span class="chip">'+esc(x.emo)+' '+x.int+'/10</span></p>':'')+(x.beh?'<p>'+esc(x.beh)+'</p>':'')+'</div></div>'+
+      ((x.traps&&x.traps.length)?'<div class="trap-tags"><span class="lbl">Trappole</span>'+x.traps.map(function(t){return '<span class="badge" title="'+esc(TRAP_DESC[t]||"")+'">'+esc(t)+'</span>';}).join("")+'</div>':'')+
+      ((x.pro||x.con)?'<div class="ev"><div><span class="lbl">Prove a favore</span><p>'+(esc(x.pro)||'<span class="hint">—</span>')+'</p></div><div><span class="lbl">Prove contro</span><p>'+(esc(x.con)||'<span class="hint">—</span>')+'</p></div></div>':'')+
       (x.alt?'<div class="alt"><span class="lbl">Un altro modo di vederla</span><p>'+esc(x.alt)+'</p><p class="hint">ora ci credo al '+x.belief2+'%, prima al '+x.belief+'%</p></div>':'')+
       (d.demo?'':'<div class="entry-foot"><button class="btn danger small" data-adel="'+x.id+'">Elimina</button></div>')+'</article>';
   }).join("");
   $("a-list").querySelectorAll("[data-adel]").forEach(function(b){
     armDelete(b,function(){ S.abc=S.abc.filter(function(x){return x.id!==b.getAttribute("data-adel");}); save(); renderABC(); },"Conferma eliminazione");
   });
+  var cnt={}, tot=0;
+  d.items.forEach(function(x){ (x.traps||[]).forEach(function(t){ cnt[t]=(cnt[t]||0)+1; tot++; }); });
+  var keys=Object.keys(cnt).sort(function(a,b){ return cnt[b]-cnt[a]; }), box=$("a-trap-stats");
+  if(!keys.length){ box.hidden=true; return; }
+  var max=cnt[keys[0]];
+  box.hidden=false;
+  box.innerHTML='<h3>Le trappole che tornano più spesso</h3><p class="hint">Quante volte le hai segnate'+(d.demo?' (dati di esempio)':'')+'.</p><div class="bars-list">'+
+    keys.slice(0,6).map(function(k){ return '<div class="bar-row" title="'+esc(TRAP_DESC[k]||"")+'"><span>'+esc(k)+'</span><i><b style="width:'+Math.round(cnt[k]/max*100)+'%"></b></i><span>'+cnt[k]+'</span></div>'; }).join("")+'</div>';
+}
+
+/* ---------- Segmenti ---------- */
+function segVal(id){ var b=$(id).querySelector('[aria-pressed="true"]'); return b?b.getAttribute("data-v"):""; }
+function setSeg(id,v){ $(id).querySelectorAll("[data-v]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-v")===v); }); }
+function bindSeg(id,cb){ $(id).querySelectorAll("[data-v]").forEach(function(b){ b.addEventListener("click",function(){ setSeg(id,b.getAttribute("data-v")); if(cb) cb(b.getAttribute("data-v")); }); }); }
+
+/* ---------- Attività ---------- */
+var uBP=bindRange("b-pl","/10"), uBM=bindRange("b-ma","/10"), rateOpen={};
+var SLOT_ORDER={mattina:0,pomeriggio:1,sera:2};
+function syncActState(v){ var fatta=(v||segVal("b-state"))==="fatta"; $("b-rates").hidden=!fatta; $("b-submit").textContent=fatta?"Salva l'attività":"Programma l'attività"; }
+bindSeg("b-slot"); bindSeg("b-state",syncActState);
+$("b-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var st=segVal("b-state"), rec={id:uid(), day:$("b-day").value||ymd(new Date()), slot:segVal("b-slot")||"mattina", what:$("b-what").value.trim(), state:st};
+  if(st==="fatta"){ rec.pl=+$("b-pl").value; rec.ma=+$("b-ma").value; }
+  S.acts.push(rec); save();
+  $("b-what").value=""; $("b-pl").value=5; $("b-ma").value=5; uBP(); uBM();
+  flash("b-toast", st==="fatta"?"Attività salvata":"Attività programmata"); renderActs();
+});
+function renderActs(){
+  var d=data("acts");
+  demoBanner("b-demo","acts","Ecco come appare una settimana di attività.");
+  var today=ymd(new Date()), weekAgo=ymd(addDays(new Date(),-6));
+  var done=d.items.filter(function(x){ return x.state==="fatta" && x.day>=weekAgo && x.day<=today; });
+  function avg(k){ if(!done.length) return "—"; var s=0; done.forEach(function(x){ s+=x[k]; }); return (s/done.length).toFixed(1).replace(".",","); }
+  var best=done.slice().sort(function(a,b){ return (b.pl+b.ma)-(a.pl+a.ma); }).slice(0,3);
+  $("b-summary").innerHTML='<h3>Gli ultimi 7 giorni</h3><div class="stats">'+
+    '<div class="stat"><b>'+done.length+'</b><span>attività fatte</span></div>'+
+    '<div class="stat"><b>'+avg("pl")+'</b><span>piacere medio</span></div>'+
+    '<div class="stat"><b>'+avg("ma")+'</b><span>padronanza media</span></div></div>'+
+    (best.length?'<div><span class="lbl">Ti hanno fatto stare meglio</span><ol class="top-acts">'+best.map(function(x){ return '<li>'+esc(x.what)+' <span class="hint">· piacere '+x.pl+', padronanza '+x.ma+'</span></li>'; }).join("")+'</ol></div>':'<p class="hint">Quando segni le prime attività fatte, qui compaiono le medie della settimana.</p>');
+  var planned=d.items.filter(function(x){ return x.state!=="fatta"; }).sort(function(a,b){ return a.day===b.day ? SLOT_ORDER[a.slot]-SLOT_ORDER[b.slot] : (a.day<b.day?-1:1); });
+  var doneAll=d.items.filter(function(x){ return x.state==="fatta"; }).sort(function(a,b){ return a.day===b.day ? SLOT_ORDER[b.slot]-SLOT_ORDER[a.slot] : (a.day<b.day?1:-1); });
+  function card(x){
+    var isP=x.state!=="fatta", open=rateOpen[x.id];
+    var h='<article class="entry'+(d.demo?' demo':'')+'"><div class="entry-head"><span class="when">'+esc(x.slot)+'</span><strong>'+esc(x.what)+'</strong>'+
+      (isP?'<span class="badge">da fare</span>':'<span class="meter" style="--chip:var(--e-gioia)"><i><b style="width:'+(x.pl*10)+'%"></b></i>piacere '+x.pl+'</span><span class="meter"><i><b style="width:'+(x.ma*10)+'%"></b></i>padronanza '+x.ma+'</span>')+
+      (d.demo?'<span class="badge">Esempio</span>':'')+'</div>';
+    if(isP && open && !d.demo){
+      h+='<div class="rate-inline"><div class="grid2"><div class="field"><label for="rp-'+x.id+'">Piacere</label><div class="range-row"><input type="range" id="rp-'+x.id+'" min="0" max="10" value="5"><output>5/10</output></div></div>'+
+         '<div class="field"><label for="rm-'+x.id+'">Padronanza</label><div class="range-row"><input type="range" id="rm-'+x.id+'" min="0" max="10" value="5"><output>5/10</output></div></div></div>'+
+         '<div class="actions"><button type="button" class="btn small" data-bsave="'+x.id+'">Salva come fatta</button><button type="button" class="btn ghost small" data-bcancel="'+x.id+'">Annulla</button></div></div>';
+    }
+    if(!d.demo) h+='<div class="entry-foot actions" style="justify-content:flex-end">'+(isP&&!open?'<button type="button" class="btn ghost small" data-brate="'+x.id+'">L\'ho fatta</button>':'')+'<button class="btn danger small" data-bdel="'+x.id+'">Elimina</button></div>';
+    return h+'</article>';
+  }
+  var html='';
+  if(planned.length) html+='<h3>In programma</h3>'+planned.map(function(x){ return '<p class="day-head">'+esc(niceDate(parseYMD(x.day)))+'</p>'+card(x); }).join("");
+  var lastDay=null;
+  if(doneAll.length) html+='<h3>Fatte</h3>'+doneAll.slice(0,40).map(function(x){ var head=x.day!==lastDay?'<p class="day-head">'+esc(niceDate(parseYMD(x.day)))+'</p>':''; lastDay=x.day; return head+card(x); }).join("");
+  $("b-list").innerHTML=html;
+  $("b-list").querySelectorAll('input[type=range]').forEach(function(r){ var o=r.nextElementSibling; r.addEventListener("input",function(){ o.textContent=r.value+"/10"; }); });
+  $("b-list").querySelectorAll("[data-brate]").forEach(function(b){ b.onclick=function(){ rateOpen[b.getAttribute("data-brate")]=true; renderActs(); }; });
+  $("b-list").querySelectorAll("[data-bcancel]").forEach(function(b){ b.onclick=function(){ delete rateOpen[b.getAttribute("data-bcancel")]; renderActs(); }; });
+  $("b-list").querySelectorAll("[data-bsave]").forEach(function(b){ b.onclick=function(){
+    var id=b.getAttribute("data-bsave"), x=S.acts.filter(function(a){return a.id===id;})[0];
+    if(x){ x.state="fatta"; x.pl=+$("rp-"+id).value; x.ma=+$("rm-"+id).value; save(); }
+    delete rateOpen[id]; renderActs();
+  }; });
+  $("b-list").querySelectorAll("[data-bdel]").forEach(function(b){ armDelete(b,function(){ S.acts=S.acts.filter(function(x){return x.id!==b.getAttribute("data-bdel");}); save(); renderActs(); },"Conferma eliminazione"); });
+}
+
+/* ---------- Compiti tra le sedute ---------- */
+var tFilter="open";
+bindSeg("t-filter",function(v){ tFilter=v; renderTasks(); });
+$("t-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  S.tasks.push({id:uid(), text:$("t-text").value.trim(), days:{}, note:"", closed:false});
+  save(); $("t-text").value=""; tFilter="open"; setSeg("t-filter","open"); renderTasks();
+});
+function renderTasks(){
+  var d=data("tasks");
+  demoBanner("t-demo","tasks","Ecco come appaiono i compiti.");
+  var items=d.items.filter(function(t){ return tFilter==="closed"?t.closed:!t.closed; });
+  var today=new Date(); today.setHours(0,0,0,0);
+  if(!items.length){ $("t-list").innerHTML='<p class="empty">'+(tFilter==="closed"?"Nessun compito concluso.":"Nessun compito in corso. Aggiungi quelli concordati in seduta.")+'</p>'; return; }
+  $("t-list").innerHTML=items.map(function(t){
+    var cells="", week=0;
+    for(var i=6;i>=0;i--){ var day=addDays(today,-i), k=ymd(day), on=!!t.days[k]; if(on) week++;
+      cells+='<button type="button" class="d7" aria-pressed="'+on+'" data-tid="'+t.id+'" data-day="'+k+'" '+(d.demo?'disabled':'')+' aria-label="'+esc(niceDate(day))+'">'+(i===0?'oggi':GG[day.getDay()])+'<b>'+day.getDate()+'</b></button>'; }
+    var total=Object.keys(t.days).filter(function(k){return t.days[k];}).length;
+    return '<article class="entry'+(d.demo?' demo':'')+'"><div class="entry-head"><strong>'+esc(t.text)+'</strong>'+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
+      '<div class="days7">'+cells+'</div><span class="task-count">'+week+(week===1?' giorno':' giorni')+' su 7 questa settimana · '+total+' in tutto</span>'+
+      '<div class="field"><label for="tn-'+t.id+'">Com\'è andata, difficoltà</label><textarea id="tn-'+t.id+'" data-tnote="'+t.id+'" '+(d.demo?'readonly':'')+' placeholder="Cosa ha funzionato, cosa no">'+esc(t.note)+'</textarea></div>'+
+      (d.demo?'':'<div class="entry-foot actions" style="justify-content:flex-end"><button type="button" class="btn ghost small" data-tclose="'+t.id+'">'+(t.closed?'Riapri':'Concluso')+'</button><button type="button" class="btn danger small" data-tdel="'+t.id+'">Elimina</button></div>')+'</article>';
+  }).join("");
+  function find(id){ return S.tasks.filter(function(t){return t.id===id;})[0]; }
+  $("t-list").querySelectorAll(".d7[data-tid]").forEach(function(b){ b.onclick=function(){ var t=find(b.getAttribute("data-tid")); if(!t) return; var k=b.getAttribute("data-day"); if(t.days[k]) delete t.days[k]; else t.days[k]=true; save(); renderTasks(); }; });
+  $("t-list").querySelectorAll("[data-tnote]").forEach(function(a){ a.addEventListener("input",function(){ var t=find(a.getAttribute("data-tnote")); if(t){ t.note=a.value; save(); } }); });
+  $("t-list").querySelectorAll("[data-tclose]").forEach(function(b){ b.onclick=function(){ var t=find(b.getAttribute("data-tclose")); if(t){ t.closed=!t.closed; save(); renderTasks(); } }; });
+  $("t-list").querySelectorAll("[data-tdel]").forEach(function(b){ armDelete(b,function(){ S.tasks=S.tasks.filter(function(t){return t.id!==b.getAttribute("data-tdel");}); save(); renderTasks(); },"Conferma"); });
 }
 
 /* ---------- Seduta ---------- */
@@ -970,6 +1185,8 @@ function alertBtn(){ var b=$("n-copy"), o=b.textContent; b.textContent="Copiato"
 $("n-copy").onclick=function(){
   var todo=S.notes.filter(function(n){return !n.done;});
   var text="Da portare in seduta"+(S.next?" ("+niceDT(S.next)+")":"")+":\n"+(todo.length?todo.map(function(n){return "- "+(n.imp?"[importante] ":"")+n.text;}).join("\n"):"(nessun appunto)");
+  var open=S.tasks.filter(function(t){return !t.closed;});
+  if(open.length){ var wk=ymd(addDays(new Date(),-6)); text+="\n\nCompiti tra le sedute:\n"+open.map(function(t){ var n=Object.keys(t.days).filter(function(k){return t.days[k] && k>=wk;}).length; return "- "+t.text+" ("+n+" giorni su 7)"+(t.note?"\n  "+t.note:""); }).join("\n"); }
   copyText(text, null, "n-copy-fallback");
 };
 $("x-copy").onclick=function(){
@@ -983,13 +1200,18 @@ $("x-copy").onclick=function(){
   out.push("== UMORE ==");
   S.mood.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date+" · umore "+x.mood+"/10"+(x.energy?" · energia "+x.energy+"/10":"")+(x.sleep?" · sonno "+x.sleep:"")+(x.note?" · "+x.note:"")); });
   out.push("","== PENSIERI (A-B-C) ==");
-  S.abc.forEach(function(x){ out.push(x.when); out.push("  A: "+x.sit); out.push("  B: "+x.thought+" ("+x.belief+"%)"); out.push("  C: "+(x.emo?x.emo+" "+x.int+"/10. ":"")+(x.beh||"")); if(x.alt) out.push("  Altro modo: "+x.alt+" (ora "+x.belief2+"%)"); out.push(""); });
+  S.abc.forEach(function(x){ out.push(x.when); out.push("  A: "+x.sit); out.push("  B: "+x.thought+" ("+x.belief+"%)"); out.push("  C: "+(x.emo?x.emo+" "+x.int+"/10. ":"")+(x.beh||"")); if(x.traps&&x.traps.length) out.push("  Trappole: "+x.traps.join(", ")); if(x.pro) out.push("  Prove a favore: "+x.pro); if(x.con) out.push("  Prove contro: "+x.con); if(x.alt) out.push("  Altro modo: "+x.alt+" (ora "+x.belief2+"%)"); out.push(""); });
+  out.push("== ATTIVITÀ ==");
+  S.acts.slice().sort(function(a,b){return a.day<b.day?-1:1;}).forEach(function(x){ out.push(x.day+" "+x.slot+" · "+x.what+(x.state==="fatta"?" · piacere "+x.pl+"/10, padronanza "+x.ma+"/10":" · da fare")); });
+  out.push("","== COMPITI TRA LE SEDUTE ==");
+  S.tasks.forEach(function(t){ var ds=Object.keys(t.days).filter(function(k){return t.days[k];}).sort(); out.push("- "+(t.closed?"[concluso] ":"")+t.text+(ds.length?" · fatto il "+ds.join(", "):"")); if(t.note) out.push("  "+t.note); });
+  out.push("");
   out.push("== APPUNTI PER LA SEDUTA ==");
   S.notes.forEach(function(n){ out.push("- "+(n.done?"[parlato] ":"")+(n.imp?"[importante] ":"")+n.text); });
   copyText(out.join("\n"), "x-toast", "x-fallback");
 };
 armDelete($("x-wipe"),function(){
-  S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.next=""; save();
+  S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.acts=[]; S.tasks=[]; S.next=""; save();
   renderAll(); flash("w-toast","Tutte le voci sono state cancellate");
 },"Sì, cancella tutto");
 
@@ -1110,10 +1332,12 @@ document.querySelectorAll(".emo-pick").forEach(function(box){
   inp.addEventListener("input",function(){ if(inp.value.trim()) open(inp.value); else close(); });
   document.addEventListener("click",function(e){ if(e.target.isConnected && !box.contains(e.target)) close(); });
 });
-function renderAll(){ renderToday(); renderDiary(); renderWheel(); renderMood(); renderABC(); renderNext(); renderNotes(); renderHaikuPage(); }
+function renderAll(){ renderToday(); renderDiary(); renderWheel(); renderMood(); renderABC(); renderActs(); renderNext(); renderNotes(); renderTasks(); renderHaikuPage(); }
 resetDiaryForm();
 $("m-date").value=ymd(new Date());
 $("a-when").value=ymd(new Date());
+$("b-day").value=ymd(new Date());
+renderTrapPicker(); syncActState();
 renderAll(); draw();
 var h=(location.hash||"").slice(1);
 show(h && document.querySelector('[data-page="'+h+'"]') ? h : (S.tab||"oggi"));
