@@ -4,8 +4,9 @@ Una piccola web app per i giorni tra un incontro e l'altro con la propria psicot
 - diario delle emozioni
 - ruota delle emozioni
 - termometro dell'umore
-- registro dei pensieri (situazione, pensiero, conseguenza)
-- appunti per la prossima seduta
+- registro dei pensieri a 7 colonne, con le trappole del pensiero
+- attività con piacere e padronanza (attivazione comportamentale)
+- appunti e compiti tra le sedute
 - haiku sul tema della cura, dell'ascolto e delle emozioni
 
 È pensata come dono di gratitudine per chi ascolta, e come strumento personale per chi è in un percorso di cura.
@@ -54,11 +55,12 @@ L'obiettivo è semplice:
 
 - **Oggi**: segno rapido dell'umore, riepilogo della settimana, scorciatoie
 - **Diario delle emozioni**: quando, emozione, intensità 0–10, situazione, pensiero, azione, bisogno; vista settimanale a colori
-- **Ruota delle emozioni**: sette famiglie (gioia, tristezza, paura, rabbia, sorpresa, disgusto, vergogna) con le loro sfumature; la parola scelta passa al diario
+- **Ruota** delle emozioni: sette famiglie (gioia, tristezza, paura, rabbia, sorpresa, disgusto, vergogna) con le loro sfumature; la parola scelta passa al diario
 - **Umore**: umore, energia e sonno giorno per giorno, con grafico degli ultimi 30 giorni
-- **Pensieri**: registro A-B-C con «un altro modo di vederla» e quanto si crede al pensiero prima e dopo
-- **Per la seduta**: data del prossimo incontro con conto alla rovescia, appunti da portare, importanti in evidenza, copia degli appunti
-- **Haiku**: 52 haiku originali in otto temi, «Pesca un haiku»; in cima a ogni pagina compare un haiku casuale sul tema della pagina
+- **Pensieri**: registro a 7 colonne (situazione, pensiero automatico, emozione e comportamento, prove a favore, prove contro, pensiero alternativo, quanto ci si crede prima e dopo), con 11 trappole del pensiero da segnare e il grafico di quelle più frequenti
+- **Attività**: attività fatte o da fare, per giorno e momento, con voti di piacere e padronanza da 0 a 10; riepilogo degli ultimi 7 giorni e attività che hanno fatto stare meglio
+- **Per la seduta**: data del prossimo incontro con conto alla rovescia, appunti da portare, importanti in evidenza; compiti tra le sedute con «Segna fatto oggi», la settimana da lunedì a domenica (anche le precedenti) e le difficoltà; copia di appunti e compiti
+- **Haiku**: 58 haiku originali in nove temi, «Pesca un haiku»; in cima a ogni pagina compare un haiku casuale sul tema della pagina
 - **Informazioni e note legali**: link in alto a destra (o indirizzo `#informazioni`) che apre una finestra con descrizione, note legali e licenza
 - **Come funziona**: privacy, consigli d'uso, numeri utili, copia di tutte le voci, cancellazione
 - tema chiaro e scuro automatico
@@ -118,4 +120,4 @@ Se decidi di usarlo con dei pazienti:
 Mauro Di Cola · Haiku di AI Haiku Gaea
 
 ## Ultimo aggiornamento
-Versione 1.1 · 16/10/2026 - Questo file va aggiornato periodicamente con data e note eventuali.
+Versione 1.2 · 16/10/2026 - Questo file va aggiornato periodicamente con data e note eventuali.
