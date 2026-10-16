@@ -79,6 +79,7 @@ Gli haiku presenti nell'app sono testi originali di AI Haiku Gaea, che accompagn
 ## 📜 Cronologia delle modifiche
 
 - **16/10/2026** — Versione 1.0, redatto documento iniziale
+- **16/10/2026** — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»
 
 ---
 

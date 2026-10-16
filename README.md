@@ -59,6 +59,7 @@ L'obiettivo è semplice:
 - **Pensieri**: registro A-B-C con «un altro modo di vederla» e quanto si crede al pensiero prima e dopo
 - **Per la seduta**: data del prossimo incontro con conto alla rovescia, appunti da portare, importanti in evidenza, copia degli appunti
 - **Haiku**: 52 haiku originali in otto temi, «Pesca un haiku»; in cima a ogni pagina compare un haiku casuale sul tema della pagina
+- **Informazioni e note legali**: link in alto a destra (o indirizzo `#informazioni`) che apre una finestra con descrizione, note legali e licenza
 - **Come funziona**: privacy, consigli d'uso, numeri utili, copia di tutte le voci, cancellazione
 - tema chiaro e scuro automatico
 - tendine e calendari uniformi, pensati per il telefono
@@ -117,4 +118,4 @@ Se decidi di usarlo con dei pazienti:
 Mauro Di Cola · Haiku di AI Haiku Gaea
 
 ## Ultimo aggiornamento
-Versione 1.0 · 16/10/2026 - Questo file va aggiornato periodicamente con data e note eventuali.
+Versione 1.1 · 16/10/2026 - Questo file va aggiornato periodicamente con data e note eventuali.
