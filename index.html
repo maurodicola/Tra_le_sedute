@@ -234,6 +234,30 @@ textarea{min-height:76px;resize:vertical}
 #r-names{margin-top:4px}
 #r-names .nuance{--chip:var(--accent);padding:3px 10px;font-size:.85rem}
 
+/* Allegati */
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.att{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.note .att{background:var(--bg)}
+.att-main{display:flex;gap:10px;align-items:center;min-width:0}
+.att-main > div{min-width:0}
+.att-thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;background:var(--bg);flex:none;cursor:zoom-in;border:0;padding:0}
+.att-thumb img{width:100%;height:100%;object-fit:cover;border-radius:8px;display:block}
+.att-ico{width:56px;height:56px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;flex:none}
+.att-name{font-weight:600;overflow-wrap:anywhere;font-size:.92rem;display:block}
+.att-meta{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere}
+.att-actions{display:flex;gap:6px;flex-wrap:wrap}
+.att-actions .btn{padding:5px 11px;font-size:.8rem}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.note .atts{display:grid;gap:8px;margin-top:8px}
+.note-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.note-tools .btn{padding:4px 10px;font-size:.78rem}
+.note-link{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.note-link input{flex:1 1 180px}
+.viewer{position:fixed;inset:0;z-index:60;background:rgba(10,14,14,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.viewer img{max-width:100%;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);object-fit:contain;border-radius:8px}
+.viewer p{color:#E3E9E4;margin:0;font-size:.9rem;text-align:center;overflow-wrap:anywhere}
+.confirm-box{border:1px solid var(--ochre);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+
 /* Seduta */
 .countdown{font-family:var(--f-display);font-size:1.5rem}
 .note{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
@@ -562,11 +586,26 @@ footer em{font-family:var(--f-display);font-size:1rem}
       <button type="button" data-f="todo" aria-pressed="true">Da portare</button>
       <button type="button" data-f="done" aria-pressed="false">Già parlati</button>
     </div>
-    <button class="btn ghost small" id="n-copy">Copia gli appunti</button>
+    <div class="actions"><button class="btn ghost small" id="n-share">Condividi</button><button class="btn ghost small" id="n-copy">Copia gli appunti</button></div>
   </div>
+  <span class="toast" id="n-toast" role="status"></span>
   <div id="n-demo"></div>
   <div class="entries" id="n-list"></div>
   <div id="n-copy-fallback"></div>
+  <div class="sec" id="sec-materiale">
+  <h2 class="sub-h">Materiale per la seduta</h2>
+  <p class="intro">Foto, disegni, documenti, testi che hai scritto, link: ciò che vuoi portare o mostrare. Restano su questo dispositivo finché non decidi tu di condividerli. Prima di inviare qualcosa alla tua terapeuta o al tuo terapeuta, chiedi se e come preferisce riceverlo.</p>
+  <div class="panel">
+    <div class="actions"><button type="button" class="btn" id="mt-add-file">Aggiungi foto o file</button><span class="hint">Immagini, PDF, documenti, HTML, ZIP…</span></div>
+    <form class="grid2" id="mt-link-form" autocomplete="off">
+      <div class="field"><label for="mt-link-url">Oppure un link</label><input type="text" id="mt-link-url" inputmode="url" placeholder="https://…" required></div>
+      <div class="field"><label for="mt-link-title">Titolo</label><input type="text" id="mt-link-title" placeholder="Facoltativo. es. L'articolo di cui ti parlavo"></div>
+      <div class="actions"><button class="btn ghost" type="submit">Aggiungi il link</button></div>
+    </form>
+    <span class="toast" id="mt-toast" role="status"></span>
+  </div>
+  <div class="att-grid" id="mt-list"></div>
+  </div>
   <div class="sec" id="sec-compiti">
   <h2 class="sub-h">Compiti tra le sedute</h2>
   <p class="intro">I compiti concordati in seduta. Quando ne fai uno, tocca «Segna fatto oggi»; se te ne sei dimenticato, tocca il giorno giusto nella settimana. Annota anche com'è andata: le difficoltà sono materiale prezioso per la prossima seduta.</p>
@@ -620,7 +659,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
   <h2>Come funziona</h2>
   <div class="prose">
     <h3>Dove finiscono le tue parole</h3>
-    <p>Tutto ciò che scrivi resta solo in questo browser, su questo dispositivo. Non viene inviato a nessuno, nemmeno alla tua terapeuta. Se cancelli i dati del browser o usi una finestra privata, le voci vanno perse: per conservarle, ogni tanto copiale altrove.</p>
+    <p>Tutto ciò che scrivi resta solo in questo browser, su questo dispositivo. Non viene inviato a nessuno, nemmeno alla tua terapeuta. Solo quando tocchi «Condividi» un appunto, un file o un link passa all'app che scegli, come WhatsApp o la posta: da lì valgono le regole di quell'app. Gli allegati restano in un archivio separato del browser, più capiente. Se cancelli i dati del browser o usi una finestra privata, le voci vanno perse: per conservarle, ogni tanto copiale altrove.</p>
     <p id="storage-warn" class="hint" hidden>Al momento questo browser non permette di salvare: le voci resteranno solo finché la pagina è aperta.</p>
     <h3>Come usarlo</h3>
     <ul>
@@ -638,6 +677,10 @@ footer em{font-family:var(--f-display);font-size:1rem}
     <p>Copia tutte le voci in un testo, da incollare in una nota o in una email a te stesso.</p>
     <div class="actions"><button class="btn ghost" id="x-copy">Copia tutte le voci</button><span class="toast" id="x-toast" role="status"></span></div>
     <div id="x-fallback"></div>
+    <h3>Archivio completo</h3>
+    <p>Il testo copiato non contiene gli allegati. Per un salvataggio completo, con note, impostazioni e allegati, scarica l'archivio: è un unico file che puoi conservare o riaprire su un altro dispositivo con «Importa».</p>
+    <div class="actions"><button class="btn ghost" id="x-export">Scarica l'archivio</button><button class="btn ghost" id="x-import">Importa un archivio</button><span class="toast" id="xa-toast" role="status"></span></div>
+    <div id="x-import-confirm"></div>
     <h3>Ricomincia da capo</h3>
     <div class="actions"><button class="btn danger" id="x-wipe">Cancella tutte le voci</button><span class="toast" id="w-toast" role="status"></span></div>
   </div>
@@ -645,18 +688,21 @@ footer em{font-family:var(--f-display);font-size:1rem}
 
 </div>
 </main>
+<input type="file" id="att-file" multiple hidden>
+<input type="file" id="arc-file" accept=".json,application/json" hidden>
+<div class="viewer" id="viewer" hidden></div>
 
 <footer>
   <div class="wrap">
     <em>Un dono di gratitudine per chi ogni giorno ascolta.</em>
-    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea · Versione 1.3 · 17/10/2026</span>
+    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea · Versione 1.4 · 17/10/2026</span>
   </div>
 </footer>
 
 
 <dialog class="info" id="info" aria-labelledby="info-title"><div class="info-head"><div><p class="info-kicker">Tra le sedute</p><h2 id="info-title">Informazioni e note legali</h2></div><button class="info-close" id="info-close" type="button" aria-label="Chiudi">✕</button></div>
 <div class="info-body">
-<section><h3>Che cos'è</h3><p>Tra le sedute è un quaderno personale per i giorni tra un incontro e l'altro con la propria psicoterapeuta o il proprio psicoterapeuta: diario delle emozioni, ruota delle emozioni, termometro dell'umore, registro dei pensieri con le trappole del pensiero, attività con piacere e padronanza, diario dei sogni, relazioni, appunti, compiti e note di fine seduta, e haiku sul tema della cura. Una pagina «Strumenti» permette di tenere solo le schede adatte al proprio percorso.</p><p>È nato come dono di gratitudine verso chi ascolta. È gratuito, senza pubblicità e senza fini commerciali. Tutto ciò che si scrive resta nel browser del dispositivo in uso e non viene inviato a nessuno.</p></section>
+<section><h3>Che cos'è</h3><p>Tra le sedute è un quaderno personale per i giorni tra un incontro e l'altro con la propria psicoterapeuta o il proprio psicoterapeuta: diario delle emozioni, ruota delle emozioni, termometro dell'umore, registro dei pensieri con le trappole del pensiero, attività con piacere e padronanza, diario dei sogni, relazioni, appunti con allegati, materiale da condividere, compiti e note di fine seduta, e haiku sul tema della cura. Una pagina «Strumenti» permette di tenere solo le schede adatte al proprio percorso.</p><p>È nato come dono di gratitudine verso chi ascolta. È gratuito, senza pubblicità e senza fini commerciali. Tutto ciò che si scrive resta nel browser del dispositivo in uso e non viene inviato a nessuno.</p></section>
 <section class="legal"><!-- Testo di LEGAL.md riportato tale e quale. -->
 <h3 class="legal-title">Informazioni legali e avvertenze</h5>
 <p>Questo documento descrive i limiti d'uso di «Tra le sedute». Non sostituisce la consulenza legale o medica professionale.</p>
@@ -687,10 +733,16 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <h4>🔒 Dati e privacy</h4>
 <h5>Dove restano i dati</h5>
 <ul>
-<li>Tutte le voci restano nel browser del dispositivo in uso (<code>localStorage</code>)</li>
+<li>Tutte le voci restano nel browser del dispositivo in uso (<code>localStorage</code>); gli allegati (foto, documenti) in un archivio separato dello stesso browser (<code>IndexedDB</code>)</li>
 <li>Non esiste un server, un account o una copia remota</li>
 <li>L'autore non riceve, non vede e non conserva alcun dato degli utenti</li>
 <li>Il professionista non riceve nulla in automatico: è l'utente a decidere se e cosa mostrare in seduta</li>
+</ul>
+<h5>Condivisione</h5>
+<ul>
+<li>Solo quando l'utente tocca «Condividi», un appunto, un file o un link passa all'app scelta (per esempio WhatsApp o la posta): da quel momento valgono le condizioni e la riservatezza di quell'app</li>
+<li>Prima di inviare materiale alla propria terapeuta o al proprio terapeuta, è bene chiedere se e come preferisce riceverlo</li>
+<li>L'archivio completo scaricato con «Scarica l'archivio» contiene tutte le note e gli allegati in chiaro: va conservato in un luogo sicuro</li>
 </ul>
 <h5>Cosa comporta</h5>
 <ul>
@@ -735,6 +787,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <li><strong>16/10/2026</strong> — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»</li>
 <li><strong>16/10/2026</strong> — Versione 1.2, aggiunti strumenti di tipo cognitivo-comportamentale (registro a 7 colonne, attività, compiti)</li>
 <li><strong>17/10/2026</strong> — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta; aggiunto il 116117</li>
+<li><strong>17/10/2026</strong> — Versione 1.4, allegati, materiale per la seduta, condivisione, archivio completo</li>
 </ul>
 <hr />
 <p><strong>Ultimo aggiornamento:</strong> 17 Ottobre 2026</p>
@@ -749,7 +802,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre></section>
-<p class="info-version">Tra le sedute · <span id="info-version">Versione 1.3 · 17/10/2026</span> · Mauro Di Cola</p>
+<p class="info-version">Tra le sedute · <span id="info-version">Versione 1.4 · 17/10/2026</span> · Mauro Di Cola</p>
 </div></dialog>
 
 <script>
@@ -862,7 +915,7 @@ function flash(id,msg){ var el=$(id); el.textContent=msg; clearTimeout(el._t); e
 
 /* ---------- Archivio locale ---------- */
 var KEY="tra-le-sedute-v1", storageOk=true;
-var S = {diary:[], mood:[], abc:[], notes:[], acts:[], tasks:[], dreams:[], rels:[], after:[], tools:null, next:"", tab:"oggi"};
+var S = {diary:[], mood:[], abc:[], notes:[], acts:[], tasks:[], dreams:[], rels:[], after:[], atts:[], tools:null, next:"", tab:"oggi"};
 try{ var raw=localStorage.getItem(KEY); if(raw){ var p=JSON.parse(raw); for(var k in S){ if(p[k]!==undefined) S[k]=p[k]; } } }catch(e){ storageOk=false; }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOk=false; $("storage-warn").hidden=false; } }
 if(!storageOk) $("storage-warn").hidden=false;
@@ -1298,11 +1351,15 @@ function renderNotes(){
   var items=d.items.filter(function(n){ return nFilter==="done"?n.done:!n.done; }).sort(function(a,b){ return (b.imp?1:0)-(a.imp?1:0); });
   $("n-list").innerHTML = items.length ? items.map(function(n){
     return '<div class="note'+(n.done?' done':'')+(d.demo?' demo':'')+'"><input type="checkbox" '+(n.done?'checked':'')+' '+(d.demo?'disabled':'')+' data-nid="'+n.id+'" aria-label="Parlato in seduta">'+
-      '<div class="txt">'+(n.imp?'<span class="star" title="Importante">★ </span>':'')+esc(n.text)+'</div>'+
+      '<div class="txt">'+(n.imp?'<span class="star" title="Importante">★ </span>':'')+esc(n.text)+(d.demo?'':noteAttHTML(n))+'</div>'+
       (d.demo?'<span class="badge">Esempio</span>':'<button class="icon-btn" data-ndel="'+n.id+'" aria-label="Elimina appunto">Elimina</button>')+'</div>';
   }).join("") : '<p class="empty">'+(nFilter==="done"?"Nessun appunto ancora segnato come parlato.":"Nessun appunto da portare. Aggiungine uno quando ti viene in mente.")+'</p>';
   $("n-list").querySelectorAll("[data-nid]").forEach(function(c){ c.onchange=function(){ var n=S.notes.filter(function(x){return x.id===c.getAttribute("data-nid");})[0]; if(n){ n.done=c.checked; save(); setTimeout(renderNotes,250); } }; });
-  $("n-list").querySelectorAll("[data-ndel]").forEach(function(b){ armDelete(b,function(){ S.notes=S.notes.filter(function(x){return x.id!==b.getAttribute("data-ndel");}); save(); renderNotes(); },"Conferma"); });
+  $("n-list").querySelectorAll("[data-ndel]").forEach(function(b){ armDelete(b,function(){ var id=b.getAttribute("data-ndel"); S.notes=S.notes.filter(function(x){return x.id!==id;}); removeAttsOf(id); save(); renderNotes(); },"Conferma"); });
+  bindAtts($("n-list"),"n-toast");
+  $("n-list").querySelectorAll("[data-nfile]").forEach(function(b){ b.onclick=function(){ pickFiles(b.getAttribute("data-nfile")); }; });
+  $("n-list").querySelectorAll("[data-nlink]").forEach(function(b){ b.onclick=function(){ var id=b.getAttribute("data-nlink"); linkOpen[id]=!linkOpen[id]; renderNotes(); var i=$("nl-"+id); if(i) i.focus(); }; });
+  $("n-list").querySelectorAll("[data-nlsave]").forEach(function(b){ b.onclick=function(){ var id=b.getAttribute("data-nlsave"); if(addLink(id,$("nl-"+id).value,"","n-toast")){ delete linkOpen[id]; renderNotes(); } }; });
 }
 
 /* ---------- Strumenti ---------- */
@@ -1315,17 +1372,18 @@ var TOOLS=[
  {k:"compiti", n:"Compiti tra le sedute", d:"Sezione della scheda Seduta"},
  {k:"sogni", n:"Diario dei sogni", d:"Psicodinamico e junghiano"},
  {k:"relazioni", n:"Relazioni", d:"Sistemico-relazionale"},
+ {k:"materiale", n:"Materiale per la seduta", d:"Foto, file e link da portare o condividere"},
  {k:"dopo", n:"Dopo la seduta", d:"Sezione della scheda Seduta, per tutti"},
  {k:"haiku", n:"Raccolta di haiku", d:"La scheda Haiku; un haiku resta comunque in cima a ogni pagina"}
 ];
 var PRESETS=[
  {k:"tutti", n:"Tutti gli strumenti", d:"Ogni scheda accesa.", on:TOOLS.map(function(t){return t.k;})},
- {k:"tcc", n:"Cognitivo-comportamentale", d:"Pensieri, attività e compiti: il lavoro sul presente, tra pensieri, emozioni e comportamenti.", on:["diario","ruota","umore","pensieri","attivita","compiti","haiku"]},
- {k:"psicodinamico", n:"Psicodinamico", d:"Sogni, associazioni e ciò che accade nella relazione terapeutica. Vale anche per l'approccio junghiano.", on:["diario","ruota","sogni","dopo","haiku"]},
- {k:"sistemico", n:"Sistemico-relazionale", d:"Le relazioni e i modi che si ripetono tra le persone.", on:["diario","ruota","relazioni","dopo","haiku"]},
- {k:"umanistico", n:"Umanistico", d:"Gestalt, approccio centrato sulla persona: il vissuto, il qui e ora, le emozioni.", on:["diario","ruota","umore","dopo","haiku"]}
+ {k:"tcc", n:"Cognitivo-comportamentale", d:"Pensieri, attività e compiti: il lavoro sul presente, tra pensieri, emozioni e comportamenti.", on:["diario","ruota","umore","pensieri","attivita","compiti","materiale","haiku"]},
+ {k:"psicodinamico", n:"Psicodinamico", d:"Sogni, associazioni e ciò che accade nella relazione terapeutica. Vale anche per l'approccio junghiano.", on:["diario","ruota","sogni","dopo","materiale","haiku"]},
+ {k:"sistemico", n:"Sistemico-relazionale", d:"Le relazioni e i modi che si ripetono tra le persone.", on:["diario","ruota","relazioni","dopo","materiale","haiku"]},
+ {k:"umanistico", n:"Umanistico", d:"Gestalt, approccio centrato sulla persona: il vissuto, il qui e ora, le emozioni.", on:["diario","ruota","umore","dopo","materiale","haiku"]}
 ];
-var SECTIONS={compiti:"sec-compiti", dopo:"sec-dopo"};
+var SECTIONS={compiti:"sec-compiti", dopo:"sec-dopo", materiale:"sec-materiale"};
 function toolOn(k){ var known=TOOLS.some(function(t){return t.k===k;}); if(!known) return true; return !S.tools || S.tools[k]!==false; }
 function setTools(list){ S.tools={}; TOOLS.forEach(function(t){ S.tools[t.k]=list.indexOf(t.k)>=0; }); save(); applyTools(); }
 function currentPreset(){ if(!S.tools) return "tutti"; var on=TOOLS.filter(function(t){return toolOn(t.k);}).map(function(t){return t.k;}).sort().join(","); var m=PRESETS.filter(function(pr){ return pr.on.slice().sort().join(",")===on; })[0]; return m?m.k:""; }
@@ -1432,6 +1490,165 @@ function updDots(){
 tabWrap.addEventListener("scroll",updDots,{passive:true});
 window.addEventListener("resize",updDots);
 
+/* ---------- Allegati: archivio locale dei file ---------- */
+var DB=null, attCache={}, attURL={}, linkOpen={}, pendingOwner="mat";
+function idb(){ return new Promise(function(res,rej){ if(DB) return res(DB); if(!window.indexedDB) return rej(new Error("no idb")); var r=indexedDB.open("tra-le-sedute-files",1); r.onupgradeneeded=function(){ r.result.createObjectStore("files"); }; r.onsuccess=function(){ DB=r.result; res(DB); }; r.onerror=function(){ rej(r.error); }; }); }
+function idbDo(mode,fn){ return idb().then(function(db){ return new Promise(function(res,rej){ var tx=db.transaction("files",mode), st=tx.objectStore("files"), out=fn(st); tx.oncomplete=function(){ res(out && out.result!==undefined ? out.result : undefined); }; tx.onerror=function(){ rej(tx.error); }; tx.onabort=function(){ rej(tx.error); }; }); }); }
+function putFile(id,blob){ return idbDo("readwrite",function(st){ st.put(blob,id); }); }
+function getFile(id){ return idbDo("readonly",function(st){ return st.get(id); }); }
+function delFile(id){ return idbDo("readwrite",function(st){ st.delete(id); }); }
+function clearFiles(){ return idbDo("readwrite",function(st){ st.clear(); }); }
+function sizeTxt(n){ if(n==null) return ""; if(n<1024) return n+" B"; if(n<1048576) return Math.round(n/1024)+" KB"; return (n/1048576).toFixed(1).replace(".",",")+" MB"; }
+function extOf(name){ var m=/\.([a-z0-9]{1,5})$/i.exec(name||""); return m?m[1]:"file"; }
+function isImg(a){ return a.kind==="file" && /^image\//.test(a.type||""); }
+function attsOf(owner){ return S.atts.filter(function(a){ return a.owner===owner; }); }
+function removeAttsOf(owner){ attsOf(owner).forEach(function(a){ delFile(a.id).catch(function(){}); drop(a.id); }); S.atts=S.atts.filter(function(a){ return a.owner!==owner; }); }
+function drop(id){ if(attURL[id]){ try{ URL.revokeObjectURL(attURL[id]); }catch(_){} } delete attURL[id]; delete attCache[id]; }
+function loadAtt(a){
+  if(a.kind!=="file" || attCache[a.id]) return Promise.resolve(attCache[a.id]);
+  return getFile(a.id).then(function(b){ if(!b) return null; attCache[a.id]=new File([b], a.name, {type:a.type||b.type||"application/octet-stream"}); attURL[a.id]=URL.createObjectURL(attCache[a.id]); return attCache[a.id]; }).catch(function(){ return null; });
+}
+function attHTML(a){
+  var main;
+  if(a.kind==="link"){
+    var host=""; try{ host=new URL(a.url).hostname.replace(/^www\./,""); }catch(_){ host=a.url; }
+    main='<div class="att-main"><span class="att-ico">link</span><div><span class="att-name">'+esc(a.title||host)+'</span><span class="att-meta">'+esc(host)+'</span></div></div>';
+    return '<div class="att">'+main+'<div class="att-actions"><a class="btn ghost" href="'+esc(a.url)+'" target="_blank" rel="noopener">Apri</a><button type="button" class="btn ghost" data-ashare="'+a.id+'">Condividi</button><button type="button" class="btn danger" data-adel="'+a.id+'">Elimina</button></div></div>';
+  }
+  var thumb = isImg(a) ? '<button type="button" class="att-thumb" data-aview="'+a.id+'" aria-label="Vedi '+esc(a.name)+'"><img alt="" data-athumb="'+a.id+'"></button>' : '<span class="att-ico">'+esc(extOf(a.name))+'</span>';
+  main='<div class="att-main">'+thumb+'<div><span class="att-name">'+esc(a.name)+'</span><span class="att-meta">'+esc(sizeTxt(a.size))+' · '+esc(niceDate(new Date(a.created)))+'</span></div></div>';
+  return '<div class="att">'+main+'<div class="att-actions">'+(isImg(a)?'<button type="button" class="btn ghost" data-aview="'+a.id+'">Vedi</button>':'')+'<button type="button" class="btn ghost" data-adown="'+a.id+'">Scarica</button><button type="button" class="btn ghost" data-ashare="'+a.id+'">Condividi</button><button type="button" class="btn danger" data-adel="'+a.id+'">Elimina</button></div></div>';
+}
+function noteAttHTML(n){
+  var list=attsOf(n.id);
+  return (list.length?'<div class="atts">'+list.map(attHTML).join("")+'</div>':'')+
+    (linkOpen[n.id]?'<div class="note-link"><input type="text" inputmode="url" id="nl-'+n.id+'" placeholder="https://…" aria-label="Link da allegare"><button type="button" class="btn small" data-nlsave="'+n.id+'">Allega</button></div>':'')+
+    '<div class="note-tools"><button type="button" class="btn ghost" data-nfile="'+n.id+'">Allega foto o file</button><button type="button" class="btn ghost" data-nlink="'+n.id+'">'+(linkOpen[n.id]?'Annulla link':'Allega link')+'</button></div>';
+}
+function findAtt(id){ return S.atts.filter(function(a){ return a.id===id; })[0]; }
+function bindAtts(root,toastId){
+  root.querySelectorAll("img[data-athumb]").forEach(function(img){ var a=findAtt(img.getAttribute("data-athumb")); if(a) loadAtt(a).then(function(){ if(attURL[a.id]) img.src=attURL[a.id]; }); });
+  root.querySelectorAll("[data-ashare]").forEach(function(b){ var a=findAtt(b.getAttribute("data-ashare")); if(a) loadAtt(a); b.onclick=function(){ shareAtt(a,toastId); }; });
+  root.querySelectorAll("[data-adown]").forEach(function(b){ b.onclick=function(){ var a=findAtt(b.getAttribute("data-adown")); loadAtt(a).then(function(){ downloadAtt(a,toastId); }); }; });
+  root.querySelectorAll("[data-aview]").forEach(function(b){ b.onclick=function(){ viewAtt(findAtt(b.getAttribute("data-aview")),toastId); }; });
+  root.querySelectorAll("[data-adel]").forEach(function(b){ armDelete(b,function(){ var id=b.getAttribute("data-adel"); delFile(id).catch(function(){}); drop(id); S.atts=S.atts.filter(function(a){ return a.id!==id; }); save(); renderNotes(); renderMaterial(); },"Conferma"); });
+}
+function shareAtt(a,toastId){
+  if(!a) return;
+  if(a.kind==="link"){
+    if(navigator.share){ navigator.share({title:a.title||a.url, url:a.url}).catch(function(){}); }
+    else copyText(a.url, toastId, toastId==="mt-toast"?"mt-fallback":"n-copy-fallback");
+    return;
+  }
+  var f=attCache[a.id];
+  if(!f){ flash(toastId,"Un attimo: sto preparando il file, poi tocca di nuovo «Condividi»."); loadAtt(a); return; }
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[f]})){
+    navigator.share({files:[f], title:a.name}).catch(function(e){ if(e && e.name!=="AbortError") flash(toastId,"La condivisione non è riuscita. Prova con «Scarica» e poi allega il file su WhatsApp."); });
+  } else if(!navigator.share){
+    flash(toastId,"Questo browser non ha la condivisione: tocca «Scarica» e allega il file nell'app che preferisci.");
+  } else {
+    flash(toastId,"Questo tipo di file non si può condividere direttamente dal browser: tocca «Scarica» e poi allegalo su WhatsApp.");
+  }
+}
+function downloadAtt(a,toastId){
+  if(!attURL[a.id]){ flash(toastId,"Non trovo più questo file su questo dispositivo."); return; }
+  var l=document.createElement("a"); l.href=attURL[a.id]; l.download=a.name; l.rel="noopener"; document.body.appendChild(l); l.click(); document.body.removeChild(l);
+}
+function viewAtt(a,toastId){
+  if(!a) return;
+  loadAtt(a).then(function(){
+    if(!attURL[a.id]){ flash(toastId,"Non trovo più questa immagine su questo dispositivo."); return; }
+    var v=$("viewer");
+    v.innerHTML='<img alt="'+esc(a.name)+'" src="'+attURL[a.id]+'"><p>'+esc(a.name)+'</p><div class="actions"><button type="button" class="btn" id="v-share">Condividi</button><button type="button" class="btn ghost" id="v-down" style="background:var(--surface)">Scarica</button><button type="button" class="btn ghost" id="v-close" style="background:var(--surface)">Chiudi</button></div>';
+    v.hidden=false;
+    $("v-share").onclick=function(){ shareAtt(a,toastId); };
+    $("v-down").onclick=function(){ downloadAtt(a,toastId); };
+    $("v-close").onclick=function(){ v.hidden=true; v.innerHTML=""; };
+    v.onclick=function(e){ if(e.target===v){ v.hidden=true; v.innerHTML=""; } };
+    $("v-close").focus();
+  });
+}
+document.addEventListener("keydown",function(e){ if(e.key==="Escape" && !$("viewer").hidden){ $("viewer").hidden=true; $("viewer").innerHTML=""; } });
+function pickFiles(owner){ pendingOwner=owner; $("att-file").value=""; $("att-file").click(); }
+$("att-file").addEventListener("change",function(){
+  var files=Array.prototype.slice.call(this.files||[]), owner=pendingOwner, toastId=owner==="mat"?"mt-toast":"n-toast";
+  if(!files.length) return;
+  try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(_){}
+  var done=0, failed=0;
+  files.forEach(function(f){
+    var id=uid();
+    putFile(id,f).then(function(){
+      S.atts.push({id:id, owner:owner, kind:"file", name:f.name||"file", type:f.type||"", size:f.size, created:Date.now()});
+      attCache[id]=f; attURL[id]=URL.createObjectURL(f); done++;
+    }).catch(function(){ failed++; }).then(function(){
+      if(done+failed===files.length){ save(); renderNotes(); renderMaterial();
+        flash(toastId, failed ? "Non sono riuscito a salvare "+failed+" file: forse lo spazio sul dispositivo è finito." : (done===1?"File aggiunto":done+" file aggiunti")); }
+    });
+  });
+});
+function addLink(owner,url,title,toastId){
+  url=(url||"").trim(); if(!url){ flash(toastId,"Scrivi o incolla un indirizzo."); return false; }
+  if(!/^https?:\/\//i.test(url)) url="https://"+url;
+  try{ new URL(url); }catch(_){ flash(toastId,"Questo indirizzo non sembra valido. Controllalo e riprova."); return false; }
+  S.atts.push({id:uid(), owner:owner, kind:"link", url:url, title:(title||"").trim(), created:Date.now()}); save(); flash(toastId,"Link aggiunto"); return true;
+}
+$("mt-add-file").onclick=function(){ pickFiles("mat"); };
+$("mt-link-form").addEventListener("submit",function(e){ e.preventDefault(); if(addLink("mat",$("mt-link-url").value,$("mt-link-title").value,"mt-toast")){ $("mt-link-url").value=""; $("mt-link-title").value=""; renderMaterial(); } });
+function renderMaterial(){
+  var list=attsOf("mat").slice().sort(function(a,b){ return b.created-a.created; });
+  $("mt-list").innerHTML = list.length ? list.map(attHTML).join("") : '<p class="empty">Ancora nessun materiale. Aggiungi una foto, un documento o un link: lo ritrovi qui, pronto da mostrare in seduta o da condividere.</p>';
+  bindAtts($("mt-list"),"mt-toast");
+}
+if(!$("mt-fallback")){ var mf=document.createElement("div"); mf.id="mt-fallback"; $("mt-list").parentNode.insertBefore(mf,$("mt-list")); }
+
+/* ---------- Condividi gli appunti ---------- */
+function notesText(){
+  var todo=S.notes.filter(function(n){return !n.done;});
+  return "Da portare in seduta"+(S.next?" ("+niceDT(S.next)+")":"")+":\n"+(todo.length?todo.map(function(n){ var at=attsOf(n.id).map(function(a){ return "   · "+(a.kind==="link"?(a.title?a.title+" ":"")+a.url:"allegato: "+a.name); }).join("\n"); return "- "+(n.imp?"[importante] ":"")+n.text+(at?"\n"+at:""); }).join("\n"):"(nessun appunto)");
+}
+$("n-share").onclick=function(){
+  var t=notesText();
+  if(navigator.share) navigator.share({title:"Appunti per la seduta", text:t}).catch(function(){});
+  else copyText(t,"n-toast","n-copy-fallback");
+};
+
+/* ---------- Archivio completo ---------- */
+function blobToDataURL(b){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; r.readAsDataURL(b); }); }
+function dataURLToBlob(u){ var i=u.indexOf(","), meta=u.slice(5,i), bin=atob(u.slice(i+1)), arr=new Uint8Array(bin.length); for(var k=0;k<bin.length;k++) arr[k]=bin.charCodeAt(k); return new Blob([arr],{type:meta.split(";")[0]}); }
+$("x-export").onclick=function(){
+  var files=S.atts.filter(function(a){return a.kind==="file";});
+  flash("xa-toast","Preparo l'archivio…");
+  Promise.all(files.map(function(a){ return getFile(a.id).then(function(b){ return b?blobToDataURL(b).then(function(d){ return {id:a.id, data:d}; }):null; }).catch(function(){ return null; }); })).then(function(list){
+    var arc={app:"tra-le-sedute", format:1, exported:new Date().toISOString(), state:S, files:list.filter(Boolean)};
+    var blob=new Blob([JSON.stringify(arc)],{type:"application/json"}), url=URL.createObjectURL(blob);
+    var l=document.createElement("a"); l.href=url; l.download="tra-le-sedute-archivio-"+ymd(new Date())+".json"; document.body.appendChild(l); l.click(); document.body.removeChild(l);
+    setTimeout(function(){ URL.revokeObjectURL(url); },60000);
+    flash("xa-toast","Archivio scaricato ("+sizeTxt(blob.size)+"). Conservalo in un posto sicuro: contiene tutte le tue note.");
+  });
+};
+$("x-import").onclick=function(){ $("arc-file").value=""; $("arc-file").click(); };
+$("arc-file").addEventListener("change",function(){
+  var f=this.files&&this.files[0]; if(!f) return;
+  f.text().then(function(t){
+    var arc; try{ arc=JSON.parse(t); }catch(_){ arc=null; }
+    if(!arc || arc.app!=="tra-le-sedute" || !arc.state){ flash("xa-toast","Questo file non è un archivio di Tra le sedute."); return; }
+    var st=arc.state, n=["diary","mood","abc","notes","acts","tasks","dreams","rels","after"].reduce(function(s,k){ return s+((st[k]||[]).length); },0);
+    var box=$("x-import-confirm");
+    box.innerHTML='<div class="confirm-box"><p>L\'archivio del '+esc(niceDate(new Date(arc.exported)))+' contiene '+n+' voci e '+(arc.files||[]).length+' allegati. Importandolo, sostituisci tutto ciò che c\'è ora su questo dispositivo.</p><div class="actions"><button type="button" class="btn" id="imp-yes">Sì, importa</button><button type="button" class="btn ghost" id="imp-no">Annulla</button></div></div>';
+    $("imp-no").onclick=function(){ box.innerHTML=""; };
+    $("imp-yes").onclick=function(){
+      clearFiles().catch(function(){}).then(function(){
+        return Promise.all((arc.files||[]).map(function(x){ return putFile(x.id, dataURLToBlob(x.data)).catch(function(){}); }));
+      }).then(function(){
+        Object.keys(attCache).forEach(drop);
+        for(var k in S){ if(st[k]!==undefined) S[k]=st[k]; }
+        ["diary","mood","abc","notes","acts","tasks","dreams","rels","after","atts"].forEach(function(k){ if(!Array.isArray(S[k])) S[k]=[]; });
+        save(); box.innerHTML=""; renderAll(); applyTools(); flash("xa-toast","Archivio importato");
+      });
+    };
+  });
+});
+
 /* ---------- Copia ---------- */
 function copyText(text, toastId, fallbackId){
   var box=$(fallbackId);
@@ -1456,10 +1673,9 @@ function copyText(text, toastId, fallbackId){
 }
 function alertBtn(){ var b=$("n-copy"), o=b.textContent; b.textContent="Copiato"; setTimeout(function(){ b.textContent=o; },2000); }
 $("n-copy").onclick=function(){
-  var todo=S.notes.filter(function(n){return !n.done;});
-  var text="Da portare in seduta"+(S.next?" ("+niceDT(S.next)+")":"")+":\n"+(todo.length?todo.map(function(n){return "- "+(n.imp?"[importante] ":"")+n.text;}).join("\n"):"(nessun appunto)");
+  var text=notesText();
   var open=S.tasks.filter(function(t){return !t.closed;});
-  if(open.length){ text+="\n\nCompiti tra le sedute:\n"+open.map(function(t){ return "- "+t.text+" (fatto "+volte(weekCount(t))+" questa settimana)"+(t.note?"\n  "+t.note:""); }).join("\n"); }
+  if(open.length) text+="\n\nCompiti tra le sedute:\n"+open.map(function(t){ return "- "+t.text+" (fatto "+volte(weekCount(t))+" questa settimana)"+(t.note?"\n  "+t.note:""); }).join("\n");
   copyText(text, null, "n-copy-fallback");
 };
 $("x-copy").onclick=function(){
@@ -1485,6 +1701,8 @@ $("x-copy").onclick=function(){
   S.rels.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date+" · "+x.who+(x.emo?" · "+x.emo:"")); out.push("  "+x.what); if(x.did) out.push("  Ho fatto: "+x.did); if(x.wish) out.push("  Avrei voluto: "+x.wish); if(x.pattern) out.push("  Mi ricorda: "+x.pattern); out.push(""); });
   out.push("== DOPO LA SEDUTA ==");
   S.after.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date); out.push("  Mi porto via: "+x.take); if(x.felt) out.push("  Ho provato: "+x.felt); if(x.unsaid) out.push("  Non ho detto: "+x.unsaid); out.push(""); });
+  out.push("== MATERIALE PER LA SEDUTA ==");
+  attsOf("mat").forEach(function(a){ out.push("- "+(a.kind==="link"?(a.title?a.title+" · ":"")+a.url:a.name+" (allegato, non incluso nel testo)")); });
   out.push("== APPUNTI PER LA SEDUTA ==");
   S.notes.forEach(function(n){ out.push("- "+(n.done?"[parlato] ":"")+(n.imp?"[importante] ":"")+n.text); });
   var kept=[], cur=null, buf=[];
@@ -1495,7 +1713,7 @@ $("x-copy").onclick=function(){
   copyText(kept.join("\n").replace(/\n{3,}/g,"\n\n"), "x-toast", "x-fallback");
 };
 armDelete($("x-wipe"),function(){
-  S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.acts=[]; S.tasks=[]; S.dreams=[]; S.rels=[]; S.after=[]; S.next=""; save();
+  S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.acts=[]; S.tasks=[]; S.dreams=[]; S.rels=[]; S.after=[]; S.atts=[]; S.next=""; save(); clearFiles().catch(function(){}); Object.keys(attCache).forEach(drop);
   renderAll(); flash("w-toast","Tutte le voci sono state cancellate");
 },"Sì, cancella tutto");
 
@@ -1616,7 +1834,7 @@ document.querySelectorAll(".emo-pick").forEach(function(box){
   inp.addEventListener("input",function(){ if(inp.value.trim()) open(inp.value); else close(); });
   document.addEventListener("click",function(e){ if(e.target.isConnected && !box.contains(e.target)) close(); });
 });
-function renderAll(){ renderToday(); renderDiary(); renderWheel(); renderMood(); renderABC(); renderActs(); renderNext(); renderNotes(); renderTasks(); renderDreams(); renderRels(); renderAfter(); renderHaikuPage(); }
+function renderAll(){ renderToday(); renderDiary(); renderWheel(); renderMood(); renderABC(); renderActs(); renderNext(); renderNotes(); renderTasks(); renderDreams(); renderRels(); renderAfter(); renderMaterial(); renderHaikuPage(); }
 resetDiaryForm();
 $("m-date").value=ymd(new Date());
 $("a-when").value=ymd(new Date());

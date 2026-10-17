@@ -33,10 +33,15 @@ In caso di crisi, rivolgiti anche al tuo medico, al tuo professionista di riferi
 ## 🔒 Dati e privacy
 
 ### Dove restano i dati
-- Tutte le voci restano nel browser del dispositivo in uso (`localStorage`)
+- Tutte le voci restano nel browser del dispositivo in uso (`localStorage`); gli allegati (foto, documenti) in un archivio separato dello stesso browser (`IndexedDB`)
 - Non esiste un server, un account o una copia remota
 - L'autore non riceve, non vede e non conserva alcun dato degli utenti
 - Il professionista non riceve nulla in automatico: è l'utente a decidere se e cosa mostrare in seduta
+
+### Condivisione
+- Solo quando l'utente tocca «Condividi», un appunto, un file o un link passa all'app scelta (per esempio WhatsApp o la posta): da quel momento valgono le condizioni e la riservatezza di quell'app
+- Prima di inviare materiale alla propria terapeuta o al proprio terapeuta, è bene chiedere se e come preferisce riceverlo
+- L'archivio completo scaricato con «Scarica l'archivio» contiene tutte le note e gli allegati in chiaro: va conservato in un luogo sicuro
 
 ### Cosa comporta
 - I dati possono andare persi se si cancellano i dati del browser, si usa una finestra privata o si cambia dispositivo
@@ -85,6 +90,7 @@ Gli haiku presenti nell'app sono testi originali di AI Haiku Gaea, che accompagn
 - **16/10/2026** — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»
 - **16/10/2026** — Versione 1.2, aggiunti strumenti di tipo cognitivo-comportamentale (registro a 7 colonne, attività, compiti)
 - **17/10/2026** — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta; aggiunto il 116117
+- **17/10/2026** — Versione 1.4, allegati, materiale per la seduta, condivisione, archivio completo
 
 ---
 
