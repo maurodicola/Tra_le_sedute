@@ -13,8 +13,9 @@ Questo documento descrive i limiti d'uso di «Tra le sedute». Non sostituisce l
 - I grafici mostrano solo ciò che l'utente ha scritto, senza interpretarlo
 
 ### Non sostituisce la psicoterapia
-- Gli strumenti presenti (diario, ruota delle emozioni, termometro dell'umore, registro dei pensieri, attività, compiti) sono di uso comune in molti percorsi, ma la loro utilità dipende dalla persona e dall'approccio del professionista
+- Gli strumenti presenti (diario, ruota delle emozioni, termometro dell'umore, registro dei pensieri, attività, compiti, sogni, relazioni, note di fine seduta) sono di uso comune in molti percorsi, ma la loro utilità dipende dalla persona e dall'approccio del professionista
 - Il registro dei pensieri con le trappole del pensiero e le prove a favore e contro, il monitoraggio delle attività con piacere e padronanza e i compiti tra le sedute sono tipici della terapia cognitivo-comportamentale: vanno usati solo se il professionista li ritiene adatti e, idealmente, concordati in seduta
+- Il diario dei sogni e le note di fine seduta richiamano il lavoro psicodinamico, le relazioni quello sistemico-relazionale: i profili della scheda «Strumenti» sono solo un punto di partenza e non attribuiscono alcun orientamento a uno specifico professionista
 - L'app non contiene questionari con punteggio né esercizi di esposizione, che richiedono la guida diretta del professionista
 - Ogni decisione sul percorso di cura spetta alla persona e al suo professionista
 
@@ -82,9 +83,10 @@ Gli haiku presenti nell'app sono testi originali di AI Haiku Gaea, che accompagn
 - **16/10/2026** — Versione 1.0, redatto documento iniziale
 - **16/10/2026** — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»
 - **16/10/2026** — Versione 1.2, aggiunti strumenti di tipo cognitivo-comportamentale (registro a 7 colonne, attività, compiti)
+- **17/10/2026** — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta
 
 ---
 
-**Ultimo aggiornamento:** 16 Ottobre 2026
+**Ultimo aggiornamento:** 17 Ottobre 2026
 
 **Nota:** Questa pagina non sostituisce la consulenza legale o medica professionale.
