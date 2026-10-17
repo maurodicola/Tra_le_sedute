@@ -376,7 +376,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
   <form class="panel" id="d-form" autocomplete="off">
     <div class="grid2">
       <div class="field"><span class="lbl" id="d-when-lbl">Quando</span><div class="dt-pick" data-mode="datetime"><input type="hidden" id="d-when"></div></div>
-      <div class="field"><label for="d-emo">Emozione</label><div class="emo-pick"><input type="text" id="d-emo" placeholder="es. ansia, sollievo, delusione" required><button type="button" class="emo-toggle" aria-expanded="false" aria-label="Mostra l'elenco delle emozioni">▾</button><div class="emo-panel" hidden></div></div><span class="hint">Non trovi la parola? <button type="button" class="link-btn" data-go="ruota">Apri la ruota</button></span></div>
+      <div class="field"><label for="d-emo">Emozione</label><div class="emo-pick"><input type="text" id="d-emo" placeholder="es. ansia, sollievo, delusione" required><button type="button" class="emo-toggle" aria-expanded="false" aria-label="Mostra l'elenco delle emozioni">▾</button><div class="emo-panel" hidden></div></div><span class="hint" id="d-emo-hint">Non trovi la parola? <button type="button" class="link-btn" data-go="ruota">Apri la ruota</button></span></div>
     </div>
     <div class="field">
       <label for="d-int">Intensità</label>
@@ -1334,6 +1334,8 @@ function applyTools(){
   Object.keys(SECTIONS).forEach(function(k){ $(SECTIONS[k]).hidden=!toolOn(k); });
   document.querySelectorAll(".shortcut[data-go]").forEach(function(b){ b.hidden=!toolOn(b.getAttribute("data-go")); });
   $("tools-hint").hidden=!!S.tools;
+  $("d-emo-hint").innerHTML = toolOn("ruota") ? 'Non trovi la parola? <button type="button" class="link-btn" data-go="ruota">Apri la ruota</button>' : 'Non trovi la parola? <button type="button" class="link-btn" id="d-emo-list">Apri l\'elenco delle emozioni</button>';
+  var dl=$("d-emo-list"); if(dl) dl.onclick=function(e){ e.stopPropagation(); var t=$("d-emo").parentNode.querySelector(".emo-toggle"); if(t) t.click(); };
   if(typeof updDots==="function") setTimeout(updDots,0);
   var cp=currentPreset();
   $("tool-presets").innerHTML=PRESETS.map(function(p){ return '<button type="button" class="nuance" aria-pressed="'+(cp===p.k)+'" data-preset="'+p.k+'">'+esc(p.n)+'</button>'; }).join("");
