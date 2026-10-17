@@ -30,7 +30,7 @@
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0;line-height:1.2}
 h2{font-size:1.75rem}
 h3{font-size:1.15rem}
@@ -46,7 +46,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .today-date{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
 
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px;scroll-behavior:smooth}
+.tab-dots{display:flex;justify-content:center;align-items:center;gap:6px;padding:0 0 8px}
+.tab-dots button{width:7px;height:7px;padding:0;border:0;border-radius:4px;background:var(--line);cursor:pointer;transition:width .25s,background .25s}
+.tab-dots button[aria-current="true"]{width:24px;background:var(--accent)}
+@media (min-width:860px){.tab-dots{display:none!important}}
 .tabs .wrap::-webkit-scrollbar{display:none}
 @media (max-width:859px){.tabs .wrap{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent 100%)}}
 @media (min-width:860px){.tabs .wrap{flex-wrap:wrap;overflow-x:visible;row-gap:6px;gap:2px}.tab{padding:8px 11px}}
@@ -217,6 +221,19 @@ textarea{min-height:76px;resize:vertical}
 .week-nav .dt-nav:disabled{opacity:.35;cursor:default}
 .task-count{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
 
+/* Strumenti */
+.sec{display:flex;flex-direction:column;gap:24px}
+.tool-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.tool{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--bg)}
+.tool input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:none}
+.tool strong{display:block;font-weight:600}
+.tool span{font-size:.85rem;color:var(--muted)}
+#tool-presets .nuance{--chip:var(--accent)}
+.dream-title{font-family:var(--f-display);font-size:1.15rem;font-weight:600}
+.dream-text{font-family:var(--f-display);font-size:1.05rem;line-height:1.6;white-space:pre-wrap}
+#r-names{margin-top:4px}
+#r-names .nuance{--chip:var(--accent);padding:3px 10px;font-size:.85rem}
+
 /* Seduta */
 .countdown{font-family:var(--f-display);font-size:1.5rem}
 .note{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
@@ -253,6 +270,10 @@ textarea{min-height:76px;resize:vertical}
 .prose{display:flex;flex-direction:column;gap:12px;max-width:64ch}
 .prose ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
 .phone{font-variant-numeric:tabular-nums;font-weight:600;user-select:all}
+.help-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+.help-list li{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:12px;align-items:baseline}
+@media (max-width:420px){.help-list li{grid-template-columns:minmax(0,1fr);gap:2px}}
+.help-list .phone{font-size:1.15rem;color:var(--accent)}
 .copy-fallback{width:100%;min-height:160px;font-size:.85rem}
 
 footer .wrap{padding-block:24px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;display:flex;flex-direction:column;gap:4px}
@@ -263,13 +284,14 @@ footer em{font-family:var(--f-display);font-size:1rem}
 @media (max-width:560px){.masthead-side{align-items:flex-start;text-align:left}}
 .info-link{font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .info-link:hover{color:var(--ochre)}
-.info{width:min(760px,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.info{width:min(760px,calc(100vw - 24px));max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:hidden;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .info::backdrop{background:rgba(16,22,21,.6)}
-.info-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 24px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
+.info[open]{display:flex;flex-direction:column}
+.info-head{flex:none;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 24px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
 .info-head h2{font-weight:400;font-size:1.7rem}
 .info-kicker{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
 .info-close{font:inherit;font-size:1.1rem;line-height:1;width:40px;height:40px;border:0;border-radius:50%;background:var(--accent-soft);color:var(--accent);cursor:pointer;flex-shrink:0}
-.info-body{padding:6px 24px 24px;font-size:.95rem;line-height:1.6}
+.info-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 24px 24px;font-size:.95rem;line-height:1.6}
 .info-body h3{font-family:var(--f-body);font-size:1rem;color:var(--accent);margin:20px 0 6px}
 .info-body p{margin:0 0 8px}
 .info-body ul,.info-body ol{margin:0 0 8px;padding-left:22px}
@@ -280,7 +302,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
 .info-body .legal{margin-top:12px;padding-top:4px;border-top:1px solid var(--line)}
 .info-body .legal-title{font-family:var(--f-display);font-weight:400;font-size:1.4rem;color:var(--ink);margin-top:18px}
 .info-body code{font-size:.85em;background:var(--bg);padding:1px 5px;border-radius:4px}
-.info-license{white-space:pre-wrap;font-size:.75rem;line-height:1.5;background:var(--bg);border-radius:8px;padding:12px 14px;overflow-x:auto}
+.info-license{white-space:pre-line;font-family:var(--f-body);font-size:.8rem;line-height:1.5;background:var(--bg);border-radius:8px;padding:12px 14px;overflow-x:auto}
 .info-version{color:var(--muted);font-size:.8rem;margin-top:18px}
 @media (max-width:560px){.info-head{padding:16px 16px 12px}.info-head h2{font-size:1.4rem}.info-body{padding:4px 16px 20px}}
 
@@ -308,10 +330,13 @@ footer em{font-family:var(--f-display);font-size:1rem}
     <button class="tab" role="tab" data-tab="umore">Umore</button>
     <button class="tab" role="tab" data-tab="pensieri">Pensieri</button>
     <button class="tab" role="tab" data-tab="attivita">Attività</button>
-    <button class="tab" role="tab" data-tab="seduta">Per la seduta</button>
+    <button class="tab" role="tab" data-tab="sogni">Sogni</button>
+    <button class="tab" role="tab" data-tab="relazioni">Relazioni</button>
+    <button class="tab" role="tab" data-tab="seduta">Seduta</button>
     <button class="tab" role="tab" data-tab="haiku">Haiku</button>
-    <button class="tab" role="tab" data-tab="info">Come funziona</button>
+    <button class="tab" role="tab" data-tab="info">Strumenti</button>
   </div>
+  <div class="tab-dots" id="tab-dots" hidden></div>
 </nav>
 
 <main>
@@ -340,6 +365,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
     <button class="shortcut" data-go="ruota"><strong>Trova la parola giusta</strong><span>Dai un nome preciso a ciò che senti</span></button>
     <button class="shortcut" data-go="seduta"><strong>Un appunto per la seduta</strong><span>Così non lo dimentichi</span></button>
   </div>
+  <div class="demo-banner" id="tools-hint" hidden><strong>Su misura.</strong><span>Questo quaderno si adatta a ogni percorso: in <button type="button" class="link-btn" data-go="info">Strumenti</button> scegli quali schede tenere.</span></div>
 </section>
 
 <!-- DIARIO -->
@@ -465,6 +491,54 @@ footer em{font-family:var(--f-display);font-size:1rem}
   <div class="entries" id="b-list"></div>
 </section>
 
+<!-- SOGNI -->
+<section class="page" data-page="sogni" hidden>
+  <div class="hk-slot" data-themes="sogni"></div>
+  <h2>Diario dei sogni</h2>
+  <p class="intro">Nella terapia psicodinamica e junghiana i sogni sono materiale prezioso. Scrivilo appena sveglio, anche a frammenti: un'immagine, un colore, una frase. Non serve capirlo, basta non perderlo.</p>
+  <form class="panel" id="g-form" autocomplete="off">
+    <div class="grid2">
+      <div class="field"><span class="lbl" id="g-date-lbl">Notte del</span><div class="dt-pick" data-mode="date"><input type="hidden" id="g-date"></div></div>
+      <div class="field"><label for="g-title">Un titolo</label><input type="text" id="g-title" placeholder="Facoltativo. es. La casa con le stanze nuove"></div>
+    </div>
+    <div class="field"><label for="g-text">Il sogno</label><textarea id="g-text" placeholder="Racconta quello che ricordi, nell'ordine in cui ti viene" required style="min-height:120px"></textarea></div>
+    <div class="grid2">
+      <div class="field"><label for="g-emo">Cosa provavo nel sogno</label><div class="emo-pick"><input type="text" id="g-emo" placeholder="es. curiosità, paura"><button type="button" class="emo-toggle" aria-expanded="false" aria-label="Mostra l'elenco delle emozioni">▾</button><div class="emo-panel" hidden></div></div></div>
+      <div class="field"><label for="g-wake">Come mi sono svegliato</label><input type="text" id="g-wake" placeholder="es. agitato, sollevato, con nostalgia"></div>
+    </div>
+    <div class="field"><label for="g-assoc">Cosa mi fa venire in mente</label><textarea id="g-assoc" placeholder="Associazioni libere: persone, luoghi, ricordi che affiorano pensando al sogno"></textarea></div>
+    <div class="field"><label for="g-life">Legami con questi giorni</label><textarea id="g-life" placeholder="Facoltativo. Qualcosa della vita di veglia che ritrovi nel sogno"></textarea></div>
+    <label style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="g-rec" style="accent-color:var(--accent);width:18px;height:18px"> È un sogno che ritorna</label>
+    <div class="actions"><button class="btn" type="submit">Salva il sogno</button><span class="toast" id="g-toast" role="status"></span></div>
+  </form>
+  <div id="g-demo"></div>
+  <div class="entries" id="g-list"></div>
+</section>
+
+<!-- RELAZIONI -->
+<section class="page" data-page="relazioni" hidden>
+  <div class="hk-slot" data-themes="relazioni"></div>
+  <h2>Relazioni</h2>
+  <p class="intro">Le persone intorno a noi fanno parte di come stiamo. Annota un momento con qualcuno: cosa è successo, cosa hai provato, cosa avresti voluto dire. Col tempo si vedono i modi che si ripetono. Nell'approccio sistemico-relazionale è il cuore del lavoro.</p>
+  <form class="panel" id="r-form" autocomplete="off">
+    <div class="grid2">
+      <div class="field"><span class="lbl" id="r-date-lbl">Giorno</span><div class="dt-pick" data-mode="date"><input type="hidden" id="r-date"></div></div>
+      <div class="field"><label for="r-who">Con chi</label><input type="text" id="r-who" placeholder="es. mia madre, un collega" required><div class="nuances" id="r-names"></div></div>
+    </div>
+    <div class="field"><label for="r-what">Cosa è successo</label><textarea id="r-what" placeholder="Il momento, in poche righe" required></textarea></div>
+    <div class="grid2">
+      <div class="field"><label for="r-emo">Cosa ho provato</label><div class="emo-pick"><input type="text" id="r-emo" placeholder="es. irritazione, tenerezza"><button type="button" class="emo-toggle" aria-expanded="false" aria-label="Mostra l'elenco delle emozioni">▾</button><div class="emo-panel" hidden></div></div></div>
+      <div class="field"><label for="r-did">Cosa ho fatto o detto</label><input type="text" id="r-did" placeholder="La mia reazione"></div>
+    </div>
+    <div class="field"><label for="r-wish">Cosa avrei voluto dire o fare</label><textarea id="r-wish" placeholder="Facoltativo"></textarea></div>
+    <div class="field"><label for="r-pattern">Mi ricorda qualcosa?</label><textarea id="r-pattern" placeholder="Facoltativo. Un modo di fare che si ripete, con questa persona o con altre"></textarea></div>
+    <div class="actions"><button class="btn" type="submit">Salva il momento</button><span class="toast" id="r-toast" role="status"></span></div>
+  </form>
+  <div class="panel" id="r-stats" hidden></div>
+  <div id="r-demo"></div>
+  <div class="entries" id="r-list"></div>
+</section>
+
 <!-- SEDUTA -->
 <section class="page" data-page="seduta" hidden>
   <div class="hk-slot" data-themes="seduta,cura"></div>
@@ -493,6 +567,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
   <div id="n-demo"></div>
   <div class="entries" id="n-list"></div>
   <div id="n-copy-fallback"></div>
+  <div class="sec" id="sec-compiti">
   <h2 class="sub-h">Compiti tra le sedute</h2>
   <p class="intro">I compiti concordati in seduta. Quando ne fai uno, tocca «Segna fatto oggi»; se te ne sei dimenticato, tocca il giorno giusto nella settimana. Annota anche com'è andata: le difficoltà sono materiale prezioso per la prossima seduta.</p>
   <form class="panel" id="t-form" autocomplete="off">
@@ -502,6 +577,21 @@ footer em{font-family:var(--f-display);font-size:1rem}
   <div class="seg" id="t-filter"><button type="button" data-v="open" aria-pressed="true">In corso</button><button type="button" data-v="closed" aria-pressed="false">Conclusi</button></div>
   <div id="t-demo"></div>
   <div class="entries" id="t-list"></div>
+  </div>
+  <div class="sec" id="sec-dopo">
+  <h2 class="sub-h">Dopo la seduta</h2>
+  <p class="intro">Qualche riga a fine incontro, mentre è ancora vivo: cosa ti porti via, cosa hai provato, cosa è rimasto non detto. Anche ciò che senti nella relazione con chi ti ascolta è materiale prezioso da riportare.</p>
+  <form class="panel" id="f-form" autocomplete="off">
+    <div class="field" style="max-width:360px"><span class="lbl" id="f-date-lbl">Seduta del</span><div class="dt-pick" data-mode="date"><input type="hidden" id="f-date"></div></div>
+    <div class="field"><label for="f-take">Cosa mi porto via</label><textarea id="f-take" placeholder="Una frase, un'immagine, una scoperta" required></textarea></div>
+    <div class="field"><label for="f-felt">Cosa ho provato durante</label><textarea id="f-felt" placeholder="Anche verso la terapeuta o il terapeuta: fiducia, fastidio, gratitudine, imbarazzo…"></textarea></div>
+    <div class="field"><label for="f-unsaid">Cosa non ho detto</label><textarea id="f-unsaid" placeholder="Facoltativo. Quello che è rimasto in gola"></textarea>
+      <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:.92rem"><input type="checkbox" id="f-tonote" checked style="accent-color:var(--accent);width:18px;height:18px"> Aggiungilo agli appunti per la prossima seduta</label></div>
+    <div class="actions"><button class="btn" type="submit">Salva</button><span class="toast" id="f-toast" role="status"></span></div>
+  </form>
+  <div id="f-demo"></div>
+  <div class="entries" id="f-list"></div>
+  </div>
 </section>
 
 <!-- HAIKU -->
@@ -517,6 +607,16 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <!-- INFO -->
 <section class="page" data-page="info" hidden>
   <div class="hk-slot" data-themes="cura,stagioni"></div>
+  <h2>Scegli gli strumenti</h2>
+  <p class="intro">Ogni percorso ha i suoi strumenti. Parti da un profilo vicino al modo di lavorare della tua terapeuta o del tuo terapeuta, poi accendi o spegni le singole schede. Puoi cambiare idea quando vuoi: spegnere una scheda la nasconde, non cancella ciò che hai scritto.</p>
+  <div class="panel">
+    <span class="lbl">Profili di partenza</span>
+    <div class="nuances" id="tool-presets"></div>
+    <p class="hint" id="tool-preset-desc"></p>
+    <span class="lbl">Schede e sezioni</span>
+    <div class="tool-list" id="tool-list"></div>
+    <span class="toast" id="tool-toast" role="status"></span>
+  </div>
   <h2>Come funziona</h2>
   <div class="prose">
     <h3>Dove finiscono le tue parole</h3>
@@ -529,7 +629,11 @@ footer em{font-family:var(--f-display);font-size:1rem}
       <li>Questi strumenti accompagnano il percorso e non sostituiscono il lavoro fatto insieme in seduta.</li>
     </ul>
     <h3>Se stai male adesso</h3>
-    <p>Se senti di essere in pericolo o hai bisogno di aiuto subito, chiama il <span class="phone">112</span>. Per parlare con qualcuno, Telefono Amico Italia risponde al <span class="phone">02 2327 2327</span>.</p>
+    <ul class="help-list">
+      <li><span class="phone">112</span><span><strong>Emergenza.</strong> Se senti di essere in pericolo o hai bisogno di aiuto subito.</span></li>
+      <li><span class="phone">116117</span><span><strong>Cure non urgenti.</strong> Gratuito, 24 ore su 24: operatori sanitari che ti orientano, ti mettono in contatto con la guardia medica di notte e nei festivi e rispondono su farmaci e servizi. Nel Lazio offre anche un primo supporto psicologico. È attivo in molte regioni, non ancora in tutte: dove manca, rivolgiti alla guardia medica della tua ASL. Se durante la chiamata emerge un'urgenza, passa al 118.</span></li>
+      <li><span class="phone">02 2327 2327</span><span><strong>Telefono Amico Italia.</strong> Per parlare con qualcuno quando ti senti solo o in difficoltà.</span></li>
+    </ul>
     <h3>Porta tutto con te</h3>
     <p>Copia tutte le voci in un testo, da incollare in una nota o in una email a te stesso.</p>
     <div class="actions"><button class="btn ghost" id="x-copy">Copia tutte le voci</button><span class="toast" id="x-toast" role="status"></span></div>
@@ -545,14 +649,14 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <footer>
   <div class="wrap">
     <em>Un dono di gratitudine per chi ogni giorno ascolta.</em>
-    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea · Versione 1.2 · 16/10/2026</span>
+    <span>Ideato da Mauro Di Cola · Haiku di AI Haiku Gaea · Versione 1.3 · 17/10/2026</span>
   </div>
 </footer>
 
 
 <dialog class="info" id="info" aria-labelledby="info-title"><div class="info-head"><div><p class="info-kicker">Tra le sedute</p><h2 id="info-title">Informazioni e note legali</h2></div><button class="info-close" id="info-close" type="button" aria-label="Chiudi">✕</button></div>
 <div class="info-body">
-<section><h3>Che cos'è</h3><p>Tra le sedute è un quaderno personale per i giorni tra un incontro e l'altro con la propria psicoterapeuta o il proprio psicoterapeuta: diario delle emozioni, ruota delle emozioni, termometro dell'umore, registro dei pensieri con le trappole del pensiero, attività con piacere e padronanza, appunti e compiti tra le sedute, e haiku sul tema della cura.</p><p>È nato come dono di gratitudine verso chi ascolta. È gratuito, senza pubblicità e senza fini commerciali. Tutto ciò che si scrive resta nel browser del dispositivo in uso e non viene inviato a nessuno.</p></section>
+<section><h3>Che cos'è</h3><p>Tra le sedute è un quaderno personale per i giorni tra un incontro e l'altro con la propria psicoterapeuta o il proprio psicoterapeuta: diario delle emozioni, ruota delle emozioni, termometro dell'umore, registro dei pensieri con le trappole del pensiero, attività con piacere e padronanza, diario dei sogni, relazioni, appunti, compiti e note di fine seduta, e haiku sul tema della cura. Una pagina «Strumenti» permette di tenere solo le schede adatte al proprio percorso.</p><p>È nato come dono di gratitudine verso chi ascolta. È gratuito, senza pubblicità e senza fini commerciali. Tutto ciò che si scrive resta nel browser del dispositivo in uso e non viene inviato a nessuno.</p></section>
 <section class="legal"><!-- Testo di LEGAL.md riportato tale e quale. -->
 <h3 class="legal-title">Informazioni legali e avvertenze</h5>
 <p>Questo documento descrive i limiti d'uso di «Tra le sedute». Non sostituisce la consulenza legale o medica professionale.</p>
@@ -567,8 +671,9 @@ footer em{font-family:var(--f-display);font-size:1rem}
 </ul>
 <h5>Non sostituisce la psicoterapia</h5>
 <ul>
-<li>Gli strumenti presenti (diario, ruota delle emozioni, termometro dell'umore, registro dei pensieri, attività, compiti) sono di uso comune in molti percorsi, ma la loro utilità dipende dalla persona e dall'approccio del professionista</li>
+<li>Gli strumenti presenti (diario, ruota delle emozioni, termometro dell'umore, registro dei pensieri, attività, compiti, sogni, relazioni, note di fine seduta) sono di uso comune in molti percorsi, ma la loro utilità dipende dalla persona e dall'approccio del professionista</li>
 <li>Il registro dei pensieri con le trappole del pensiero e le prove a favore e contro, il monitoraggio delle attività con piacere e padronanza e i compiti tra le sedute sono tipici della terapia cognitivo-comportamentale: vanno usati solo se il professionista li ritiene adatti e, idealmente, concordati in seduta</li>
+<li>Il diario dei sogni e le note di fine seduta richiamano il lavoro psicodinamico, le relazioni quello sistemico-relazionale: i profili della scheda «Strumenti» sono solo un punto di partenza e non attribuiscono alcun orientamento a uno specifico professionista</li>
 <li>L'app non contiene questionari con punteggio né esercizi di esposizione, che richiedono la guida diretta del professionista</li>
 <li>Ogni decisione sul percorso di cura spetta alla persona e al suo professionista</li>
 </ul>
@@ -576,6 +681,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <p>L'app non invia messaggi, non avvisa nessuno e non viene letta da altri.</p>
 <p>Se senti di essere in pericolo o hai bisogno di aiuto subito:
 - <strong>112</strong>, numero unico di emergenza
+- <strong>116117</strong>, numero europeo armonizzato per le cure mediche non urgenti: gratuito, attivo 24 ore su 24, orienta verso il servizio giusto e mette in contatto con la guardia medica; nel Lazio, dove è attivo in tutta la regione dal 24 agosto 2026, offre anche un primo supporto psicologico. Non è ancora attivo in tutte le regioni: dove manca, rivolgiti alla guardia medica della tua ASL
 - <strong>Telefono Amico Italia</strong>, 02 2327 2327, per parlare con qualcuno</p>
 <p>In caso di crisi, rivolgiti anche al tuo medico, al tuo professionista di riferimento o al pronto soccorso più vicino.</p>
 <h4>🔒 Dati e privacy</h4>
@@ -628,33 +734,22 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <li><strong>16/10/2026</strong> — Versione 1.0, redatto documento iniziale</li>
 <li><strong>16/10/2026</strong> — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»</li>
 <li><strong>16/10/2026</strong> — Versione 1.2, aggiunti strumenti di tipo cognitivo-comportamentale (registro a 7 colonne, attività, compiti)</li>
+<li><strong>17/10/2026</strong> — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta; aggiunto il 116117</li>
 </ul>
 <hr />
-<p><strong>Ultimo aggiornamento:</strong> 16 Ottobre 2026</p>
+<p><strong>Ultimo aggiornamento:</strong> 17 Ottobre 2026</p>
 <p><strong>Nota:</strong> Questa pagina non sostituisce la consulenza legale o medica professionale.</p>
 </section>
 <section class="legal"><h3 class="legal-title">Licenza</h3><p>Il codice è distribuito con licenza MIT. Gli haiku sono testi originali di AI Haiku Gaea: se li riusi fuori dal progetto, cita la fonte. Testo ufficiale della licenza:</p><pre class="info-license">MIT License
 
 Copyright (c) 2026 Mauro Di Cola
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the &quot;Software&quot;), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</pre></section>
-<p class="info-version">Tra le sedute · <span id="info-version">Versione 1.2 · 16/10/2026</span> · Mauro Di Cola</p>
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre></section>
+<p class="info-version">Tra le sedute · <span id="info-version">Versione 1.3 · 17/10/2026</span> · Mauro Di Cola</p>
 </div></dialog>
 
 <script>
@@ -662,7 +757,7 @@ SOFTWARE.</pre></section>
 "use strict";
 
 /* ---------- Haiku ---------- */
-var THEMES = {oggi:"Il giorno", diario:"Scrivere", emozioni:"Emozioni", umore:"Umore", pensieri:"Pensieri", seduta:"La seduta", cura:"Chi ascolta", passi:"Piccoli passi", stagioni:"Stagioni interiori"};
+var THEMES = {oggi:"Il giorno", diario:"Scrivere", emozioni:"Emozioni", umore:"Umore", pensieri:"Pensieri", seduta:"La seduta", cura:"Chi ascolta", passi:"Piccoli passi", sogni:"Sogni", relazioni:"Legami", stagioni:"Stagioni interiori"};
 var HAIKU = [
  ["oggi","Apro le imposte —|nulla mi chiede il giorno|se non entrare."],
  ["oggi","Caffè che fuma —|chiedo a me stesso, piano:|come stai, oggi?"],
@@ -721,7 +816,17 @@ var HAIKU = [
  ["passi","Piccolo compito|segnato sul quaderno:|oggi l'ho fatto."],
  ["passi","Senza voglia, sì,|ma l'ho fatto lo stesso —|domani è più lieve."],
  ["passi","Prove a favore,|prove contro: sul tavolo|il pensiero pesa meno."],
- ["passi","La mente predice,|il giorno poi risponde —|ascolto il giorno."]
+ ["passi","La mente predice,|il giorno poi risponde —|ascolto il giorno."],
+ ["sogni","Sogno all'alba —|lo scrivo prima che il giorno|lo porti via."],
+ ["sogni","Una casa ignota|con stanze che conosco —|chi abita in me?"],
+ ["sogni","Volo nel sonno:|al risveglio i piedi|ricordano il cielo."],
+ ["sogni","Frammento di sogno —|un treno, una voce:|basta per cominciare."],
+ ["sogni","Il sogno parla|una lingua antica —|la impariamo in due."],
+ ["relazioni","Due tazze sul tavolo —|una parola detta,|una trattenuta."],
+ ["relazioni","Litigio d'inverno:|anche il ghiaccio, al sole,|ritorna acqua."],
+ ["relazioni","Lo stesso nodo|con persone diverse —|forse è un filo mio."],
+ ["relazioni","La telefonata|che rimandavo da mesi —|la voce è la stessa."],
+ ["relazioni","Ponte tra due rive:|si costruisce piano|da entrambe le parti."]
 ].map(function(h){return {t:h[0], l:h[1].split("|")};});
 
 /* ---------- Emozioni ---------- */
@@ -757,7 +862,7 @@ function flash(id,msg){ var el=$(id); el.textContent=msg; clearTimeout(el._t); e
 
 /* ---------- Archivio locale ---------- */
 var KEY="tra-le-sedute-v1", storageOk=true;
-var S = {diary:[], mood:[], abc:[], notes:[], acts:[], tasks:[], next:"", tab:"oggi"};
+var S = {diary:[], mood:[], abc:[], notes:[], acts:[], tasks:[], dreams:[], rels:[], after:[], tools:null, next:"", tab:"oggi"};
 try{ var raw=localStorage.getItem(KEY); if(raw){ var p=JSON.parse(raw); for(var k in S){ if(p[k]!==undefined) S[k]=p[k]; } } }catch(e){ storageOk=false; }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOk=false; $("storage-warn").hidden=false; } }
 if(!storageOk) $("storage-warn").hidden=false;
@@ -789,6 +894,18 @@ var DEMO = {
  tasks:[
   (function(){ var d={}; [0,-1,-3,-4].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v1", text:"Compilare il registro dei pensieri una volta al giorno", created:ymd(addDays(now,-9)), days:d, note:"La sera sono stanco, meglio farlo dopo pranzo.", closed:false}; })(),
   (function(){ var d={}; [-2,-5].forEach(function(k){ d[ymd(addDays(now,k))]=true; }); return {id:"v2", text:"Programmare due attività piacevoli a settimana", created:ymd(addDays(now,-9)), days:d, note:"", closed:false}; })()
+ ],
+ dreams:[
+  {id:"q1", date:ymd(addDays(now,-1)), title:"La casa con le stanze nuove", text:"Ero nella casa dove sono cresciuto, ma dietro la cucina c'era una porta che non avevo mai visto. Dentro, stanze luminose e vuote. Ne aprivo una dopo l'altra.", emo:"curiosità", wake:"sereno, un po' stupito", assoc:"Il trasloco dei miei genitori. Lo studio della terapeuta, che ha una porta simile.", life:"In questi giorni sto pensando di riprendere a scrivere.", rec:false},
+  {id:"q2", date:ymd(addDays(now,-5)), title:"", text:"Perdo il treno. Corro sul binario ma le gambe sono pesanti.", emo:"ansia", wake:"agitato", assoc:"Gli esami all'università.", life:"", rec:true}
+ ],
+ rels:[
+  {id:"u1", date:ymd(addDays(now,-1)), who:"mia madre", what:"Mi ha chiesto per la terza volta se avevo mangiato.", emo:"irritazione", did:"Ho risposto brusco e ho chiuso in fretta.", wish:"Dirle che mi sento trattato da bambino, senza alzare la voce.", pattern:"Succede anche con mia sorella quando si preoccupa per me."},
+  {id:"u2", date:ymd(addDays(now,-3)), who:"un collega", what:"Mi ha ringraziato davanti a tutti per un lavoro.", emo:"imbarazzo", did:"Ho minimizzato: «niente di che».", wish:"Dire semplicemente grazie.", pattern:""},
+  {id:"u3", date:ymd(addDays(now,-6)), who:"mia madre", what:"Pranzo della domenica, abbiamo riso di vecchie foto.", emo:"tenerezza", did:"Le ho chiesto di raccontarmi di quando era giovane.", wish:"", pattern:""}
+ ],
+ after:[
+  {id:"k1", date:ymd(addDays(now,-4)), take:"La frase «non devi meritarti di stare bene».", felt:"All'inizio imbarazzo, poi sollievo. Mi sono sentito ascoltato.", unsaid:"Che la settimana scorsa ho saltato i compiti."}
  ]
 };
 function data(kind){ return S[kind].length ? {items:S[kind], demo:false} : {items:DEMO[kind], demo:true}; }
@@ -822,9 +939,10 @@ document.querySelectorAll(".hk-slot").forEach(fillSlot);
 /* ---------- Schede ---------- */
 var tabs=document.querySelectorAll(".tab"), pages=document.querySelectorAll(".page");
 function show(name){
-  if(!document.querySelector('[data-page="'+name+'"]')) name="oggi";
+  if(!document.querySelector('[data-page="'+name+'"]') || !toolOn(name)) name="oggi";
   pages.forEach(function(p){ p.hidden = p.getAttribute("data-page")!==name; });
-  tabs.forEach(function(t){ var on=t.getAttribute("data-tab")===name; t.setAttribute("aria-selected",on?"true":"false"); if(on && t.scrollIntoView) t.scrollIntoView({block:"nearest",inline:"center"}); });
+  tabs.forEach(function(t){ var on=t.getAttribute("data-tab")===name; t.setAttribute("aria-selected",on?"true":"false"); if(on && t.scrollIntoView) t.scrollIntoView({block:"nearest",inline:"center"});
+    if(on && typeof updDots==="function") setTimeout(updDots,350); });
   S.tab=name; save();
   var slot=document.querySelector('[data-page="'+name+'"] .hk-slot'); if(slot) fillSlot(slot);
   if(name==="oggi") renderToday();
@@ -1187,17 +1305,152 @@ function renderNotes(){
   $("n-list").querySelectorAll("[data-ndel]").forEach(function(b){ armDelete(b,function(){ S.notes=S.notes.filter(function(x){return x.id!==b.getAttribute("data-ndel");}); save(); renderNotes(); },"Conferma"); });
 }
 
+/* ---------- Strumenti ---------- */
+var TOOLS=[
+ {k:"diario", n:"Diario delle emozioni", d:"Per tutti i percorsi"},
+ {k:"ruota", n:"Ruota delle emozioni", d:"Per dare un nome a ciò che si prova"},
+ {k:"umore", n:"Termometro dell'umore", d:"Umore, energia e sonno giorno per giorno"},
+ {k:"pensieri", n:"Registro dei pensieri", d:"Cognitivo-comportamentale"},
+ {k:"attivita", n:"Attività", d:"Cognitivo-comportamentale: attivazione"},
+ {k:"compiti", n:"Compiti tra le sedute", d:"Sezione della scheda Seduta"},
+ {k:"sogni", n:"Diario dei sogni", d:"Psicodinamico e junghiano"},
+ {k:"relazioni", n:"Relazioni", d:"Sistemico-relazionale"},
+ {k:"dopo", n:"Dopo la seduta", d:"Sezione della scheda Seduta, per tutti"},
+ {k:"haiku", n:"Raccolta di haiku", d:"La scheda Haiku; un haiku resta comunque in cima a ogni pagina"}
+];
+var PRESETS=[
+ {k:"tutti", n:"Tutti gli strumenti", d:"Ogni scheda accesa.", on:TOOLS.map(function(t){return t.k;})},
+ {k:"tcc", n:"Cognitivo-comportamentale", d:"Pensieri, attività e compiti: il lavoro sul presente, tra pensieri, emozioni e comportamenti.", on:["diario","ruota","umore","pensieri","attivita","compiti","haiku"]},
+ {k:"psicodinamico", n:"Psicodinamico", d:"Sogni, associazioni e ciò che accade nella relazione terapeutica. Vale anche per l'approccio junghiano.", on:["diario","ruota","sogni","dopo","haiku"]},
+ {k:"sistemico", n:"Sistemico-relazionale", d:"Le relazioni e i modi che si ripetono tra le persone.", on:["diario","ruota","relazioni","dopo","haiku"]},
+ {k:"umanistico", n:"Umanistico", d:"Gestalt, approccio centrato sulla persona: il vissuto, il qui e ora, le emozioni.", on:["diario","ruota","umore","dopo","haiku"]}
+];
+var SECTIONS={compiti:"sec-compiti", dopo:"sec-dopo"};
+function toolOn(k){ var known=TOOLS.some(function(t){return t.k===k;}); if(!known) return true; return !S.tools || S.tools[k]!==false; }
+function setTools(list){ S.tools={}; TOOLS.forEach(function(t){ S.tools[t.k]=list.indexOf(t.k)>=0; }); save(); applyTools(); }
+function currentPreset(){ if(!S.tools) return "tutti"; var on=TOOLS.filter(function(t){return toolOn(t.k);}).map(function(t){return t.k;}).sort().join(","); var m=PRESETS.filter(function(pr){ return pr.on.slice().sort().join(",")===on; })[0]; return m?m.k:""; }
+function applyTools(){
+  document.querySelectorAll(".tab").forEach(function(t){ t.hidden=!toolOn(t.getAttribute("data-tab")); });
+  Object.keys(SECTIONS).forEach(function(k){ $(SECTIONS[k]).hidden=!toolOn(k); });
+  document.querySelectorAll(".shortcut[data-go]").forEach(function(b){ b.hidden=!toolOn(b.getAttribute("data-go")); });
+  $("tools-hint").hidden=!!S.tools;
+  if(typeof updDots==="function") setTimeout(updDots,0);
+  var cp=currentPreset();
+  $("tool-presets").innerHTML=PRESETS.map(function(p){ return '<button type="button" class="nuance" aria-pressed="'+(cp===p.k)+'" data-preset="'+p.k+'">'+esc(p.n)+'</button>'; }).join("");
+  var pd=PRESETS.filter(function(p){return p.k===cp;})[0];
+  $("tool-preset-desc").textContent = pd ? pd.d : "Combinazione personale.";
+  $("tool-presets").querySelectorAll("[data-preset]").forEach(function(b){ b.onclick=function(){ var pr=PRESETS.filter(function(p){return p.k===b.getAttribute("data-preset");})[0]; setTools(pr.on); flash("tool-toast","Profilo «"+pr.n+"» applicato"); }; });
+  $("tool-list").innerHTML=TOOLS.map(function(t){ return '<label class="tool"><input type="checkbox" data-tool="'+t.k+'" '+(toolOn(t.k)?'checked':'')+'><div><strong>'+esc(t.n)+'</strong><span>'+esc(t.d)+'</span></div></label>'; }).join("");
+  $("tool-list").querySelectorAll("[data-tool]").forEach(function(c){ c.onchange=function(){ var list=TOOLS.filter(function(t){ return t.k===c.getAttribute("data-tool") ? c.checked : toolOn(t.k); }).map(function(t){return t.k;}); setTools(list); }; });
+  var cur=S.tab||"oggi", pg=document.querySelector('[data-page="'+cur+'"]'); if(pg && !toolOn(cur) && !pg.hidden) show("oggi");
+}
+
+/* ---------- Sogni ---------- */
+$("g-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  S.dreams.push({id:uid(), date:$("g-date").value||ymd(new Date()), title:$("g-title").value.trim(), text:$("g-text").value.trim(), emo:$("g-emo").value.trim(), wake:$("g-wake").value.trim(), assoc:$("g-assoc").value.trim(), life:$("g-life").value.trim(), rec:$("g-rec").checked});
+  save(); ["g-title","g-text","g-emo","g-wake","g-assoc","g-life"].forEach(function(id){ $(id).value=""; }); $("g-rec").checked=false; $("g-date").value=ymd(new Date());
+  flash("g-toast","Sogno salvato"); renderDreams();
+});
+function renderDreams(){
+  var d=data("dreams");
+  demoBanner("g-demo","dreams","Ecco come appare il diario dei sogni.");
+  var items=d.items.slice().sort(function(a,b){return a.date<b.date?1:-1;});
+  $("g-list").innerHTML=items.map(function(x){
+    var rows=[["Cosa provavo",x.emo],["Al risveglio",x.wake],["Cosa mi fa venire in mente",x.assoc],["Legami con questi giorni",x.life]].filter(function(r){return r[1];}).map(function(r){return "<div><dt>"+r[0]+"</dt><dd>"+esc(r[1])+"</dd></div>";}).join("");
+    return '<article class="entry'+(d.demo?' demo':'')+'" style="--chip:'+famColor(x.emo)+'"><div class="entry-head"><span class="when">notte del '+esc(niceDate(parseYMD(x.date)))+'</span>'+(x.rec?'<span class="badge">ricorrente</span>':'')+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
+      (x.title?'<p class="dream-title">'+esc(x.title)+'</p>':'')+'<p class="dream-text">'+esc(x.text)+'</p>'+(rows?'<dl>'+rows+'</dl>':'')+
+      (d.demo?'':'<div class="entry-foot"><button class="btn danger small" data-gdel="'+x.id+'">Elimina</button></div>')+'</article>';
+  }).join("");
+  $("g-list").querySelectorAll("[data-gdel]").forEach(function(b){ armDelete(b,function(){ S.dreams=S.dreams.filter(function(x){return x.id!==b.getAttribute("data-gdel");}); save(); renderDreams(); },"Conferma eliminazione"); });
+}
+
+/* ---------- Relazioni ---------- */
+$("r-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  S.rels.push({id:uid(), date:$("r-date").value||ymd(new Date()), who:$("r-who").value.trim(), what:$("r-what").value.trim(), emo:$("r-emo").value.trim(), did:$("r-did").value.trim(), wish:$("r-wish").value.trim(), pattern:$("r-pattern").value.trim()});
+  save(); ["r-who","r-what","r-emo","r-did","r-wish","r-pattern"].forEach(function(id){ $(id).value=""; }); $("r-date").value=ymd(new Date());
+  flash("r-toast","Momento salvato"); renderRels();
+});
+function renderRels(){
+  var d=data("rels");
+  demoBanner("r-demo","rels","Ecco come appaiono i momenti con le persone.");
+  var names={}; S.rels.forEach(function(x){ var k=x.who.toLowerCase(); names[k]=x.who; });
+  $("r-names").innerHTML=Object.keys(names).slice(0,8).map(function(k){ return '<button type="button" class="nuance" data-rname="'+esc(names[k])+'">'+esc(names[k])+'</button>'; }).join("");
+  $("r-names").querySelectorAll("[data-rname]").forEach(function(b){ b.onclick=function(){ $("r-who").value=b.getAttribute("data-rname"); }; });
+  var cnt={}, label={}; d.items.forEach(function(x){ var k=x.who.toLowerCase(); cnt[k]=(cnt[k]||0)+1; label[k]=x.who; });
+  var keys=Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a];}), box=$("r-stats");
+  if(keys.length>1){ var max=cnt[keys[0]]; box.hidden=false;
+    box.innerHTML='<h3>Le persone che compaiono più spesso</h3><div class="bars-list">'+keys.slice(0,6).map(function(k){ return '<div class="bar-row"><span>'+esc(label[k])+'</span><i><b style="width:'+Math.round(cnt[k]/max*100)+'%"></b></i><span>'+cnt[k]+'</span></div>'; }).join("")+'</div>';
+  } else box.hidden=true;
+  var items=d.items.slice().sort(function(a,b){return a.date<b.date?1:-1;});
+  $("r-list").innerHTML=items.map(function(x){
+    var rows=[["Cosa è successo",x.what],["Cosa ho fatto o detto",x.did],["Cosa avrei voluto",x.wish],["Mi ricorda",x.pattern]].filter(function(r){return r[1];}).map(function(r){return "<div><dt>"+r[0]+"</dt><dd>"+esc(r[1])+"</dd></div>";}).join("");
+    return '<article class="entry'+(d.demo?' demo':'')+'" style="--chip:'+famColor(x.emo)+'"><div class="entry-head"><span class="when">'+esc(niceDate(parseYMD(x.date)))+'</span><strong>'+esc(x.who)+'</strong>'+(x.emo?'<span class="chip">'+esc(x.emo)+'</span>':'')+(d.demo?'<span class="badge">Esempio</span>':'')+'</div>'+
+      (rows?'<dl>'+rows+'</dl>':'')+(d.demo?'':'<div class="entry-foot"><button class="btn danger small" data-rdel="'+x.id+'">Elimina</button></div>')+'</article>';
+  }).join("");
+  $("r-list").querySelectorAll("[data-rdel]").forEach(function(b){ armDelete(b,function(){ S.rels=S.rels.filter(function(x){return x.id!==b.getAttribute("data-rdel");}); save(); renderRels(); },"Conferma eliminazione"); });
+}
+
+/* ---------- Dopo la seduta ---------- */
+$("f-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var unsaid=$("f-unsaid").value.trim();
+  S.after.push({id:uid(), date:$("f-date").value||ymd(new Date()), take:$("f-take").value.trim(), felt:$("f-felt").value.trim(), unsaid:unsaid});
+  if(unsaid && $("f-tonote").checked){ S.notes.push({id:uid(), text:unsaid, imp:false, done:false}); renderNotes(); }
+  save(); ["f-take","f-felt","f-unsaid"].forEach(function(id){ $(id).value=""; }); $("f-date").value=ymd(new Date());
+  flash("f-toast", unsaid && $("f-tonote").checked ? "Salvato, e aggiunto agli appunti" : "Salvato"); renderAfter();
+});
+function renderAfter(){
+  var d=data("after");
+  demoBanner("f-demo","after","Ecco come appaiono le note di fine seduta.");
+  var items=d.items.slice().sort(function(a,b){return a.date<b.date?1:-1;});
+  $("f-list").innerHTML=items.map(function(x){
+    var rows=[["Cosa mi porto via",x.take],["Cosa ho provato",x.felt],["Cosa non ho detto",x.unsaid]].filter(function(r){return r[1];}).map(function(r){return "<div><dt>"+r[0]+"</dt><dd>"+esc(r[1])+"</dd></div>";}).join("");
+    return '<article class="entry'+(d.demo?' demo':'')+'"><div class="entry-head"><span class="when">seduta del '+esc(niceDate(parseYMD(x.date)))+'</span>'+(d.demo?'<span class="badge">Esempio</span>':'')+'</div><dl>'+rows+'</dl>'+
+      (d.demo?'':'<div class="entry-foot"><button class="btn danger small" data-fdel="'+x.id+'">Elimina</button></div>')+'</article>';
+  }).join("");
+  $("f-list").querySelectorAll("[data-fdel]").forEach(function(b){ armDelete(b,function(){ S.after=S.after.filter(function(x){return x.id!==b.getAttribute("data-fdel");}); save(); renderAfter(); },"Conferma eliminazione"); });
+}
+
+/* ---------- Puntini delle schede ---------- */
+var tabWrap=$("tablist"), tabDots=$("tab-dots"), dotN=0;
+function updDots(){
+  var max=tabWrap.scrollWidth-tabWrap.clientWidth;
+  if(max<8){ tabDots.hidden=true; dotN=0; return; }
+  var n=Math.max(2, Math.ceil(tabWrap.scrollWidth/tabWrap.clientWidth));
+  var cur=Math.round(tabWrap.scrollLeft/max*(n-1));
+  if(n!==dotN){
+    tabDots.innerHTML=""; dotN=n;
+    for(var i=0;i<n;i++){ (function(k){ var b=document.createElement("button"); b.type="button"; b.setAttribute("aria-label","Schede, parte "+(k+1)+" di "+n); b.onclick=function(){ tabWrap.scrollLeft=max*k/(n-1); }; tabDots.appendChild(b); })(i); }
+  }
+  tabDots.hidden=false;
+  Array.prototype.forEach.call(tabDots.children,function(b,k){ b.setAttribute("aria-current", k===cur?"true":"false"); });
+}
+tabWrap.addEventListener("scroll",updDots,{passive:true});
+window.addEventListener("resize",updDots);
+
 /* ---------- Copia ---------- */
 function copyText(text, toastId, fallbackId){
-  function fallback(){
-    var box=$(fallbackId); box.innerHTML='<p class="hint">Seleziona il testo qui sotto e copialo.</p><textarea class="copy-fallback" readonly></textarea>';
+  var box=$(fallbackId);
+  function ok(){ box.innerHTML=""; if(toastId) flash(toastId,"Copiato: ora puoi incollarlo dove vuoi"); else alertBtn(); }
+  function show(){
+    box.innerHTML='<p class="hint">Il browser non ha permesso la copia automatica. Tieni premuto nel riquadro, scegli «Seleziona tutto» e poi «Copia».</p><textarea class="copy-fallback" readonly></textarea>';
     var ta=box.querySelector("textarea"); ta.value=text; ta.focus(); ta.select();
   }
+  function classic(){
+    try{
+      var ta=document.createElement("textarea"); ta.value=text; ta.setAttribute("readonly","");
+      ta.style.cssText="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;";
+      document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,text.length);
+      var res=document.execCommand && document.execCommand("copy"); document.body.removeChild(ta); return !!res;
+    }catch(e){ return false; }
+  }
+  if(classic()){ ok(); return; }
   try{
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){ if(toastId) flash(toastId,"Copiato"); else alertBtn(); }, fallback);
-    } else fallback();
-  }catch(e){ fallback(); }
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, show);
+    else show();
+  }catch(e){ show(); }
 }
 function alertBtn(){ var b=$("n-copy"), o=b.textContent; b.textContent="Copiato"; setTimeout(function(){ b.textContent=o; },2000); }
 $("n-copy").onclick=function(){
@@ -1224,12 +1477,23 @@ $("x-copy").onclick=function(){
   out.push("","== COMPITI TRA LE SEDUTE ==");
   S.tasks.forEach(function(t){ var ds=Object.keys(t.days).filter(function(k){return t.days[k];}).sort(); out.push("- "+(t.closed?"[concluso] ":"")+t.text+(ds.length?" · fatto il "+ds.join(", "):"")); if(t.note) out.push("  "+t.note); });
   out.push("");
+  out.push("== SOGNI ==");
+  S.dreams.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date+(x.title?" · "+x.title:"")+(x.rec?" (ricorrente)":"")); out.push("  "+x.text); if(x.emo) out.push("  Provavo: "+x.emo); if(x.wake) out.push("  Al risveglio: "+x.wake); if(x.assoc) out.push("  Associazioni: "+x.assoc); if(x.life) out.push("  Legami: "+x.life); out.push(""); });
+  out.push("== RELAZIONI ==");
+  S.rels.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date+" · "+x.who+(x.emo?" · "+x.emo:"")); out.push("  "+x.what); if(x.did) out.push("  Ho fatto: "+x.did); if(x.wish) out.push("  Avrei voluto: "+x.wish); if(x.pattern) out.push("  Mi ricorda: "+x.pattern); out.push(""); });
+  out.push("== DOPO LA SEDUTA ==");
+  S.after.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date); out.push("  Mi porto via: "+x.take); if(x.felt) out.push("  Ho provato: "+x.felt); if(x.unsaid) out.push("  Non ho detto: "+x.unsaid); out.push(""); });
   out.push("== APPUNTI PER LA SEDUTA ==");
   S.notes.forEach(function(n){ out.push("- "+(n.done?"[parlato] ":"")+(n.imp?"[importante] ":"")+n.text); });
-  copyText(out.join("\n"), "x-toast", "x-fallback");
+  var kept=[], cur=null, buf=[];
+  function flush(){ if(cur!==null && buf.some(function(l){return l.trim();})) kept.push.apply(kept,[cur].concat(buf)); buf=[]; }
+  out.forEach(function(l,k){ if(k<2){ kept.push(l); return; } if(/^== .* ==$/.test(l)){ flush(); cur=l; } else if(cur!==null) buf.push(l); });
+  flush();
+  if(kept.length<=2){ $("x-fallback").innerHTML=""; flash("x-toast","Non ci sono ancora voci tue da copiare: gli esempi non vengono copiati."); return; }
+  copyText(kept.join("\n").replace(/\n{3,}/g,"\n\n"), "x-toast", "x-fallback");
 };
 armDelete($("x-wipe"),function(){
-  S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.acts=[]; S.tasks=[]; S.next=""; save();
+  S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.acts=[]; S.tasks=[]; S.dreams=[]; S.rels=[]; S.after=[]; S.next=""; save();
   renderAll(); flash("w-toast","Tutte le voci sono state cancellate");
 },"Sì, cancella tutto");
 
@@ -1350,13 +1614,15 @@ document.querySelectorAll(".emo-pick").forEach(function(box){
   inp.addEventListener("input",function(){ if(inp.value.trim()) open(inp.value); else close(); });
   document.addEventListener("click",function(e){ if(e.target.isConnected && !box.contains(e.target)) close(); });
 });
-function renderAll(){ renderToday(); renderDiary(); renderWheel(); renderMood(); renderABC(); renderActs(); renderNext(); renderNotes(); renderTasks(); renderHaikuPage(); }
+function renderAll(){ renderToday(); renderDiary(); renderWheel(); renderMood(); renderABC(); renderActs(); renderNext(); renderNotes(); renderTasks(); renderDreams(); renderRels(); renderAfter(); renderHaikuPage(); }
 resetDiaryForm();
 $("m-date").value=ymd(new Date());
 $("a-when").value=ymd(new Date());
 $("b-day").value=ymd(new Date());
+$("g-date").value=ymd(new Date()); $("r-date").value=ymd(new Date()); $("f-date").value=ymd(new Date());
 renderTrapPicker(); syncActState();
 renderAll(); draw();
+applyTools();
 var h=(location.hash||"").slice(1);
 show(h && document.querySelector('[data-page="'+h+'"]') ? h : (S.tab||"oggi"));
 if(h==="informazioni") openInfo();

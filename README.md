@@ -6,8 +6,11 @@ Una piccola web app per i giorni tra un incontro e l'altro con la propria psicot
 - termometro dell'umore
 - registro dei pensieri a 7 colonne, con le trappole del pensiero
 - attività con piacere e padronanza (attivazione comportamentale)
-- appunti e compiti tra le sedute
+- diario dei sogni (psicodinamico e junghiano)
+- relazioni (sistemico-relazionale)
+- appunti, compiti e note di fine seduta
 - haiku sul tema della cura, dell'ascolto e delle emozioni
+- scelta degli strumenti, con profili per i diversi orientamenti
 
 È pensata come dono di gratitudine per chi ascolta, e come strumento personale per chi è in un percorso di cura.
 
@@ -28,6 +31,7 @@ Questo repository contiene un quaderno digitale per uso personale. Non è un dis
 
 ### Se stai male adesso
 Se senti di essere in pericolo o hai bisogno di aiuto subito, chiama il **112**.
+Per problemi di salute non urgenti, anche di notte e nei festivi, c'è il **116117**: gratuito, 24 ore su 24, collega con la guardia medica e nel Lazio offre anche un primo supporto psicologico (non ancora attivo in tutte le regioni).
 Per parlare con qualcuno, Telefono Amico Italia risponde al **02 2327 2327**.
 
 Più dettagli in [LEGAL.md](LEGAL.md).
@@ -39,7 +43,7 @@ Tutto ciò che si scrive resta solo nel browser e sul dispositivo di chi usa l'a
 - nessun server
 - nessun invio di dati
 
-Se si cancellano i dati del browser o si usa una finestra privata, le voci vanno perse. Per conservarle si usa «Copia tutte le voci» nella sezione «Come funziona».
+Se si cancellano i dati del browser o si usa una finestra privata, le voci vanno perse. Per conservarle si usa «Copia tutte le voci» nella scheda «Strumenti».
 
 L'unica risorsa esterna sono i caratteri tipografici di Google Fonts. Senza connessione la pagina funziona lo stesso, con i caratteri di sistema.
 
@@ -59,10 +63,12 @@ L'obiettivo è semplice:
 - **Umore**: umore, energia e sonno giorno per giorno, con grafico degli ultimi 30 giorni
 - **Pensieri**: registro a 7 colonne (situazione, pensiero automatico, emozione e comportamento, prove a favore, prove contro, pensiero alternativo, quanto ci si crede prima e dopo), con 11 trappole del pensiero da segnare e il grafico di quelle più frequenti
 - **Attività**: attività fatte o da fare, per giorno e momento, con voti di piacere e padronanza da 0 a 10; riepilogo degli ultimi 7 giorni e attività che hanno fatto stare meglio
-- **Per la seduta**: data del prossimo incontro con conto alla rovescia, appunti da portare, importanti in evidenza; compiti tra le sedute con «Segna fatto oggi», la settimana da lunedì a domenica (anche le precedenti) e le difficoltà; copia di appunti e compiti
-- **Haiku**: 58 haiku originali in nove temi, «Pesca un haiku»; in cima a ogni pagina compare un haiku casuale sul tema della pagina
+- **Sogni**: diario dei sogni con titolo, racconto, emozioni nel sogno e al risveglio, associazioni, legami con la vita di questi giorni, sogni ricorrenti
+- **Relazioni**: momenti con le persone (con chi, cosa è successo, cosa ho provato, cosa ho fatto, cosa avrei voluto, cosa mi ricorda), nomi già usati a portata di tocco, persone che compaiono più spesso
+- **Seduta**: data del prossimo incontro con conto alla rovescia, appunti da portare, importanti in evidenza; compiti tra le sedute con «Segna fatto oggi», la settimana da lunedì a domenica (anche le precedenti) e le difficoltà; «Dopo la seduta» per annotare cosa ci si porta via, cosa si è provato e cosa non si è detto, che può finire direttamente negli appunti; copia di appunti e compiti
+- **Haiku**: 68 haiku originali in undici temi, «Pesca un haiku»; in cima a ogni pagina compare un haiku casuale sul tema della pagina
 - **Informazioni e note legali**: link in alto a destra (o indirizzo `#informazioni`) che apre una finestra con descrizione, note legali e licenza
-- **Come funziona**: privacy, consigli d'uso, numeri utili, copia di tutte le voci, cancellazione
+- **Strumenti**: profili di partenza (tutti, cognitivo-comportamentale, psicodinamico, sistemico-relazionale, umanistico) e interruttori per ogni scheda o sezione; spegnere una scheda la nasconde senza cancellare nulla. Sotto: privacy, consigli d'uso, numeri utili, copia di tutte le voci, cancellazione
 - tema chiaro e scuro automatico
 - tendine e calendari uniformi, pensati per il telefono
 - al primo avvio, voci di esempio segnate come tali che spariscono alla prima voce vera
@@ -91,10 +97,11 @@ Per usarlo:
 ## ▶️ Come usare
 
 1. Aprire `index.html` nel browser, oppure la pagina pubblicata
-2. Scegliere una sezione dalle schede in alto
-3. Scrivere quello che si vuole, quando si vuole: anche una riga conta
-4. Prima della seduta, aprire «Per la seduta» e copiare gli appunti, se utile
-5. Ogni tanto copiare tutte le voci altrove, per non perderle
+2. In «Strumenti», scegliere il profilo più vicino al proprio percorso e le schede da tenere
+3. Scegliere una sezione dalle schede in alto
+4. Scrivere quello che si vuole, quando si vuole: anche una riga conta
+5. Prima della seduta, aprire «Seduta» e copiare gli appunti, se utile
+6. Ogni tanto copiare tutte le voci altrove, per non perderle
 
 ## 📄 Licenza
 
@@ -120,4 +127,4 @@ Se decidi di usarlo con dei pazienti:
 Mauro Di Cola · Haiku di AI Haiku Gaea
 
 ## Ultimo aggiornamento
-Versione 1.2 · 16/10/2026 - Questo file va aggiornato periodicamente con data e note eventuali.
+Versione 1.3 · 17/10/2026 - Questo file va aggiornato periodicamente con data e note eventuali.
