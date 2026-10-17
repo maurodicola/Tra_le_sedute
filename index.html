@@ -46,7 +46,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .today-date{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
 
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px;scroll-behavior:smooth}
+.tab-dots{display:flex;justify-content:center;align-items:center;gap:6px;padding:0 0 8px}
+.tab-dots button{width:7px;height:7px;padding:0;border:0;border-radius:4px;background:var(--line);cursor:pointer;transition:width .25s,background .25s}
+.tab-dots button[aria-current="true"]{width:24px;background:var(--accent)}
+@media (min-width:860px){.tab-dots{display:none!important}}
 .tabs .wrap::-webkit-scrollbar{display:none}
 @media (max-width:859px){.tabs .wrap{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent 100%)}}
 @media (min-width:860px){.tabs .wrap{flex-wrap:wrap;overflow-x:visible;row-gap:6px;gap:2px}.tab{padding:8px 11px}}
@@ -266,6 +270,10 @@ textarea{min-height:76px;resize:vertical}
 .prose{display:flex;flex-direction:column;gap:12px;max-width:64ch}
 .prose ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
 .phone{font-variant-numeric:tabular-nums;font-weight:600;user-select:all}
+.help-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+.help-list li{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:12px;align-items:baseline}
+@media (max-width:420px){.help-list li{grid-template-columns:minmax(0,1fr);gap:2px}}
+.help-list .phone{font-size:1.15rem;color:var(--accent)}
 .copy-fallback{width:100%;min-height:160px;font-size:.85rem}
 
 footer .wrap{padding-block:24px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;display:flex;flex-direction:column;gap:4px}
@@ -276,13 +284,14 @@ footer em{font-family:var(--f-display);font-size:1rem}
 @media (max-width:560px){.masthead-side{align-items:flex-start;text-align:left}}
 .info-link{font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .info-link:hover{color:var(--ochre)}
-.info{width:min(760px,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.info{width:min(760px,calc(100vw - 24px));max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:hidden;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .info::backdrop{background:rgba(16,22,21,.6)}
-.info-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 24px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
+.info[open]{display:flex;flex-direction:column}
+.info-head{flex:none;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 24px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
 .info-head h2{font-weight:400;font-size:1.7rem}
 .info-kicker{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
 .info-close{font:inherit;font-size:1.1rem;line-height:1;width:40px;height:40px;border:0;border-radius:50%;background:var(--accent-soft);color:var(--accent);cursor:pointer;flex-shrink:0}
-.info-body{padding:6px 24px 24px;font-size:.95rem;line-height:1.6}
+.info-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 24px 24px;font-size:.95rem;line-height:1.6}
 .info-body h3{font-family:var(--f-body);font-size:1rem;color:var(--accent);margin:20px 0 6px}
 .info-body p{margin:0 0 8px}
 .info-body ul,.info-body ol{margin:0 0 8px;padding-left:22px}
@@ -293,7 +302,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
 .info-body .legal{margin-top:12px;padding-top:4px;border-top:1px solid var(--line)}
 .info-body .legal-title{font-family:var(--f-display);font-weight:400;font-size:1.4rem;color:var(--ink);margin-top:18px}
 .info-body code{font-size:.85em;background:var(--bg);padding:1px 5px;border-radius:4px}
-.info-license{white-space:pre-wrap;font-size:.75rem;line-height:1.5;background:var(--bg);border-radius:8px;padding:12px 14px;overflow-x:auto}
+.info-license{white-space:pre-line;font-family:var(--f-body);font-size:.8rem;line-height:1.5;background:var(--bg);border-radius:8px;padding:12px 14px;overflow-x:auto}
 .info-version{color:var(--muted);font-size:.8rem;margin-top:18px}
 @media (max-width:560px){.info-head{padding:16px 16px 12px}.info-head h2{font-size:1.4rem}.info-body{padding:4px 16px 20px}}
 
@@ -327,6 +336,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
     <button class="tab" role="tab" data-tab="haiku">Haiku</button>
     <button class="tab" role="tab" data-tab="info">Strumenti</button>
   </div>
+  <div class="tab-dots" id="tab-dots" hidden></div>
 </nav>
 
 <main>
@@ -619,7 +629,11 @@ footer em{font-family:var(--f-display);font-size:1rem}
       <li>Questi strumenti accompagnano il percorso e non sostituiscono il lavoro fatto insieme in seduta.</li>
     </ul>
     <h3>Se stai male adesso</h3>
-    <p>Se senti di essere in pericolo o hai bisogno di aiuto subito, chiama il <span class="phone">112</span>. Per parlare con qualcuno, Telefono Amico Italia risponde al <span class="phone">02 2327 2327</span>.</p>
+    <ul class="help-list">
+      <li><span class="phone">112</span><span><strong>Emergenza.</strong> Se senti di essere in pericolo o hai bisogno di aiuto subito.</span></li>
+      <li><span class="phone">116117</span><span><strong>Cure non urgenti.</strong> Gratuito, 24 ore su 24: operatori sanitari che ti orientano, ti mettono in contatto con la guardia medica di notte e nei festivi e rispondono su farmaci e servizi. Nel Lazio offre anche un primo supporto psicologico. È attivo in molte regioni, non ancora in tutte: dove manca, rivolgiti alla guardia medica della tua ASL. Se durante la chiamata emerge un'urgenza, passa al 118.</span></li>
+      <li><span class="phone">02 2327 2327</span><span><strong>Telefono Amico Italia.</strong> Per parlare con qualcuno quando ti senti solo o in difficoltà.</span></li>
+    </ul>
     <h3>Porta tutto con te</h3>
     <p>Copia tutte le voci in un testo, da incollare in una nota o in una email a te stesso.</p>
     <div class="actions"><button class="btn ghost" id="x-copy">Copia tutte le voci</button><span class="toast" id="x-toast" role="status"></span></div>
@@ -667,6 +681,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <p>L'app non invia messaggi, non avvisa nessuno e non viene letta da altri.</p>
 <p>Se senti di essere in pericolo o hai bisogno di aiuto subito:
 - <strong>112</strong>, numero unico di emergenza
+- <strong>116117</strong>, numero europeo armonizzato per le cure mediche non urgenti: gratuito, attivo 24 ore su 24, orienta verso il servizio giusto e mette in contatto con la guardia medica; nel Lazio, dove è attivo in tutta la regione dal 24 agosto 2026, offre anche un primo supporto psicologico. Non è ancora attivo in tutte le regioni: dove manca, rivolgiti alla guardia medica della tua ASL
 - <strong>Telefono Amico Italia</strong>, 02 2327 2327, per parlare con qualcuno</p>
 <p>In caso di crisi, rivolgiti anche al tuo medico, al tuo professionista di riferimento o al pronto soccorso più vicino.</p>
 <h4>🔒 Dati e privacy</h4>
@@ -719,7 +734,7 @@ footer em{font-family:var(--f-display);font-size:1rem}
 <li><strong>16/10/2026</strong> — Versione 1.0, redatto documento iniziale</li>
 <li><strong>16/10/2026</strong> — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»</li>
 <li><strong>16/10/2026</strong> — Versione 1.2, aggiunti strumenti di tipo cognitivo-comportamentale (registro a 7 colonne, attività, compiti)</li>
-<li><strong>17/10/2026</strong> — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta</li>
+<li><strong>17/10/2026</strong> — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta; aggiunto il 116117</li>
 </ul>
 <hr />
 <p><strong>Ultimo aggiornamento:</strong> 17 Ottobre 2026</p>
@@ -729,23 +744,11 @@ footer em{font-family:var(--f-display);font-size:1rem}
 
 Copyright (c) 2026 Mauro Di Cola
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the &quot;Software&quot;), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</pre></section>
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre></section>
 <p class="info-version">Tra le sedute · <span id="info-version">Versione 1.3 · 17/10/2026</span> · Mauro Di Cola</p>
 </div></dialog>
 
@@ -938,7 +941,8 @@ var tabs=document.querySelectorAll(".tab"), pages=document.querySelectorAll(".pa
 function show(name){
   if(!document.querySelector('[data-page="'+name+'"]') || !toolOn(name)) name="oggi";
   pages.forEach(function(p){ p.hidden = p.getAttribute("data-page")!==name; });
-  tabs.forEach(function(t){ var on=t.getAttribute("data-tab")===name; t.setAttribute("aria-selected",on?"true":"false"); if(on && t.scrollIntoView) t.scrollIntoView({block:"nearest",inline:"center"}); });
+  tabs.forEach(function(t){ var on=t.getAttribute("data-tab")===name; t.setAttribute("aria-selected",on?"true":"false"); if(on && t.scrollIntoView) t.scrollIntoView({block:"nearest",inline:"center"});
+    if(on && typeof updDots==="function") setTimeout(updDots,350); });
   S.tab=name; save();
   var slot=document.querySelector('[data-page="'+name+'"] .hk-slot'); if(slot) fillSlot(slot);
   if(name==="oggi") renderToday();
@@ -1330,6 +1334,7 @@ function applyTools(){
   Object.keys(SECTIONS).forEach(function(k){ $(SECTIONS[k]).hidden=!toolOn(k); });
   document.querySelectorAll(".shortcut[data-go]").forEach(function(b){ b.hidden=!toolOn(b.getAttribute("data-go")); });
   $("tools-hint").hidden=!!S.tools;
+  if(typeof updDots==="function") setTimeout(updDots,0);
   var cp=currentPreset();
   $("tool-presets").innerHTML=PRESETS.map(function(p){ return '<button type="button" class="nuance" aria-pressed="'+(cp===p.k)+'" data-preset="'+p.k+'">'+esc(p.n)+'</button>'; }).join("");
   var pd=PRESETS.filter(function(p){return p.k===cp;})[0];
@@ -1408,17 +1413,44 @@ function renderAfter(){
   $("f-list").querySelectorAll("[data-fdel]").forEach(function(b){ armDelete(b,function(){ S.after=S.after.filter(function(x){return x.id!==b.getAttribute("data-fdel");}); save(); renderAfter(); },"Conferma eliminazione"); });
 }
 
+/* ---------- Puntini delle schede ---------- */
+var tabWrap=$("tablist"), tabDots=$("tab-dots"), dotN=0;
+function updDots(){
+  var max=tabWrap.scrollWidth-tabWrap.clientWidth;
+  if(max<8){ tabDots.hidden=true; dotN=0; return; }
+  var n=Math.max(2, Math.ceil(tabWrap.scrollWidth/tabWrap.clientWidth));
+  var cur=Math.round(tabWrap.scrollLeft/max*(n-1));
+  if(n!==dotN){
+    tabDots.innerHTML=""; dotN=n;
+    for(var i=0;i<n;i++){ (function(k){ var b=document.createElement("button"); b.type="button"; b.setAttribute("aria-label","Schede, parte "+(k+1)+" di "+n); b.onclick=function(){ tabWrap.scrollLeft=max*k/(n-1); }; tabDots.appendChild(b); })(i); }
+  }
+  tabDots.hidden=false;
+  Array.prototype.forEach.call(tabDots.children,function(b,k){ b.setAttribute("aria-current", k===cur?"true":"false"); });
+}
+tabWrap.addEventListener("scroll",updDots,{passive:true});
+window.addEventListener("resize",updDots);
+
 /* ---------- Copia ---------- */
 function copyText(text, toastId, fallbackId){
-  function fallback(){
-    var box=$(fallbackId); box.innerHTML='<p class="hint">Seleziona il testo qui sotto e copialo.</p><textarea class="copy-fallback" readonly></textarea>';
+  var box=$(fallbackId);
+  function ok(){ box.innerHTML=""; if(toastId) flash(toastId,"Copiato: ora puoi incollarlo dove vuoi"); else alertBtn(); }
+  function show(){
+    box.innerHTML='<p class="hint">Il browser non ha permesso la copia automatica. Tieni premuto nel riquadro, scegli «Seleziona tutto» e poi «Copia».</p><textarea class="copy-fallback" readonly></textarea>';
     var ta=box.querySelector("textarea"); ta.value=text; ta.focus(); ta.select();
   }
+  function classic(){
+    try{
+      var ta=document.createElement("textarea"); ta.value=text; ta.setAttribute("readonly","");
+      ta.style.cssText="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;";
+      document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,text.length);
+      var res=document.execCommand && document.execCommand("copy"); document.body.removeChild(ta); return !!res;
+    }catch(e){ return false; }
+  }
+  if(classic()){ ok(); return; }
   try{
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){ if(toastId) flash(toastId,"Copiato"); else alertBtn(); }, fallback);
-    } else fallback();
-  }catch(e){ fallback(); }
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, show);
+    else show();
+  }catch(e){ show(); }
 }
 function alertBtn(){ var b=$("n-copy"), o=b.textContent; b.textContent="Copiato"; setTimeout(function(){ b.textContent=o; },2000); }
 $("n-copy").onclick=function(){
@@ -1453,7 +1485,12 @@ $("x-copy").onclick=function(){
   S.after.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(x){ out.push(x.date); out.push("  Mi porto via: "+x.take); if(x.felt) out.push("  Ho provato: "+x.felt); if(x.unsaid) out.push("  Non ho detto: "+x.unsaid); out.push(""); });
   out.push("== APPUNTI PER LA SEDUTA ==");
   S.notes.forEach(function(n){ out.push("- "+(n.done?"[parlato] ":"")+(n.imp?"[importante] ":"")+n.text); });
-  copyText(out.join("\n"), "x-toast", "x-fallback");
+  var kept=[], cur=null, buf=[];
+  function flush(){ if(cur!==null && buf.some(function(l){return l.trim();})) kept.push.apply(kept,[cur].concat(buf)); buf=[]; }
+  out.forEach(function(l,k){ if(k<2){ kept.push(l); return; } if(/^== .* ==$/.test(l)){ flush(); cur=l; } else if(cur!==null) buf.push(l); });
+  flush();
+  if(kept.length<=2){ $("x-fallback").innerHTML=""; flash("x-toast","Non ci sono ancora voci tue da copiare: gli esempi non vengono copiati."); return; }
+  copyText(kept.join("\n").replace(/\n{3,}/g,"\n\n"), "x-toast", "x-fallback");
 };
 armDelete($("x-wipe"),function(){
   S.diary=[]; S.mood=[]; S.abc=[]; S.notes=[]; S.acts=[]; S.tasks=[]; S.dreams=[]; S.rels=[]; S.after=[]; S.next=""; save();

@@ -25,6 +25,7 @@ L'app non invia messaggi, non avvisa nessuno e non viene letta da altri.
 
 Se senti di essere in pericolo o hai bisogno di aiuto subito:
 - **112**, numero unico di emergenza
+- **116117**, numero europeo armonizzato per le cure mediche non urgenti: gratuito, attivo 24 ore su 24, orienta verso il servizio giusto e mette in contatto con la guardia medica; nel Lazio, dove è attivo in tutta la regione dal 24 agosto 2026, offre anche un primo supporto psicologico. Non è ancora attivo in tutte le regioni: dove manca, rivolgiti alla guardia medica della tua ASL
 - **Telefono Amico Italia**, 02 2327 2327, per parlare con qualcuno
 
 In caso di crisi, rivolgiti anche al tuo medico, al tuo professionista di riferimento o al pronto soccorso più vicino.
@@ -83,7 +84,7 @@ Gli haiku presenti nell'app sono testi originali di AI Haiku Gaea, che accompagn
 - **16/10/2026** — Versione 1.0, redatto documento iniziale
 - **16/10/2026** — Versione 1.1, il testo è consultabile anche nell'app, dal link «Informazioni e note legali»
 - **16/10/2026** — Versione 1.2, aggiunti strumenti di tipo cognitivo-comportamentale (registro a 7 colonne, attività, compiti)
-- **17/10/2026** — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta
+- **17/10/2026** — Versione 1.3, scelta degli strumenti per orientamento; sogni, relazioni, dopo la seduta; aggiunto il 116117
 
 ---
 

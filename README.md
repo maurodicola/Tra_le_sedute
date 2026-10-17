@@ -31,6 +31,7 @@ Questo repository contiene un quaderno digitale per uso personale. Non è un dis
 
 ### Se stai male adesso
 Se senti di essere in pericolo o hai bisogno di aiuto subito, chiama il **112**.
+Per problemi di salute non urgenti, anche di notte e nei festivi, c'è il **116117**: gratuito, 24 ore su 24, collega con la guardia medica e nel Lazio offre anche un primo supporto psicologico (non ancora attivo in tutte le regioni).
 Per parlare con qualcuno, Telefono Amico Italia risponde al **02 2327 2327**.
 
 Più dettagli in [LEGAL.md](LEGAL.md).
